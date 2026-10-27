@@ -1,0 +1,158 @@
+---
+// Closing photo band (worksheet page 15): yellow wave at the top, full-bleed field photo,
+// cream scalloped edge at the bottom leading into the footer.
+import Photo from './Photo.astro';
+import Scribble from './Scribble.astro';
+
+// Row of cream arches along the bottom edge (the design shows about 9 across the page)
+const bumps = 9;
+const bumpW = 1440 / bumps;
+let scallop = 'M0 36V28';
+for (let i = 0; i < bumps; i++) {
+  const x = i * bumpW;
+  scallop += `Q${(x + bumpW / 2).toFixed(1)} -18 ${(x + bumpW).toFixed(1)} 28`;
+}
+scallop += 'V36Z';
+---
+
+<section class="band" data-nav="dark" aria-labelledby="band-title">
+  <div class="band__photo">
+    <Photo src="closing/field-tractor.webp" alt="A tractor resting in a green rice field at dusk" />
+  </div>
+
+  <svg class="band__wave" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d="M0 0H1440V104C1300 118 1220 140 1100 128C980 116 900 60 760 48C620 36 560 66 440 90C320 114 180 160 0 136Z" />
+  </svg>
+
+  <svg class="band__scallop" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={scallop} />
+  </svg>
+
+  <div class="band__content">
+    <h2 id="band-title" class="band__title" data-split>
+      <span class="ln">Ready to meet young pioneers already</span>
+      <span class="ln hl">making an impact in the fields?</span>
+    </h2>
+    <div class="band__arrow"><Scribble name="loop-down" /></div>
+    <a class="pill-btn pill-btn--cream band__btn" href="/youth-in-agri" data-pop>
+      Read Success Stories from Students Like You!
+    </a>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    overflow: hidden;
+    min-height: 34rem;
+    background: var(--green-deep);
+    color: var(--cream);
+  }
+
+  .band__photo {
+    --photo-empty-bg: #78805a;
+    position: absolute;
+    inset: 0;
+  }
+
+  .band__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(20, 24, 10, 0.3), rgba(20, 24, 10, 0.05));
+  }
+
+  .band__wave {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 4rem;
+    fill: var(--yellow);
+  }
+
+  .band__scallop {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1.8rem;
+    fill: var(--cream);
+  }
+
+  .band__content {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    padding: 8rem var(--gutter) 6rem;
+    text-align: center;
+  }
+
+  .ln {
+    display: block;
+  }
+
+  .band__title {
+    max-width: 22rem;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: clamp(1.7rem, 7.4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--cream);
+  }
+
+  .hl {
+    color: var(--yellow);
+  }
+
+  .band__arrow {
+    width: 3.5rem;
+    color: var(--yellow);
+  }
+
+  .band__btn {
+    max-width: 18rem;
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  @media (min-width: 960px) {
+    .band {
+      min-height: calc(var(--u) * 55);
+    }
+
+    .band__wave {
+      height: calc(var(--u) * 10.3);
+    }
+
+    .band__scallop {
+      height: calc(var(--u) * 2.5);
+    }
+
+    .band__content {
+      gap: 0;
+      padding: calc(var(--u) * 15.6) 0 calc(var(--u) * 9);
+    }
+
+    .band__title {
+      max-width: none;
+      font-size: calc(var(--u) * 2.62);
+    }
+
+    .band__arrow {
+      width: calc(var(--u) * 5.6);
+      margin: calc(var(--u) * 3.6) 0 calc(var(--u) * 4);
+    }
+
+    .band__btn {
+      max-width: calc(var(--u) * 26);
+      padding: calc(var(--u) * 1.4) calc(var(--u) * 3.6);
+      font-size: calc(var(--u) * 1.75);
+    }
+  }
+</style>

@@ -1,0 +1,11 @@
+{
+  "_about": "SAMPLE list. Replace the entries below with the real schools (the team is still collecting them). One object per school. Keep the field names. type is 'SHS' or 'College'.",
+  "schools": [
+    { "id": "sample-1", "name": "Sample National High School A", "type": "SHS", "province": "Sample Province 1", "city": "Sample City 1", "programs": ["TVL Agri-Fishery Arts"], "sample": true },
+    { "id": "sample-2", "name": "Sample National High School B", "type": "SHS", "province": "Sample Province 1", "city": "Sample City 2", "programs": ["TVL Agri-Fishery Arts"], "sample": true },
+    { "id": "sample-3", "name": "Sample Integrated School C", "type": "SHS", "province": "Sample Province 2", "city": "Sample City 3", "programs": ["TVL Agri-Fishery Arts"], "sample": true },
+    { "id": "sample-4", "name": "Sample State University D", "type": "College", "province": "Sample Province 1", "city": "Sample City 1", "programs": ["BS Agriculture", "BS Fisheries"], "sample": true },
+    { "id": "sample-5", "name": "Sample Agricultural College E", "type": "College", "province": "Sample Province 2", "city": "Sample City 3", "programs": ["BS Agribusiness", "BS Agricultural Technology"], "sample": true },
+    { "id": "sample-6", "name": "Sample Institute of Technology F", "type": "College", "province": "Sample Province 2", "city": "Sample City 4", "programs": ["BS Agricultural Engineering"], "sample": true }
+  ]
+}

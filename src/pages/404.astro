@@ -1,0 +1,41 @@
+---
+// 404 page: the farmer is out planting, and the page you wanted is not planted yet.
+// Cloudflare Pages serves this file (dist/404.html) for any address that does not exist.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NotFoundScene from '../components/NotFoundScene.astro';
+import '../styles/notfound.css';
+---
+
+<BaseLayout
+  title="Wala pang tanim dito (404) | Ani Natin"
+  description="Hindi namin mahanap ang pahinang hinahanap mo. Balik sa bukid ng Ani Natin."
+>
+  <section class="nf" data-nav="light" aria-labelledby="nf-title">
+    <div class="nf__inner">
+      <p class="nf__code" aria-hidden="true">
+        <span class="nf__digit" data-reveal>4</span><span class="nf__zero" data-pop>
+          <svg class="nf__leaf" viewBox="0 0 60 44" focusable="false"><path d="M30 40C30 26 32 14 38 4" fill="none" stroke="#2a4e1a" stroke-width="5" stroke-linecap="round" /><path d="M36 22C26 6 8 8 4 14C14 24 26 26 36 22Z" fill="#6aa84a" /><path d="M38 12C46 0 58 2 58 8C52 16 44 16 38 12Z" fill="#2a4e1a" /></svg>
+          <span class="nf__zero-text">0</span>
+        </span><span class="nf__digit" data-reveal>4</span>
+      </p>
+      <p class="nf__eyebrow">Error 404 · Hindi mahanap ang pahina</p>
+      <h1 id="nf-title" class="nf__title" data-split>
+        Wala pang <span class="mark">tanim</span> dito!
+      </h1>
+      <p class="nf__lead" data-reveal>
+        Mukhang naligaw ka sa pilapil. Ang pahinang hinahanap mo ay hindi pa naitatanim, naani na, o lumipat sa ibang bukid.
+        Habang naghahanap tayo, si Mang Ani muna ang magtatanim ng palay, prutas, at gulay para sa iyo.
+      </p>
+      <div class="nf__cta" data-reveal>
+        <a class="pill-btn pill-btn--green" href="/">Balik sa Bukid</a>
+        <a class="pill-btn pill-btn--lime" href="/community">Pumunta sa Community</a>
+      </div>
+    </div>
+
+    <NotFoundScene />
+  </section>
+</BaseLayout>
+
+<script>
+  import '../scripts/notfound-animations.js';
+</script>

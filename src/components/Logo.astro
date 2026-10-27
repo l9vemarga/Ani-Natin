@@ -1,0 +1,30 @@
+---
+// Brand logos traced from the Brand Book (public/brand/*.svg). They take the current text color,
+// so use one solid color at a time (Brand Book rule). Replace the SVG files when the originals arrive.
+import icon from '../../public/brand/logo-icon.svg?raw';
+import wordmark from '../../public/brand/logo-wordmark.svg?raw';
+import combination from '../../public/brand/logo-combination.svg?raw';
+
+interface Props {
+  variant: 'icon' | 'wordmark' | 'combination';
+  class?: string;
+}
+
+const { variant, class: className } = Astro.props;
+const markup = { icon, wordmark, combination }[variant];
+---
+
+<span class:list={['logo-mark', `logo-mark--${variant}`, className]} set:html={markup} />
+
+<style>
+  .logo-mark {
+    display: inline-block;
+    line-height: 0;
+  }
+
+  .logo-mark :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

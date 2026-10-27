@@ -1,0 +1,360 @@
+---
+// The 404 page's farm scene: a farmer digging and planting, with rice, corn, tomatoes, carrots, pineapples,
+// fruit trees and a fishpond. Drawn in code with the brand colors (stand-in artwork until the team's own
+// illustration exists). The page is complete without scripts (everything shown, farmer in a resting pose);
+// notfound-animations.js grows the crops, swings the hoe and drifts the clouds.
+// Coordinates: viewBox 1440 x 520; the farmer stands at x 720, the soil starts at y 395.
+
+// small repeatable "random" so the field looks hand-planted but never changes between builds
+function rng(seed) {
+  let a = seed;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const r2 = (n) => Math.round(n * 10) / 10;
+
+/* Rice: a clump of curved stalks with golden grain heads */
+function riceClump(seed) {
+  const rand = rng(seed);
+  const stalks = [];
+  const count = 8;
+  for (let i = 0; i < count; i++) {
+    const a = -30 + (60 * i) / (count - 1) + (rand() - 0.5) * 6; // degrees from vertical
+    const h = 52 + rand() * 24;
+    const rad = (a * Math.PI) / 180;
+    const ex = Math.sin(rad) * h * 0.85 + (a > 0 ? 7 : -7);
+    const ey = -Math.cos(rad) * h;
+    const cx = Math.sin(rad) * h * 0.2;
+    const cy = -h * 0.62;
+    const tilt = a > 0 ? 38 : -38;
+    stalks.push({ d: `M0 0Q${r2(cx)} ${r2(cy)} ${r2(ex)} ${r2(ey)}`, ex: r2(ex), ey: r2(ey), tilt, shade: i % 2 });
+  }
+  return stalks;
+}
+
+const riceBack = [58, 126, 396].map((x, i) => ({ x, y: 412, s: 0.82, seed: 11 + i }));
+const riceFront = [38, 112, 190, 268, 346, 424].map((x, i) => ({ x, y: 447, s: 1, seed: 31 + i }));
+const corn = [1068, 1128, 1188].map((x, i) => ({ x, y: 440, s: 0.96 + (i % 2) * 0.08 }));
+const tomatoes = [1244, 1312, 1380].map((x, i) => ({ x, y: 452, s: 1 - i * 0.04 }));
+const carrots = [948, 996].map((x, i) => ({ x, y: 456, s: 1 + i * 0.05 }));
+const pineapples = [528, 580].map((x, i) => ({ x, y: 452, s: 1 - i * 0.08 }));
+const clouds = [
+  { x: 200, y: 150, s: 1 },
+  { x: 860, y: 205, s: 0.75 },
+];
+const rays = Array.from({ length: 12 }, (_, i) => i * 30);
+
+const dirt = [
+  [-34, -52], [-18, -74], [4, -86], [22, -70], [38, -48], [-4, -58], [14, -92],
+].map(([dx, dy], i) => ({ dx, dy, r: 3 + (i % 3) * 1.2 }));
+---
+
+<div class="nf-scene">
+  <svg class="nf-scene__svg" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id="nf-pine-clip"><ellipse cx="0" cy="-26" rx="17" ry="24" /></clipPath>
+      <clipPath id="nf-shirt-clip"><path d="M-30-98L-27-186Q2-198 31-186L34-98Z" /></clipPath>
+    </defs>
+
+    <!-- Sun -->
+    <g transform="translate(1230 176)">
+      <g class="nf-rays">
+        {rays.map((a) => (
+          <rect x="-5" y="-78" width="10" height="26" rx="5" fill="#e5dc72" transform={`rotate(${a})`} />
+        ))}
+      </g>
+      <circle class="nf-sun" r="40" fill="#e5dc72" />
+    </g>
+
+    <!-- Clouds -->
+    {clouds.map((c) => (
+      <g transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+        <g class="nf-cloud">
+          <path d="M-62 18C-92 18-92-22-58-22C-52-50-8-56 4-30C26-44 62-28 54-4C84-4 84 18 56 18Z" fill="#fff2d9" />
+        </g>
+      </g>
+    ))}
+
+    <!-- Birds -->
+    <g class="nf-bird" transform="translate(-60 214)">
+      <path class="nf-wing" d="M0 0Q9-11 18 0Q27-11 36 0" fill="none" stroke="#2a4e1a" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <g class="nf-bird" transform="translate(-60 250)">
+      <path class="nf-wing" d="M0 0Q7-9 14 0Q21-9 28 0" fill="none" stroke="#2a4e1a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- Far hills -->
+    <path d="M0 322C170 268 330 296 520 316C720 338 880 282 1080 296C1250 308 1350 286 1440 276V520H0Z" fill="#bed889" />
+    <path d="M0 360C210 326 400 352 640 348C870 344 1090 326 1440 354V520H0Z" fill="#a7c874" />
+
+    <!-- Fishpond -->
+    <g transform="translate(250 350)">
+      <ellipse rx="124" ry="19" fill="#6f9e5a" />
+      <ellipse rx="114" ry="14" fill="#8ec9b9" />
+      <path d="M-70 -2Q-50-6-30-2M20 4Q44 0 70 4M-30 8Q-10 5 8 8" fill="none" stroke="#c4e6dc" stroke-width="2.4" stroke-linecap="round" />
+      <ellipse class="nf-ripple" rx="14" ry="4" cx="10" cy="0" fill="none" stroke="#e8f6f1" stroke-width="2.4" />
+      <g class="nf-fish">
+        <g transform="translate(10 0)">
+          <path d="M-16 0C-8-11 10-11 18-1C10 9-8 10-16 0Z" fill="#de6822" />
+          <path d="M-16 0L-27-8L-24 0L-27 8Z" fill="#de6822" />
+          <circle cx="9" cy="-2" r="1.8" fill="#452a17" />
+        </g>
+      </g>
+    </g>
+
+    <!-- Fruit trees -->
+    <g transform="translate(470 396)">
+      <g class="nf-tree" data-grow>
+        <path d="M-8 0L-5-62H5L8 0Z" fill="#6b4226" />
+        <g fill="#4a7c35">
+          <circle cx="-30" cy="-84" r="34" /><circle cx="30" cy="-86" r="36" /><circle cx="0" cy="-108" r="38" /><circle cx="0" cy="-76" r="34" />
+        </g>
+        <g fill="#6a9a45" opacity=".7">
+          <circle cx="-14" cy="-118" r="14" /><circle cx="26" cy="-96" r="11" /><circle cx="-38" cy="-90" r="10" />
+        </g>
+        <g class="nf-fruits" fill="#f0b030" stroke="#c4801a" stroke-width="1.5">
+          <ellipse cx="-34" cy="-72" rx="6.5" ry="8" /><ellipse cx="-4" cy="-60" rx="6.5" ry="8" /><ellipse cx="30" cy="-74" rx="6.5" ry="8" />
+          <ellipse cx="12" cy="-106" rx="6.5" ry="8" /><ellipse cx="-22" cy="-112" rx="6.5" ry="8" /><ellipse cx="48" cy="-98" rx="6.5" ry="8" />
+        </g>
+      </g>
+    </g>
+    <g transform="translate(1316 394) scale(.92)">
+      <g class="nf-tree" data-grow>
+        <path d="M-8 0L-5-62H5L8 0Z" fill="#6b4226" />
+        <g fill="#3f7330">
+          <circle cx="-30" cy="-84" r="34" /><circle cx="30" cy="-86" r="36" /><circle cx="0" cy="-108" r="38" /><circle cx="0" cy="-76" r="34" />
+        </g>
+        <g fill="#5f9540" opacity=".7">
+          <circle cx="-18" cy="-114" r="14" /><circle cx="24" cy="-92" r="11" />
+        </g>
+        <g class="nf-fruits" fill="#de6822" stroke="#b64e14" stroke-width="1.5">
+          <circle cx="-34" cy="-72" r="7.5" /><circle cx="-4" cy="-60" r="7.5" /><circle cx="30" cy="-74" r="7.5" />
+          <circle cx="12" cy="-106" r="7.5" /><circle cx="-22" cy="-112" r="7.5" /><circle cx="48" cy="-98" r="7.5" />
+        </g>
+      </g>
+    </g>
+
+    <!-- Soil -->
+    <path d="M0 400C220 384 440 400 700 396C960 392 1200 380 1440 392V520H0Z" fill="#5a3a22" />
+    <g fill="none" stroke-linecap="round">
+      <path d="M-10 430C300 420 600 438 900 430S1300 426 1450 432" stroke="#452a17" stroke-width="5" />
+      <path d="M-10 466C240 456 520 474 800 466S1260 462 1450 468" stroke="#452a17" stroke-width="5" />
+      <path d="M-10 500C300 492 620 508 920 500S1300 496 1450 502" stroke="#452a17" stroke-width="5" />
+      <path d="M-10 438C300 428 600 446 900 438S1300 434 1450 440" stroke="#7a5230" stroke-width="3" opacity=".7" />
+      <path d="M-10 474C240 464 520 482 800 474S1260 470 1450 476" stroke="#7a5230" stroke-width="3" opacity=".7" />
+    </g>
+
+    <!-- Harvest crate -->
+    <g transform="translate(626 458)">
+      <g class="nf-crate" data-grow>
+        <rect x="-32" y="-30" width="64" height="30" rx="4" fill="#c99a5b" />
+        <path d="M-32-20H32M-32-10H32" stroke="#a87a40" stroke-width="2.5" />
+        <circle cx="-16" cy="-34" r="10" fill="#de6822" /><circle cx="2" cy="-37" r="10" fill="#f0b030" /><circle cx="20" cy="-33" r="9" fill="#de6822" />
+        <path d="M-16-44q4-6 8-4M2-47q4-6 8-4" stroke="#3f7330" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      </g>
+    </g>
+
+    <!-- Pineapples -->
+    {pineapples.map((p) => (
+      <g transform={`translate(${p.x} ${p.y}) scale(${p.s})`}>
+        <g class="nf-crop" data-grow>
+          <ellipse cx="0" cy="-26" rx="17" ry="24" fill="#f0b030" />
+          <g clip-path="url(#nf-pine-clip)" stroke="#c47d1a" stroke-width="1.8" fill="none">
+            <path d="M-24-56L22-4M-24-44L22 8M-24-32L22 20M-24-68L22-16M-22-20L4 4M-22-8L4 16" />
+            <path d="M24-56L-22-4M24-44L-22 8M24-32L-22 20M24-68L-22-16M22-20L-4 4M22-8L-4 16" />
+          </g>
+          <g fill="#2f6b2a">
+            <path d="M0-48C-16-62-14-78-8-86C-6-72-2-60 0-48Z" /><path d="M0-48C16-62 14-78 8-86C6-72 2-60 0-48Z" />
+            <path d="M0-48C-24-54-30-68-28-76C-16-70-6-60 0-48Z" /><path d="M0-48C24-54 30-68 28-76C16-70 6-60 0-48Z" />
+            <path d="M0-48C-3-64 3-80 0-92C5-80 5-64 0-48Z" />
+          </g>
+        </g>
+      </g>
+    ))}
+
+    <!-- Rice (back row, then front row) -->
+    {[...riceBack, ...riceFront].map((c) => (
+      <g transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+        <g class="nf-crop nf-rice" data-grow>
+          {riceClump(c.seed).map((st) => (
+            <g>
+              <path d={st.d} fill="none" stroke={st.shade ? '#6f9d3f' : '#8fb85a'} stroke-width="3.2" stroke-linecap="round" />
+              <g transform={`translate(${st.ex} ${st.ey}) rotate(${st.tilt})`}>
+                <ellipse cx="0" cy="-5" rx="3.4" ry="9" fill="#e5dc72" />
+                <ellipse cx="-3.4" cy="-1" rx="2.6" ry="6.5" fill="#d9ce55" />
+                <ellipse cx="3.4" cy="-2" rx="2.6" ry="6.5" fill="#efe587" />
+              </g>
+            </g>
+          ))}
+        </g>
+      </g>
+    ))}
+
+    <!-- Carrots -->
+    {carrots.map((c) => (
+      <g transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+        <g class="nf-crop" data-grow>
+          <g fill="none" stroke="#5f9f45" stroke-width="3.2" stroke-linecap="round">
+            <path d="M0 0Q-6-16-16-28M0 0Q-2-18-4-34M0 0Q4-18 10-32M0 0Q8-12 20-22" />
+          </g>
+          <ellipse cx="0" cy="1" rx="8" ry="4.5" fill="#de6822" />
+        </g>
+      </g>
+    ))}
+
+    <!-- Corn -->
+    {corn.map((c, i) => (
+      <g transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+        <g class="nf-crop nf-corn" data-grow>
+          <rect x="-4" y="-122" width="8" height="122" rx="4" fill="#5f9440" />
+          {[0, 1, 2, 3].map((k) => {
+            const side = k % 2 ? 1 : -1;
+            const y0 = -26 - k * 25;
+            return (
+              <path
+                d={`M0 ${y0}Q${side * 30} ${y0 - 22} ${side * 54} ${y0 + 8}Q${side * 28} ${y0 - 6} 0 ${y0 + 8}Z`}
+                fill={k % 2 ? '#6fa84a' : '#5f9a3e'}
+                stroke="#3f7330"
+                stroke-width="1.4"
+                stroke-linejoin="round"
+              />
+            );
+          })}
+          <g transform={`translate(${i % 2 ? -9 : 9} -70) rotate(${i % 2 ? -14 : 14})`}>
+            <ellipse cx="0" cy="0" rx="7.5" ry="17" fill="#ecd24a" />
+            <path d="M-7-2Q-9 14 0 18Q9 14 7-2Q0 6-7-2Z" fill="#6fa84a" />
+          </g>
+          <g stroke="#e5dc72" stroke-width="2.4" stroke-linecap="round" fill="none">
+            <path d="M0-122l-8-16M0-122l0-20M0-122l8-16M0-122l-14-10M0-122l14-10" />
+          </g>
+        </g>
+      </g>
+    ))}
+
+    <!-- Tomatoes -->
+    {tomatoes.map((c) => (
+      <g transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+        <g class="nf-crop nf-tomato" data-grow>
+          <rect x="-1.6" y="-78" width="3.2" height="78" fill="#a87a40" />
+          <g fill="#4a8a35">
+            <circle cx="-14" cy="-24" r="19" /><circle cx="14" cy="-28" r="20" /><circle cx="0" cy="-46" r="17" /><circle cx="-8" cy="-12" r="14" /><circle cx="12" cy="-12" r="13" />
+          </g>
+          <g fill="#6aa84a" opacity=".7"><circle cx="-4" cy="-52" r="9" /><circle cx="20" cy="-34" r="8" /></g>
+          <g class="nf-fruits" fill="#de6822" stroke="#b64e14" stroke-width="1.4">
+            <circle cx="-18" cy="-18" r="7.5" /><circle cx="10" cy="-14" r="7.5" /><circle cx="20" cy="-36" r="7.5" /><circle cx="-6" cy="-40" r="7.5" /><circle cx="-24" cy="-36" r="6.5" />
+          </g>
+        </g>
+      </g>
+    ))}
+
+    <!-- Farmer -->
+    <g transform="translate(720 474)">
+      <ellipse cx="14" cy="3" rx="56" ry="7" fill="#2b180c" opacity=".32" />
+      <g class="nf-farmer">
+        <!-- legs and boots -->
+        <path d="M-28-100L-6-100L-10-16L-30-16Z" fill="#1d3611" />
+        <path d="M-2-100L20-100L24-16L4-16Z" fill="#2a4e1a" />
+        <path d="M-34-18H-8Q4-16 6-6V0H-36Z" fill="#2b180c" />
+        <path d="M0-18H24Q38-16 40-6V0H-2Z" fill="#3a2314" />
+
+        <g class="nf-torso">
+          <path d="M-30-98L-27-186Q2-198 31-186L34-98Z" fill="#de6822" />
+          <g clip-path="url(#nf-shirt-clip)" stroke="#fae4bc" stroke-width="3" opacity=".4">
+            <path d="M-40-172H44M-40-150H44M-40-128H44M-40-108H44M-14-200V-90M6-200V-90M24-200V-90" />
+          </g>
+          <rect x="-31" y="-106" width="66" height="9" rx="2" fill="#2b180c" />
+
+          <!-- head and hat -->
+          <g class="nf-head">
+            <rect x="-2" y="-196" width="16" height="14" rx="5" fill="#c4804d" />
+            <circle cx="6" cy="-213" r="21" fill="#d9915a" />
+            <circle cx="-4" cy="-211" r="5.5" fill="#c4804d" />
+            <circle cx="28" cy="-210" r="4.2" fill="#d9915a" />
+            <circle cx="16" cy="-215" r="2.5" fill="#452a17" />
+            <path d="M13-203Q20-197 27-203" fill="none" stroke="#452a17" stroke-width="2.4" stroke-linecap="round" />
+            <circle cx="20" cy="-207" r="3" fill="#de6822" opacity=".35" />
+            <path d="M-22-226Q-20-264 6-264Q34-264 34-226Z" fill="#ecdf7e" />
+            <path d="M-22-228H34V-221H-22Z" fill="#452a17" />
+            <ellipse cx="6" cy="-224" rx="52" ry="10" fill="#e5dc72" />
+            <path d="M-44-224Q6-212 56-224" fill="none" stroke="#c9bd45" stroke-width="2.4" stroke-linecap="round" />
+          </g>
+        </g>
+
+        <!-- arms and hoe, pivot at the shoulder -->
+        <g class="nf-arms">
+          <path d="M6-178L86-100" stroke="#b5551a" stroke-width="16" stroke-linecap="round" fill="none" />
+          <circle cx="90" cy="-96" r="8.5" fill="#c4804d" />
+          <path d="M30-174L152-8" stroke="#c99a5b" stroke-width="8" stroke-linecap="round" fill="none" />
+          <path d="M146-16L184-2L177 11L140-4Z" fill="#8d8f84" stroke="#6b6d63" stroke-width="2" stroke-linejoin="round" />
+          <path d="M10-180L58-140" stroke="#de6822" stroke-width="17" stroke-linecap="round" fill="none" />
+          <circle cx="60" cy="-138" r="9" fill="#d9915a" />
+        </g>
+      </g>
+    </g>
+
+    <!-- Where the farmer digs: a hole, flying dirt, and a seedling that pops up -->
+    <g transform="translate(886 480)">
+      <ellipse class="nf-hole" cx="0" cy="0" rx="20" ry="6" fill="#2b180c" />
+      <g class="nf-plant">
+        <path d="M0 0Q-2-14 0-26" stroke="#6aa84a" stroke-width="3.6" stroke-linecap="round" fill="none" />
+        <path d="M0-24C-18-34-26-22-24-16C-12-14-4-18 0-24Z" fill="#8fb85a" />
+        <path d="M0-26C16-38 26-28 24-20C12-18 4-22 0-26Z" fill="#6aa84a" />
+      </g>
+      <g class="nf-dirt" fill="#452a17">
+        {dirt.map((d) => (
+          <circle cx="0" cy="-6" r={d.r} data-dx={d.dx} data-dy={d.dy} />
+        ))}
+      </g>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .nf-scene {
+    position: relative;
+    width: 100%;
+    height: clamp(17rem, 56vw, 26rem);
+    overflow: hidden;
+  }
+
+  .nf-scene__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    max-width: none;
+  }
+
+  @media (min-width: 640px) {
+    .nf-scene {
+      height: clamp(22rem, 36vw, 32rem);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .nf-scene {
+      height: 30vw; /* grows with the width, so wide screens keep the same crop (sun and clouds stay in view) */
+    }
+  }
+
+  /* Before the animation starts, the pieces that grow are hidden so nothing pops in (same idea as data-reveal).
+     Without scripts, with reduced motion, or if the animation cannot start, the full scene simply shows. */
+  :global(html.js:not(.rm):not(.anim-fail) .nf-scene [data-grow]) {
+    visibility: hidden;
+  }
+
+  /* the flying dirt shows only while it flies */
+  .nf-scene :global(.nf-dirt) {
+    opacity: 0;
+  }
+
+  .nf-scene :global(.nf-crop),
+  .nf-scene :global(.nf-tree),
+  .nf-scene :global(.nf-crate) {
+    cursor: default;
+  }
+</style>

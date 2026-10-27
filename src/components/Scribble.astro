@@ -1,0 +1,46 @@
+---
+// Hand-drawn marks from the design study (underline, looping arrows, star).
+// If the designed file exists at /public/images/scribbles/<name>.svg it is used. Until then a simple
+// stand-in is drawn so the layout is right. Replace with the original drawings when they arrive.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  name: 'underline' | 'loop-down' | 'loop-right' | 'loop-curl' | 'loop-small' | 'star';
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const exists = fs.existsSync(path.join(process.cwd(), 'public', 'images', 'scribbles', `${name}.svg`));
+
+const shapes = {
+  underline: { viewBox: '0 0 240 16', d: 'M3 9C45 3 95 11 145 6S205 7 237 4M30 14C80 10 150 14 214 11' },
+  'loop-down': { viewBox: '0 0 70 100', d: 'M34 3C58-3 66 26 42 34C18 42 8 16 30 16C52 16 54 56 34 80M24 68L35 84L47 71' },
+  'loop-right': { viewBox: '0 0 160 70', d: 'M4 50C30 10 90 0 108 22C122 40 92 52 88 34C84 14 124 10 146 34M128 22L148 36L124 46' },
+  // curl, then an arrow pointing down and to the right (Agri-career branches mockup)
+  'loop-curl': { viewBox: '140 100 700 550', sw: 17, d: 'M150 148C230 100 340 130 400 220C430 262 450 300 455 332C468 400 440 470 396 514C352 546 316 520 306 450C300 392 340 336 420 318C480 304 560 322 630 372C700 422 750 492 781 628M636 494C700 508 745 535 775 585M828 450C812 520 795 580 781 630' },
+  'loop-small': { viewBox: '0 0 50 70', d: 'M26 4C44 0 48 22 28 28C10 34 6 12 24 12C40 12 40 40 24 58M16 48L25 62L36 50' },
+  star: { viewBox: '0 0 60 60', d: 'M30 4L37 22L56 23L41 35L46 54L30 43L14 54L19 35L4 23L23 22Z' },
+};
+const shape = shapes[name];
+---
+
+{exists ? (
+  <img class:list={['scribble', className]} src={`/images/scribbles/${name}.svg`} alt="" aria-hidden="true" {...(name === 'star' ? { 'data-pop': '' } : { 'data-draw': '' })} />
+) : name === 'star' ? (
+  <svg class:list={['scribble', className]} viewBox={shape.viewBox} aria-hidden="true" focusable="false" data-pop>
+    <path d={shape.d} fill="currentColor" stroke="currentColor" stroke-width="6" stroke-linejoin="round" />
+  </svg>
+) : (
+  <svg class:list={['scribble', className]} viewBox={shape.viewBox} aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width={shape.sw ?? 4} stroke-linecap="round" stroke-linejoin="round" data-draw>
+    <path d={shape.d} />
+  </svg>
+)}
+
+<style>
+  .scribble {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

@@ -1,0 +1,301 @@
+---
+// Footer from the design study (worksheet page 15): cream, all orange, vertical navigation list.
+import Logo from './Logo.astro';
+
+const year = new Date().getFullYear();
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/youth-in-agri', label: 'Youth in Agri' },
+  { href: '/community', label: 'Community' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/community#faq', label: 'FAQ' },
+];
+const email = 'aninatin.project@gmail.com';
+---
+
+<footer class="footer" data-nav="light">
+  <div class="footer__grid">
+    <div class="footer__brand" data-reveal>
+      <Logo variant="wordmark" class="footer__logo" />
+      <p class="footer__slogan">Tanim ng Kabataan,<br />Ani ng Bayan</p>
+    </div>
+
+    <div class="footer__nav" data-reveal>
+      <nav aria-label="Footer">
+        <ul>
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <ul class="footer__social">
+        <li>
+          <a href="#" aria-label="Instagram (link to be added)">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true">
+              <rect x="3" y="3" width="26" height="26" rx="8" />
+              <circle cx="16" cy="16" r="6.2" />
+              <circle cx="23.2" cy="8.8" r="1.2" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="#" aria-label="Facebook (link to be added)">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <path fill="currentColor" d="M16 2a14 14 0 0 0-2.2 27.8V20h-3.6v-4h3.6v-3c0-3.5 2.1-5.5 5.3-5.5 1.5 0 3.1.3 3.1.3v3.4h-1.8c-1.7 0-2.3 1.1-2.3 2.2V16h3.9l-.6 4h-3.3v9.8A14 14 0 0 0 16 2Z" />
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer__help" data-reveal>
+      <p class="footer__help-title">Can&rsquo;t find what you&rsquo;re looking for?</p>
+      <a class="footer__card" href="/community">
+        <span>Submit a question to the community and get answers from alumni and experts.</span>
+        <span class="footer__go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+        </span>
+      </a>
+      <a class="footer__card" href={`mailto:${email}`}>
+        <span>Contact us through:<br />{email}</span>
+        <span class="footer__go" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+        </span>
+      </a>
+    </div>
+
+    <div class="footer__legal" data-reveal>
+      <a href="/privacy">Privacy Policy</a>
+      <p>&copy; {year} Ani Natin Project<br />All Rights Reserved</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--cream);
+    color: var(--orange);
+    padding: 3.5rem var(--gutter) 3rem;
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  .footer__brand {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+  }
+
+  .footer__brand :global(.footer__logo) {
+    width: 11rem;
+  }
+
+  .footer__slogan {
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .footer__nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__nav {
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--orange);
+  }
+
+  .footer__nav nav a {
+    display: inline-block;
+    padding-block: 0.1rem;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.15;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  /* underline slides in from the left */
+  .footer__nav nav a {
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 3px;
+    transition: background-size 0.25s ease;
+  }
+
+  .footer__nav nav a:hover,
+  .footer__nav nav a:focus-visible {
+    background-size: 100% 3px;
+  }
+
+  .footer__social a {
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .footer__social a:hover {
+    transform: rotate(-8deg) scale(1.1);
+  }
+
+  .footer__social {
+    display: flex;
+    gap: 0.9rem;
+    margin-top: 1.5rem !important;
+  }
+
+  .footer__social svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .footer__help {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .footer__help-title {
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .footer__card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border: 2px solid var(--orange);
+    border-radius: 1.1rem;
+    font-size: 0.98rem;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+
+  .footer__card {
+    transition: background-color 0.2s ease;
+  }
+
+  .footer__card:hover {
+    background: rgba(222, 104, 34, 0.1);
+  }
+
+  .footer__go {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--cream);
+    transition: transform 0.2s ease;
+  }
+
+  .footer__card:hover .footer__go {
+    transform: translateX(4px);
+  }
+
+  .footer__go svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .footer__legal {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .footer__legal a {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (min-width: 960px) {
+    .footer {
+      padding: calc(var(--u) * 7.6) 0 calc(var(--u) * 6.4);
+    }
+
+    .footer__grid {
+      grid-template-columns: calc(var(--u) * 23.4) calc(var(--u) * 19.3) calc(var(--u) * 26.5) 1fr;
+      align-items: start;
+      gap: 0;
+      max-width: none;
+      padding-left: calc(var(--gx) + var(--u) * 11);
+    }
+
+    .footer__brand {
+      justify-items: center;
+      width: calc(var(--u) * 17.2);
+      text-align: center;
+    }
+
+    .footer__brand :global(.footer__logo) {
+      width: 100%;
+    }
+
+    .footer__slogan {
+      font-size: calc(var(--u) * 1.55);
+    }
+
+    /* divider line spans the height of the nav column */
+    .footer__nav {
+      padding-left: calc(var(--u) * 3.1);
+      border-left-width: calc(var(--u) * 0.2);
+      min-height: calc(var(--u) * 14.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .footer__nav nav a {
+      font-size: calc(var(--u) * 1.45);
+      line-height: 1.07;
+      padding-block: 0;
+    }
+
+    .footer__social {
+      margin-top: 0 !important;
+      gap: calc(var(--u) * 1);
+    }
+
+    .footer__social svg {
+      width: calc(var(--u) * 2.2);
+      height: calc(var(--u) * 2.2);
+    }
+
+    .footer__help {
+      gap: calc(var(--u) * 1);
+      width: calc(var(--u) * 21);
+    }
+
+    .footer__help-title {
+      font-size: calc(var(--u) * 1.3);
+    }
+
+    .footer__card {
+      padding: calc(var(--u) * 1) calc(var(--u) * 1.4);
+      border-radius: calc(var(--u) * 1.2);
+      font-size: max(0.9rem, calc(var(--u) * 1.1));
+    }
+
+    .footer__go {
+      width: calc(var(--u) * 2.1);
+      height: calc(var(--u) * 2.1);
+    }
+
+    .footer__legal {
+      font-size: max(0.88rem, calc(var(--u) * 1.1));
+    }
+  }
+</style>

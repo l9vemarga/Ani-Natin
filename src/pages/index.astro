@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import IntroFrames from '../components/IntroFrames.astro';
+import HomeHero from '../components/HomeHero.astro';
+import Rationale from '../components/Rationale.astro';
+import Infographic from '../components/Infographic.astro';
+import AgriCareers from '../components/AgriCareers.astro';
+import ClosingBand from '../components/ClosingBand.astro';
+---
+
+<BaseLayout
+  title="Ani Natin"
+  description="Alamin kung paano maaaring maging moderno, high-tech at kumikitang karera ang Agri-Fishery Arts. Mga kuwento, school finder, at community para sa mga Grade 10 na estudyante."
+  loader
+>
+  <IntroFrames />
+  <HomeHero />
+  <Rationale />
+  <Infographic />
+  <AgriCareers />
+  <ClosingBand />
+</BaseLayout>
+
+<script>
+  import '../scripts/loader.js';
+  import '../scripts/home-animations.js';
+</script>

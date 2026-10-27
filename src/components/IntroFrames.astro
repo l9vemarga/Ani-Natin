@@ -1,0 +1,329 @@
+---
+// Intro: the design study's two frames (worksheet page 12), as the first part of the Home page.
+// Frame 1 is the cream statement, frame 2 is the full-bleed farmer photo. The scroll transition
+// between them is added in the animation pass.
+import Logo from './Logo.astro';
+import Photo from './Photo.astro';
+---
+
+<div class="intro-stage">
+<section id="intro" class="frame frame--one" data-nav="light" aria-label="Introduction">
+  <p class="frame1__top" data-split>
+    <span class="ln">Food nurtures us</span>
+    <span class="ln accent">every single day.</span>
+  </p>
+
+  <span class="frame1__slash" aria-hidden="true"></span>
+
+  <div class="frame1__art">
+    <Photo src="intro/farmer-lineart.webp" fit="contain" alt="Line drawing of a farmer holding harvested crops" />
+  </div>
+
+  <p class="frame1__bottom" data-split>
+    <span class="ln">At sa bawat kain</span>
+    <span class="ln">natin, may kwentong</span>
+    <span class="ln accent">nagmumula sa lupa.</span>
+  </p>
+
+  <span class="frame1__quarter" aria-hidden="true"></span>
+
+  <!-- Small cue that the page continues by scrolling. Fades out as soon as scrolling starts. -->
+  <a class="frame1__cue" href="#home" aria-label="Scroll to continue">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6" /></svg>
+  </a>
+</section>
+
+<section class="frame frame--two" data-nav="dark" aria-label="Introduction, continued">
+  <div class="frame2__photo">
+    <Photo src="intro/farmer-field.webp" alt="A farmer bent over a field of young crops" />
+  </div>
+  <span class="frame2__ring" aria-hidden="true"></span>
+  <!-- <Logo variant="icon" class="frame2__icon" /> -->
+
+  <div class="frame2__text">
+    <p class="frame2__title">
+      <span class="ln">Pagdating ng</span>
+      <span class="ln">araw, <span class="hl">sino na ang</span></span>
+      <span class="ln hl">magpapakain sa</span>
+      <span class="ln hl">bayan?</span>
+    </p>
+    <p class="frame2__invite">Tara, sama-sama nating alamin!</p>
+  </div>
+</section>
+</div>
+
+<style>
+  .frame {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Scroll cue at the bottom of frame 1 */
+  .frame1__cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: 0.15rem;
+    transform: translateX(-50%);
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--green);
+  }
+
+  .frame1__cue svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: cue-bob 1.8s ease-in-out infinite;
+  }
+
+  @keyframes cue-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+  }
+
+  /* When animations are on, both frames share one pinned screen. Frame 2 opens from the green
+     quarter-circle as the visitor scrolls (the animation script drives the clip-path). */
+  :global(html.js:not(.rm):not(.anim-fail)) .intro-stage {
+    position: relative;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  :global(html.js:not(.rm):not(.anim-fail)) .intro-stage .frame {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+
+  :global(html.js:not(.rm):not(.anim-fail)) .intro-stage .frame--two {
+    z-index: 2;
+    clip-path: circle(0% at 10% 100%);
+  }
+
+  .ln {
+    display: block;
+  }
+
+  /* shared headline style: heavy sans, tight, capitals */
+  .frame1__top,
+  .frame1__bottom,
+  .frame2__title {
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Frame 1 ---------- */
+  .frame--one {
+    min-height: 100svh;
+    background: var(--cream);
+    color: var(--brown);
+    padding: 6.5rem var(--gutter) 11rem;
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .frame1__top,
+  .frame1__bottom {
+    font-size: clamp(1.9rem, 8.4vw, 3.2rem);
+  }
+
+  .accent {
+    color: var(--orange);
+  }
+
+  .frame1__bottom {
+    justify-self: end;
+    text-align: right;
+  }
+
+  .frame1__art {
+    width: 9rem;
+    height: 10rem;
+    justify-self: center;
+  }
+
+  .frame1__slash {
+    display: none;
+  }
+
+  .frame1__quarter {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 9rem;
+    height: 7rem;
+    background: var(--green);
+    border-top-right-radius: 100% 100%;
+  }
+
+  /* ---------- Frame 2 ---------- */
+  .frame--two {
+    min-height: 100svh;
+    background: var(--green-deep);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    padding: 5rem var(--gutter);
+  }
+
+  .frame2__photo {
+    --photo-empty-bg: #5b6a45;
+    position: absolute;
+    inset: 0;
+  }
+
+  .frame2__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(20, 20, 10, 0.45), rgba(20, 20, 10, 0.05) 70%);
+  }
+
+  .frame2__ring {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 62%;
+    height: 40%;
+    background: radial-gradient(ellipse 100% 100% at 100% 100%, transparent 0 26%, var(--green) 26.5% 99.5%, transparent 100%);
+  }
+
+  .frame--two :global(.frame2__icon) {
+    position: absolute;
+    right: 9%;
+    bottom: 11%;
+    width: 4.5rem;
+    color: var(--yellow);
+  }
+
+  .frame2__text {
+    position: relative;
+  }
+
+  .frame2__title {
+    font-size: clamp(2rem, 9vw, 3.4rem);
+    color: var(--cream);
+  }
+
+  .hl {
+    color: var(--yellow);
+  }
+
+  .frame2__invite {
+    margin: 1.75rem 0 0;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- Desktop: positions drawn in proportions of the 1440px design ---------- */
+  @media (min-width: 960px) {
+    .frame--one {
+      display: block;
+      min-height: max(100svh, calc(var(--u) * 56));
+      padding: 0;
+    }
+
+    .frame1__top,
+    .frame1__bottom {
+      position: absolute;
+      font-size: calc(var(--u) * 4.1);
+    }
+
+    .frame1__top {
+      left: calc(var(--gx) + var(--u) * 10.3);
+      top: calc(var(--u) * 17.4);
+    }
+
+    .frame1__bottom {
+      right: calc(var(--gx) + var(--u) * 8.9);
+      top: calc(var(--u) * 33.5);
+    }
+
+    .frame1__slash {
+      display: block;
+      position: absolute;
+      left: calc(var(--gx) + var(--u) * 39.1);
+      top: calc(var(--u) * 27.6);
+      width: calc(var(--u) * 13);
+      height: 3px;
+      background: var(--brown);
+      transform-origin: left center;
+      transform: rotate(29.3deg);
+    }
+
+    .frame1__art {
+      position: absolute;
+      left: calc(var(--gx) + var(--u) * 63.9);
+      top: calc(var(--u) * 14.5);
+      width: calc(var(--u) * 17.5);
+      height: calc(var(--u) * 16.2);
+    }
+
+    .frame1__quarter {
+      width: calc(var(--u) * 29.3);
+      height: calc(var(--u) * 21.5);
+    }
+
+    .frame1__cue {
+      bottom: calc(var(--u) * 2.4);
+      font-size: calc(var(--u) * 1);
+    }
+
+    .frame--two {
+      min-height: max(100svh, calc(var(--u) * 61));
+      padding: 0;
+      display: block;
+    }
+
+    .frame2__ring {
+      width: calc(var(--u) * 34);
+      height: calc(var(--u) * 46);
+    }
+
+    .frame--two :global(.frame2__icon) {
+      left: calc(var(--gx) + var(--u) * 69.6);
+      right: auto;
+      bottom: auto;
+      top: calc(var(--u) * 14.4);
+      width: calc(var(--u) * 18);
+    }
+
+    .frame2__text {
+      position: absolute;
+      left: calc(var(--gx) + var(--u) * 7.9);
+      top: calc(var(--u) * 14.6);
+    }
+
+    .frame2__title {
+      font-size: calc(var(--u) * 4.1);
+      line-height: 1.38;
+    }
+
+    .frame2__invite {
+      margin: calc(var(--u) * 3.4) 0 0;
+      font-size: calc(var(--u) * 2.3);
+    }
+  }
+</style>

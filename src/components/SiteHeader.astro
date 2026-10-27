@@ -1,0 +1,281 @@
+---
+// Floating header from the design study: a green icon circle at the left and pill links joined by thin
+// lines at the right. No bar behind it. Over a light section the pills are orange and the icon circle is
+// green; over a dark section (data-nav="dark" on the section) they turn yellow. The icon and every pill
+// check what is behind them on their own, so they change as a dark section reaches them.
+import Logo from './Logo.astro';
+
+const links = [
+  { href: '/youth-in-agri', label: 'Youth in Agri' },
+  { href: '/community', label: 'Community' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+// The link for the page you are on is marked, for screen readers and with a cream ring
+const here = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<header class="site-header">
+  <a class="site-header__home" href="/" aria-label="Ani Natin, home" data-tone-probe>
+    <Logo variant="icon" class="site-header__icon" />
+  </a>
+
+  <button class="site-header__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-tone-probe>
+    Menu
+  </button>
+
+  <nav id="primary-nav" class="site-header__nav" aria-label="Main">
+    <ul>
+      {links.map((link) => (
+        <li data-tone-probe><a class="pill" href={link.href} aria-current={here === link.href ? 'page' : undefined}>{link.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem var(--gutter) 0;
+    pointer-events: none;
+  }
+
+  /* Colors per piece: light section (default) or dark section (data-tone="dark", set by the script below) */
+  .site-header__home,
+  .site-header__toggle,
+  .site-header__nav li {
+    --pill-bg: var(--orange);
+    --pill-fg: var(--cream);
+    --pill-line: var(--orange);
+    --pill-ring: var(--cream);
+    --vine-fill: var(--green);
+    --vine-ink: var(--cream);
+    --logo-bg: var(--green);
+    --logo-fg: var(--cream);
+  }
+
+  .site-header [data-tone='dark'] {
+    --pill-bg: var(--yellow);
+    --pill-fg: var(--brown);
+    --pill-line: var(--yellow);
+    --pill-ring: var(--brown);
+    --vine-fill: var(--orange);
+    --vine-ink: var(--cream);
+    --logo-bg: var(--yellow);
+    --logo-fg: var(--green);
+  }
+
+  /* the global .pill sets its own vine colors; take the ones from the list item instead */
+  .site-header .pill {
+    --vine-fill: inherit;
+    --vine-ink: inherit;
+  }
+
+  .site-header > * {
+    pointer-events: auto;
+  }
+
+  .site-header__home {
+    display: grid;
+    place-items: center;
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 50%;
+    background: var(--logo-bg);
+    color: var(--logo-fg);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .site-header :global(.site-header__icon) {
+    width: 1.25rem;
+  }
+
+  .pill,
+  .site-header__toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.6rem;
+    padding: 0 1.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--pill-bg);
+    color: var(--pill-fg);
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.18s ease, background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .pill:hover {
+    transform: translateY(-2px);
+  }
+
+  .pill[aria-current='page'] {
+    box-shadow: inset 0 0 0 0.16rem var(--pill-ring);
+  }
+
+  .site-header__nav ul {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* thin line that joins the pills */
+  .site-header__nav li + li::before {
+    content: '';
+    display: block;
+    width: 1.1rem;
+    height: 3px;
+    background: var(--pill-line);
+    position: absolute;
+    left: -1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background-color 0.25s ease;
+  }
+
+  .site-header__nav li {
+    position: relative;
+  }
+
+  .site-header__nav li + li {
+    margin-left: 1.1rem;
+  }
+
+  /* Phones and tablets: icon circle plus one Menu pill that opens a stack of pills */
+  @media (max-width: 959px) {
+    .site-header__nav {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: var(--gutter);
+    }
+
+    .site-header__nav.is-open {
+      display: block;
+    }
+
+    .site-header__nav ul {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .site-header__nav li + li {
+      margin-left: 0;
+    }
+
+    .site-header__nav li + li::before {
+      display: none;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .site-header {
+      padding: calc(var(--u) * 5.4) calc(var(--gx) + var(--u) * 8) 0 calc(var(--gx) + var(--u) * 7.4);
+    }
+
+    .site-header__home {
+      width: calc(var(--u) * 4.6);
+      height: calc(var(--u) * 4.6);
+    }
+
+    .site-header :global(.site-header__icon) {
+      width: calc(var(--u) * 1.9);
+    }
+
+    .site-header__toggle {
+      display: none;
+    }
+
+    .pill {
+      min-height: calc(var(--u) * 3.5);
+      padding: 0 calc(var(--u) * 1.8);
+      font-size: calc(var(--u) * 1.32);
+      letter-spacing: 0.005em;
+    }
+
+    .site-header__nav li + li {
+      margin-left: calc(var(--u) * 2.6);
+    }
+
+    .site-header__nav li + li::before {
+      width: calc(var(--u) * 2.6);
+      left: calc(var(--u) * -2.6);
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = document.querySelector<HTMLButtonElement>('.site-header__toggle');
+  const nav = document.getElementById('primary-nav');
+
+  function setOpen(open: boolean) {
+    toggle?.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('is-open', open);
+  }
+
+  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  nav?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  // Light or dark behind each piece? Sections say so with data-nav="light" or data-nav="dark". The icon, the
+  // Menu button and every pill look at the point under their own center, so while a dark section is
+  // sweeping in (the intro reveal) they change one by one. Hit testing respects clip-path, so a section
+  // that is not revealed yet does not count.
+  const probes = header ? Array.from(header.querySelectorAll<HTMLElement>('[data-tone-probe]')) : [];
+  function toneAt(el: HTMLElement) {
+    const r = el.getBoundingClientRect();
+    if (!r.width) return null; // hidden (the closed phone menu)
+    for (const hit of document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2)) {
+      if (header!.contains(hit)) continue;
+      const section = hit.closest<HTMLElement>('[data-nav]');
+      if (section) return section.dataset.nav === 'dark' ? 'dark' : 'light';
+    }
+    return 'light';
+  }
+  function update() {
+    for (const el of probes) {
+      const tone = toneAt(el);
+      if (tone && el.dataset.tone !== tone) el.dataset.tone = tone;
+    }
+  }
+  let queued = false;
+  function queue() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      update();
+    });
+  }
+  if (probes.length) {
+    update();
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue);
+    addEventListener('load', queue);
+    addEventListener('ani:ready', queue);
+    // the phone menu opens after the first check
+    toggle?.addEventListener('click', queue);
+  }
+</script>

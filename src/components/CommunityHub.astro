@@ -1,0 +1,161 @@
+---
+// Testimonials and Discussion Forum (wireframe: two tall cards that open their section below).
+// The cards are tabs. The forum is the default one. The forum list, the replies and the "Ask a question"
+// form are drawn by community.js from the forum data layer (forum-api.js).
+import { categories, testimonials } from '../data/community-content.js';
+import { communityConfig } from '../data/community.config.js';
+
+const limits = communityConfig.limits;
+const initials = (name: string) =>
+  name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('') || 'AN';
+const tones = ['lime', 'yellow', 'cream'];
+---
+
+<section class="cm-hub" id="forum-and-testimonials" data-nav="dark" aria-labelledby="cm-hub-title">
+  <svg class="cm-hub__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d="M0 62C100 92 200 92 320 50C440 8 520 40 640 64C760 88 880 40 1000 20C1120 0 1300 22 1440 34L1440 120L0 120Z" />
+  </svg>
+  <h2 id="cm-hub-title" class="visually-hidden">Testimonials and Discussion Forum</h2>
+
+  <div class="cm-tabs" role="tablist" aria-label="Testimonials or Discussion Forum">
+    <button class="cm-card cm-card--tes" type="button" role="tab" id="tab-testimonials" aria-controls="panel-testimonials" aria-selected="false" tabindex="-1" data-tab="testimonials" data-fade>
+      <span class="cm-card__q">Rinig Mula sa Agri-Fishery Alumni at Agri-Pioneers</span>
+      <svg class="cm-card__art" viewBox="0 0 160 120" aria-hidden="true" focusable="false">
+        <path class="a-quote" d="M18 70C18 44 34 30 54 28L56 40C44 43 38 50 38 58H54V92H18Z" />
+        <path class="a-quote" d="M66 70C66 44 82 30 102 28L104 40C92 43 86 50 86 58H102V92H66Z" />
+        <path class="a-stem" d="M128 118C124 96 132 82 126 62" />
+        <path class="a-leaf" d="M127 64C112 60 100 48 100 32C116 34 127 46 127 64Z" />
+        <path class="a-leaf a-leaf--b" d="M127 68C142 64 154 52 154 36C138 38 127 50 127 68Z" />
+      </svg>
+      <span class="cm-card__label">Testimonials <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg></span>
+    </button>
+
+    <button class="cm-card cm-card--forum" type="button" role="tab" id="tab-forum" aria-controls="panel-forum" aria-selected="true" data-tab="forum" data-fade>
+      <span class="cm-card__q">May tanong tungkol sa Agri-Fishery o sa Ani Natin? Pagusapan Natin!</span>
+      <svg class="cm-card__art" viewBox="0 0 160 120" aria-hidden="true" focusable="false">
+        <path class="a-bubble" d="M14 18H98C106 18 112 24 112 32V70C112 78 106 84 98 84H52L30 102V84H14C6 84 0 78 0 70V32C0 24 6 18 14 18Z" transform="translate(4 0)" />
+        <path class="a-bubble a-bubble--b" d="M70 52H146C154 52 160 58 160 66V92C160 100 154 106 146 106H138V120L118 106H70C62 106 56 100 56 92V66C56 58 62 52 70 52Z" transform="translate(-4 -6)" />
+        <circle class="a-dot" cx="30" cy="50" r="6" /><circle class="a-dot" cx="56" cy="50" r="6" /><circle class="a-dot" cx="82" cy="50" r="6" />
+      </svg>
+      <span class="cm-card__label">Discussion Forum <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg></span>
+    </button>
+  </div>
+
+  <div class="cm-panels">
+    <!-- ================= Discussion forum ================= -->
+    <div class="cm-panel" id="panel-forum" role="tabpanel" aria-labelledby="tab-forum" tabindex="0">
+      <header class="cm-panel__head">
+        <div>
+          <h3 class="cm-h3">Anong Nasa Isip Mo? Usap Tayo Dito!</h3>
+          <p class="cm-note">Nickname lang ang kailangan. Walang sign-up, walang email.</p>
+        </div>
+        <button class="pill-btn pill-btn--green cm-ask" id="ask-open" type="button">Ask a question</button>
+      </header>
+
+      <div class="cm-toolbar">
+        <div class="cm-chips" role="group" aria-label="Filter by category">
+          <button class="cm-chip is-on" type="button" data-cat="all" aria-pressed="true">All</button>
+          {categories.map((c) => <button class="cm-chip" type="button" data-cat={c.id} aria-pressed="false">{c.label}</button>)}
+        </div>
+        <label class="cm-mini">
+          <span class="visually-hidden">Search topics</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21" /></svg>
+          <input id="forum-q" type="search" placeholder="Search topics" autocomplete="off" />
+        </label>
+      </div>
+
+      <p class="cm-sample" id="forum-sample" hidden>Sample topics lang ito, para makita ang itsura ng forum. Ang mga totoong tanong at sagot ay lalabas kapag live na ito.</p>
+
+      <ul class="cm-topics" id="forum-list" aria-live="polite" aria-busy="true"></ul>
+      <p class="cm-empty" id="forum-empty" hidden>Wala pang topic dito. Ikaw na ang mauna: pindutin ang <b>Ask a question</b>!</p>
+      <div class="cm-more"><button class="pill-btn pill-btn--lime" id="forum-more" type="button" hidden>Ipakita pa</button></div>
+
+      <p class="cm-moderation">
+        Dumadaan sa review ng Ani Natin team ang bawat tanong at sagot bago ito lumabas, at hindi namin hinihingi ang email mo.
+        <a href="/privacy">Privacy Note (RA 10173)</a>
+      </p>
+    </div>
+
+    <!-- ================= Testimonials ================= -->
+    <div class="cm-panel" id="panel-testimonials" role="tabpanel" aria-labelledby="tab-testimonials" tabindex="0" hidden>
+      <header class="cm-panel__head">
+        <div>
+          <h3 class="cm-h3">Rinig Mula sa Agri-Fishery Alumni at Agri-Pioneers</h3>
+          <p class="cm-note">Mga kuwento ng mga nakaranas na ng Agri-Fishery.</p>
+        </div>
+      </header>
+      <ul class="cm-quotes">
+        {testimonials.map((t, i) => (
+          <li class={`cm-quote cm-quote--${tones[i % tones.length]}`}>
+            {communityConfig.showSampleTags && t.sample && <span class="cm-tag">Sample</span>}
+            <svg class="cm-quote__mark" viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path d="M0 22C0 10 7 3 18 1L19 7C14 8.500 11 12 11 16H19V36H0Z" /><path d="M27 22C27 10 34 3 45 1L46 7C41 8.500 38 12 38 16H46V36H27Z" /></svg>
+            <blockquote><p>{t.quote}</p></blockquote>
+            <div class="cm-quote__by">
+              <span class="cm-avatar" aria-hidden="true">{initials(t.name)}</span>
+              <span><b>{t.name}</b><br /><span class="cm-quote__role">{t.role} · {t.school}</span></span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================= "Ask a question" form ================= -->
+  <dialog class="cm-dialog" id="ask-dialog" aria-labelledby="ask-title">
+    <form class="cm-form" id="ask-form" method="dialog" novalidate>
+      <div class="cm-dialog__head">
+        <h3 id="ask-title" class="cm-h3">Magtanong sa Community</h3>
+        <button class="cm-x" type="button" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+
+      <div class="cm-form__fields">
+        <p class="cm-field">
+          <label for="ask-category">Category</label>
+          <select id="ask-category" name="category" required>
+            <option value="">Pumili ng category</option>
+            {categories.map((c) => <option value={c.id}>{c.label}</option>)}
+          </select>
+          <span class="cm-err" data-err="category" role="alert"></span>
+        </p>
+        <p class="cm-field">
+          <label for="ask-title-input">Title</label>
+          <input id="ask-title-input" name="title" type="text" maxlength={limits.title} autocomplete="off" required />
+          <span class="cm-count" data-count="title" data-max={limits.title}></span>
+          <span class="cm-err" data-err="title" role="alert"></span>
+        </p>
+        <p class="cm-field">
+          <label for="ask-body">Ano ang tanong mo?</label>
+          <textarea id="ask-body" name="body" rows="5" maxlength={limits.body} required></textarea>
+          <span class="cm-count" data-count="body" data-max={limits.body}></span>
+          <span class="cm-err" data-err="body" role="alert"></span>
+        </p>
+        <p class="cm-field">
+          <label for="ask-nick">Nickname</label>
+          <input id="ask-nick" name="nickname" type="text" maxlength={limits.nickname} autocomplete="off" required aria-describedby="ask-nick-hint" />
+          <span class="cm-hintline" id="ask-nick-hint">Huwag gamitin ang buong pangalan, address, o numero mo.</span>
+          <span class="cm-err" data-err="nickname" role="alert"></span>
+        </p>
+        <!-- Honeypot: hidden from people. Only bots fill it in. -->
+        <p class="cm-hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label></p>
+        <!-- Turnstile (Cloudflare's bot check) goes here when the backend is live. See BACKEND.md. -->
+      </div>
+
+      <p class="cm-status" id="ask-status" role="status" aria-live="polite"></p>
+      <p class="cm-moderation">Dumadaan sa review ang post bago ito lumabas. Walang email na kinokolekta. <a href="/privacy">Privacy Note</a></p>
+
+      <div class="cm-form__actions">
+        <button class="cm-link" type="button" data-close>Cancel</button>
+        <button class="pill-btn pill-btn--green" type="submit" id="ask-submit">Ipadala para ma-review</button>
+      </div>
+    </form>
+
+    <div class="cm-done" id="ask-done" hidden>
+      <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="60" r="52" class="d-bg" /><path class="d-check" d="M36 62L53 79L86 42" /></svg>
+      <h3 class="cm-h3">Salamat!</h3>
+      <p>Natanggap na namin ang tanong mo. Lalabas ito sa forum kapag na-review na ng Ani Natin team.</p>
+      <button class="pill-btn pill-btn--green" type="button" data-close>Sige, balik sa forum</button>
+    </div>
+  </dialog>
+</section>

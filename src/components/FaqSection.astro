@@ -1,0 +1,27 @@
+---
+// FAQ (wireframe: a bar with a chevron that straddles the green section and the cream page).
+// A yellow card holds the questions, each one a button that opens its answer. Written answers: see
+// community-content.js. Footer's "FAQ" link goes to #faq; #faq-<id> opens one question.
+import { faq } from '../data/community-content.js';
+---
+
+<section class="cm-faq" id="faq" aria-labelledby="faq-title">
+  <div class="cm-faq__card" data-nav="light">
+    <h2 id="faq-title" class="cm-h2" data-split>Mga Karaniwang Tanong (Sagot Agad!)</h2>
+    <ul class="cm-acc">
+      {faq.map((item) => (
+        <li class="cm-acc__item" data-reveal>
+          <h3 class="cm-acc__h">
+            <button class="cm-acc__btn" type="button" id={`faq-${item.id}`} aria-expanded="false" aria-controls={`faq-panel-${item.id}`}>
+              <span>{item.q}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+          </h3>
+          <div class="cm-acc__panel" id={`faq-panel-${item.id}`} role="region" aria-labelledby={`faq-${item.id}`}>
+            <div class="cm-acc__inner"><p>{item.a}</p></div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

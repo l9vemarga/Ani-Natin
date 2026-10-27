@@ -1,0 +1,56 @@
+---
+// Community hero (wireframe: tagline + one big search bar). The headline and sub-headline are the
+// worksheet's. The search looks through the forum topics, the FAQ and the schools (see community.js).
+---
+
+<section class="cm-hero" data-nav="light" aria-labelledby="cm-title">
+  <!-- Cute decoration: organic blobs, flowers and leaves, in the Home page's style -->
+  <div class="cm-hero__decor" aria-hidden="true">
+    <svg class="cm-deco cm-deco--blob-orange" viewBox="0 0 420 380" focusable="false" data-pop>
+      <path d="M210 20C250-5 290 30 270 70C300 80 330 110 312 150C362 170 392 232 332 272C352 322 300 362 250 342C230 382 170 382 150 342C100 357 50 322 70 272C20 252 0 192 50 162C30 112 70 72 120 77C120 42 170 5 210 20Z" />
+    </svg>
+    <svg class="cm-deco cm-deco--blob-lime" viewBox="0 0 360 212" focusable="false" data-pop>
+      <path d="M0 90C-2 50 30 30 70 35C85 30 95 15 118 2C122 22 126 35 135 45C175 55 215 75 235 100C300 95 355 125 360 160C362 195 330 212 290 212C240 212 205 190 190 160C160 140 120 135 100 125C50 122 5 125 0 90Z" />
+    </svg>
+    <svg class="cm-deco cm-deco--flower-a" viewBox="-40 -40 80 80" focusable="false" data-pop>
+      <g class="cm-flower"><circle cx="0" cy="-22" r="14" /><circle cx="21" cy="-7" r="14" /><circle cx="13" cy="18" r="14" /><circle cx="-13" cy="18" r="14" /><circle cx="-21" cy="-7" r="14" /><circle class="cm-flower__heart" cx="0" cy="0" r="12" /></g>
+    </svg>
+    <svg class="cm-deco cm-deco--flower-b" viewBox="-40 -40 80 80" focusable="false" data-pop>
+      <g class="cm-flower cm-flower--b"><circle cx="0" cy="-22" r="14" /><circle cx="21" cy="-7" r="14" /><circle cx="13" cy="18" r="14" /><circle cx="-13" cy="18" r="14" /><circle cx="-21" cy="-7" r="14" /><circle class="cm-flower__heart" cx="0" cy="0" r="12" /></g>
+    </svg>
+    <svg class="cm-deco cm-deco--sprout" viewBox="0 0 120 150" focusable="false" data-pop>
+      <path class="cm-stem" d="M60 148C58 120 66 100 62 74" />
+      <path class="cm-leaf" d="M62 76C40 70 18 52 16 22C44 24 62 44 62 76Z" />
+      <path class="cm-leaf cm-leaf--b" d="M62 80C84 74 106 56 108 26C80 28 62 48 62 80Z" />
+    </svg>
+  </div>
+
+  <div class="cm-hero__inner">
+    <p class="cm-eyebrow" data-reveal>Community</p>
+    <h1 id="cm-title" class="cm-title" data-split>
+      <span class="ln">Got Questions About the</span>
+      <span class="ln"><span class="mark">Agri-Fishery Elective?</span></span>
+    </h1>
+    <p class="cm-sub" data-split>Magtanong tungkol sa subjects at magbasa ng karanasan ng mga alumni ng Agri-Fishery!</p>
+    <p class="cm-tagline" data-reveal>Magtanong, magbasa, at matuto kasama ang mga studyante, alumni, farmers, at agri-pioneers.</p>
+
+    <form class="cm-search" id="cm-search-form" role="search" data-reveal>
+      <label class="visually-hidden" for="cm-search-input">Search the community</label>
+      <svg class="cm-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21" /></svg>
+      <input
+        id="cm-search-input"
+        class="cm-search__input"
+        type="search"
+        placeholder="Search"
+        autocomplete="off"
+        spellcheck="false"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="cm-results"
+      />
+      <div id="cm-results" class="cm-results" role="listbox" aria-label="Search results" hidden></div>
+    </form>
+    <p class="cm-hint" data-reveal>Hanapin sa mga topic ng forum, sa FAQ, at sa listahan ng mga school.</p>
+  </div>
+</section>

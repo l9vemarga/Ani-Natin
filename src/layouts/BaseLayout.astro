@@ -1,0 +1,59 @@
+---
+import '@fontsource/bagel-fat-one/latin-400.css';
+import '@fontsource-variable/fredoka/wght.css';
+import '@fontsource-variable/figtree/wght.css';
+import '../styles/fonts.css';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Loader from '../components/Loader.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  loader?: boolean; // show the vine loading screen (Home page)
+}
+
+const { title, description, loader = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Brand fonts, fetched early so the text does not visibly change when they arrive -->
+    <link rel="preload" href="/fonts/magic-yellow.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/etna-sans-serif.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/garet-book.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/garet-heavy.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Flags set before first paint so nothing jumps:
+         js = scripts available, rm = visitor prefers reduced motion (no animation),
+         anim-fail = animations did not start in time, so everything is shown plainly. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) root.classList.add('rm');
+        setTimeout(function () {
+          if (!root.classList.contains('anim-ready')) root.classList.add('anim-fail');
+        }, 4500);
+      })();
+    </script>
+  </head>
+  <body>
+    {loader && <Loader />}
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+    <script>
+      import '../scripts/vine-hover.js';
+    </script>
+  </body>
+</html>

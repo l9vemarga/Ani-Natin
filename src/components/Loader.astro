@@ -1,0 +1,344 @@
+---
+// Loading screen: the page starts covered by a thick tangle of green vines. A little carrot-shaped
+// brush writes the Ani Natin wordmark in the middle, then vines, leaves and flowers grow around it.
+// After a few seconds the vines pull away in both directions, opening from the middle like a curtain,
+// and the intro underneath (unchanged) takes over. Not a spinner.
+//
+// - The vines are plain SVG, so the cover is there from the very first paint (no flash of the intro).
+// - src/scripts/loader.js runs the animation. It is skipped for reduced motion and when scripts are off
+//   (the inline script below only switches the loader on when it can actually be animated).
+// - The wordmark is drawn through a mask. The mask is two wide zig-zag strokes (one per row of letters)
+//   that the brush follows, so the letters appear exactly where the brush has been.
+import wordmarkSvg from '../../public/brand/logo-wordmark.svg?raw';
+
+const wordmarkInner = wordmarkSvg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+
+// Ten overlapping wavy rows that together cover the whole screen (the viewBox is sliced to fit any shape)
+const seg = 240;
+const x0 = -240;
+function wave(y: number, flip: boolean, amp: number, step: number, count: number) {
+  let d = `M${x0} ${y}Q${x0 + step / 2} ${y + (flip ? amp : -amp) * 2} ${x0 + step} ${y}`;
+  for (let i = 2; i <= count; i++) d += `T${x0 + step * i} ${y}`;
+  return d;
+}
+const rows = Array.from({ length: 10 }, (_, i) => ({
+  d: wave(-56 + i * 112, i % 2 === 0, 36, seg, 8),
+  tone: i % 2 === 0 ? 'row-a' : 'row-b',
+}));
+const veins = [200, 380, 540, 700].map((y, i) => wave(y, i % 2 === 0, 60, 320, 6));
+
+// The brush's path over the wordmark (wordmark units, 1518 x 939). Row 1 ("ani") fills x 232-1202,
+// y 0-473; row 2 ("natin") fills x 0-1517, y 503-938. Each path zig-zags across its row.
+function zigzag(xStart: number, xEnd: number, yTop: number, yBottom: number, step: number) {
+  let d = `M${xStart} ${yTop}`;
+  let x = xStart;
+  let down = true;
+  while (x < xEnd) {
+    x += step;
+    d += `L${x} ${down ? yBottom : yTop}`;
+    down = !down;
+  }
+  return d;
+}
+// The turning points sit just outside the letters and the strokes are close together, so every part of
+// every letter is covered; each stroke is clipped to its own row (see the clip paths below) so it cannot
+// reveal the other row early.
+const sweeps = [zigzag(150, 1250, -60, 535, 150), zigzag(-60, 1580, 440, 1000, 150)];
+
+// Leaves, flowers and sparkles around the wordmark. Drawn on a 780 x 560 sheet where the wordmark
+// itself fills the box from (180,160) to (600,420). Pieces may reach past the sheet (it is not clipped).
+const leafPath = (s: number) =>
+  `M0 0C${s * 0.3} ${-s * 0.55} ${s * 0.95} ${-s * 0.5} ${s * 1.15} 0C${s * 0.95} ${s * 0.5} ${s * 0.3} ${s * 0.55} 0 0Z`;
+const stalks = [
+  // sprouts and short tendrils close to the letters
+  'M215 175C190 140 160 120 150 80',
+  'M575 170C600 130 640 110 650 70',
+  'M230 410C215 450 170 470 150 450C135 432 155 415 172 428',
+  'M560 415C580 455 620 475 640 500',
+  'M300 168Q292 140 302 118',
+  'M480 418Q490 440 478 462',
+  // long vines that climb out of the letters to each side, top and bottom
+  'M205 320C150 300 110 250 60 262C10 274 -20 330 -70 320',
+  'M575 300C630 285 670 340 720 330C770 320 800 265 850 275',
+  'M395 168C385 120 425 85 405 35C390 -5 430 -35 470 -28',
+  'M385 418C395 470 355 500 375 540C390 575 445 580 480 560',
+];
+const leaves = [
+  { x: 150, y: 80, a: -125, s: 70 },
+  { x: 150, y: 80, a: -45, s: 58 },
+  { x: 650, y: 70, a: -62, s: 66 },
+  { x: 650, y: 70, a: -150, s: 54 },
+  { x: 222, y: 438, a: 78, s: 60 },
+  { x: 640, y: 500, a: 28, s: 62 },
+  { x: 640, y: 500, a: 112, s: 52 },
+  // along the long vines
+  { x: 150, y: 300, a: 100, s: 52 },
+  { x: 60, y: 262, a: -100, s: 58 },
+  { x: -10, y: 322, a: 105, s: 50 },
+  { x: 630, y: 290, a: -85, s: 52 },
+  { x: 720, y: 330, a: 85, s: 58 },
+  { x: 790, y: 300, a: -70, s: 50 },
+  { x: 402, y: 100, a: 160, s: 54 },
+  { x: 412, y: 44, a: -30, s: 50 },
+  { x: 372, y: 482, a: 20, s: 54 },
+  { x: 384, y: 548, a: 150, s: 50 },
+];
+const flowers = [
+  { x: 302, y: 102, r: 17, tone: 'a' },
+  { x: 478, y: 478, r: 17, tone: 'a' },
+  { x: -74, y: 318, r: 19, tone: 'b' },
+  { x: 852, y: 274, r: 19, tone: 'c' },
+  { x: 472, y: -30, r: 18, tone: 'b' },
+  { x: 484, y: 558, r: 18, tone: 'c' },
+];
+const sparks = [
+  { x: 105, y: 262, s: 15 },
+  { x: 690, y: 300, s: 13 },
+  { x: 88, y: 392, s: 10 },
+  { x: 700, y: 196, s: 10 },
+  { x: 560, y: 20, s: 11 },
+  { x: 230, y: 520, s: 11 },
+];
+const petals = [0, 1, 2, 3, 4].map((i) => {
+  const a = (i * 72 - 90) * (Math.PI / 180);
+  return { cx: Math.cos(a) * 1.25, cy: Math.sin(a) * 1.25 };
+});
+---
+
+<div class="loader" role="status" aria-label="Loading Ani Natin" data-loader>
+  <svg class="loader__vines" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    {rows.map((r) => <path class:list={['vine-row', r.tone]} d={r.d} />)}
+    {veins.map((d) => <path class="vein" d={d} />)}
+  </svg>
+
+  <div class="loader__center">
+    <svg class="loader__decor" viewBox="0 0 780 560" aria-hidden="true" focusable="false">
+      {stalks.map((d) => <path class="stalk" d={d} />)}
+      {leaves.map((l) => (
+        <g class="pop" data-x={l.x} data-y={l.y}>
+          <g transform={`translate(${l.x} ${l.y}) rotate(${l.a})`}><path class="leaf" d={leafPath(l.s)} /></g>
+        </g>
+      ))}
+      {flowers.map((f) => (
+        <g class="pop" data-x={f.x} data-y={f.y}>
+          <g transform={`translate(${f.x} ${f.y})`}>
+            {petals.map((p) => <circle class={`petal petal-${f.tone}`} cx={p.cx * f.r} cy={p.cy * f.r} r={f.r} />)}
+            <circle class={`heart heart-${f.tone}`} cx="0" cy="0" r={f.r * 0.8} />
+          </g>
+        </g>
+      ))}
+      {sparks.map((s) => (
+        <g class="pop" data-x={s.x} data-y={s.y}>
+          <g transform={`translate(${s.x} ${s.y})`}>
+            <path class="spark" d={`M0 ${-s.s}Q0 0 ${s.s} 0Q0 0 0 ${s.s}Q0 0 ${-s.s} 0Q0 0 0 ${-s.s}Z`} />
+          </g>
+        </g>
+      ))}
+    </svg>
+
+    <!-- The wordmark, revealed by the brush. The carrot sits in the same coordinates (its tip is its origin). -->
+    <svg class="loader__word" viewBox="0 0 1518 939" role="img" aria-label="Ani Natin" focusable="false">
+      <defs>
+        <clipPath id="wm-row-1"><rect x="-400" y="-400" width="2400" height="888" /></clipPath>
+        <clipPath id="wm-row-2"><rect x="-400" y="488" width="2400" height="1000" /></clipPath>
+        <mask id="wm-reveal" maskUnits="userSpaceOnUse" x="-400" y="-400" width="2400" height="1800">
+          {sweeps.map((d, i) => <path class="wm-sweep" d={d} clip-path={`url(#wm-row-${i + 1})`} />)}
+        </mask>
+      </defs>
+      <g mask="url(#wm-reveal)" set:html={wordmarkInner} />
+
+      <g class="carrot" transform="translate(170 -10) rotate(26) scale(0)">
+        <path class="c-leaf" d="M0 -320C-70 -380 -95 -470 -45 -540C-20 -480 -5 -400 0 -320Z" />
+        <path class="c-leaf" d="M0 -320C70 -380 95 -470 45 -540C20 -480 5 -400 0 -320Z" />
+        <path class="c-leaf c-leaf-mid" d="M0 -320C-35 -400 -25 -500 0 -590C25 -500 35 -400 0 -320Z" />
+        <path class="c-body" d="M0 0C22 -70 60 -210 52 -325C30 -347 -30 -347 -52 -325C-60 -210 -22 -70 0 0Z" />
+        <path class="c-ridge" d="M-36 -268q16 -7 30 0M8 -212q16 -7 30 0M-24 -158q14 -6 26 0M-8 -104q9 -5 16 0" />
+        <path class="c-paint" d="M0 0C-10 -26 -14 -52 -15 -84L15 -84C14 -52 10 -26 0 0Z" />
+        <circle class="c-eye" cx="-17" cy="-262" r="8" />
+        <circle class="c-eye" cx="17" cy="-262" r="8" />
+        <path class="c-smile" d="M-11 -238q11 12 22 0" />
+      </g>
+    </svg>
+  </div>
+</div>
+
+<!-- Switches the loader on only when the animation can run (scripts available, no reduced motion) -->
+<script is:inline>
+  (function () {
+    var r = document.documentElement;
+    if (r.classList.contains('js') && !r.classList.contains('rm')) r.classList.add('loader-on');
+  })();
+</script>
+
+<style is:global>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: none;
+    overflow: hidden;
+  }
+
+  html.loader-on .loader {
+    display: block;
+  }
+
+  /* No scrolling under the loader. The gutter stays reserved so nothing shifts when it leaves. */
+  html.loader-on {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+    background-color: var(--green-deep); /* fills the reserved scrollbar strip so the vines look edge to edge */
+    transition: background-color 0.5s ease;
+  }
+
+  html.loader-on.loader-opening {
+    background-color: var(--cream);
+  }
+
+  /* If the animations never start, the page is simply shown */
+  html.anim-fail .loader {
+    display: none;
+  }
+
+  html.anim-fail.loader-on {
+    overflow: visible;
+  }
+
+  .loader__vines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+
+  .loader .vine-row {
+    fill: none;
+    stroke-width: 230;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .loader .row-a {
+    stroke: var(--green);
+  }
+
+  .loader .row-b {
+    stroke: var(--green-deep);
+  }
+
+  .loader .vein {
+    fill: none;
+    stroke: var(--lime);
+    stroke-width: 4;
+    stroke-linecap: round;
+    opacity: 0.32;
+  }
+
+  .loader__center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(60vw, 26rem);
+    aspect-ratio: 1518 / 939;
+    transform: translate(-50%, -50%);
+    visibility: hidden; /* the script shows it */
+  }
+
+  .loader__decor {
+    position: absolute;
+    left: -42.86%;
+    top: -61.54%;
+    width: 185.71%;
+    height: 215.38%;
+    max-width: none;
+    overflow: visible;
+  }
+
+  .loader .stalk {
+    fill: none;
+    stroke: #66954a;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .loader .leaf {
+    fill: var(--lime);
+  }
+
+  .loader .petal,
+  .loader .spark {
+    fill: var(--yellow);
+  }
+
+  .loader .heart {
+    fill: var(--orange);
+  }
+
+  .loader .petal-b {
+    fill: var(--orange);
+  }
+
+  .loader .heart-b {
+    fill: var(--yellow);
+  }
+
+  .loader .petal-c {
+    fill: var(--cream);
+  }
+
+  .loader__center .loader__word {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    overflow: visible;
+    color: var(--cream);
+  }
+
+  /* the zig-zag strokes are the mask: wherever the brush has been, the letters show */
+  .loader .wm-sweep {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 330;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  /* The carrot brush */
+  .loader .c-body {
+    fill: var(--orange);
+  }
+
+  .loader .c-ridge {
+    fill: none;
+    stroke: #b8521a;
+    stroke-width: 9;
+    stroke-linecap: round;
+  }
+
+  .loader .c-leaf {
+    fill: var(--lime);
+  }
+
+  .loader .c-leaf-mid {
+    fill: #8dbb55;
+  }
+
+  .loader .c-paint {
+    fill: var(--cream);
+  }
+
+  .loader .c-eye {
+    fill: var(--brown);
+  }
+
+  .loader .c-smile {
+    fill: none;
+    stroke: var(--brown);
+    stroke-width: 7;
+    stroke-linecap: round;
+  }
+</style>

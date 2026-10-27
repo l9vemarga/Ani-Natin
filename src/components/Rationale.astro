@@ -1,0 +1,226 @@
+---
+// Rationale (worksheet page 13, lower half): dark green, wave at the top, right-aligned yellow heading
+// with a hand-drawn underline, two pill-shaped photos with tomato and pear shapes overlapping them.
+import Photo from './Photo.astro';
+import Scribble from './Scribble.astro';
+---
+
+<section id="agri-fishery" class="rationale" data-nav="dark" aria-labelledby="rationale-title">
+  <svg class="rationale__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d="M0 62C100 92 200 92 320 50C440 8 520 40 640 64C760 88 880 40 1000 20C1120 0 1300 22 1440 34L1440 120L0 120Z" />
+  </svg>
+
+  <div class="rationale__inner">
+    <div class="rationale__copy">
+      <h2 id="rationale-title" class="rationale__title" data-split>
+        <span class="ln hl">Let&rsquo;s make</span>
+        <span class="ln lm">Agri-Fishery</span>
+        <span class="ln hl">the next trend</span>
+      </h2>
+      <Scribble name="underline" class="rationale__underline" />
+      <p class="rationale__text" data-split>
+        Definitely! Now&rsquo;s the time to be the next agri-pioneer. Sa SHS Tech Pro Agri-Fishery
+        Elective, higit sa manual farming ang matututunan mo through modern tech, applied science, at
+        agribusiness!
+      </p>
+      <a class="pill-btn pill-btn--lime rationale__cta" href="#agri-guide" data-reveal>Ano Ba&rsquo;ng Ginagawa sa Agri-Fishery?</a>
+    </div>
+
+    <div class="rationale__photos">
+      <div class="rationale__photo rationale__photo--top" data-clip>
+        <Photo src="home/rationale-photo-1.webp" alt="A student in a field hat picking fruit from a tree" />
+      </div>
+      <div class="rationale__photo rationale__photo--bottom" data-clip>
+        <Photo src="home/rationale-photo-2.webp" alt="Two farmers walking between rows of fruit trees" />
+      </div>
+      <svg class="rationale__pear" viewBox="0 0 160 160" aria-hidden="true" focusable="false" data-pop>
+        <path d="M70 6C92-6 124 18 112 52C152 82 150 142 92 150C32 156 0 120 22 80C32 55 56 42 70 6Z" />
+      </svg>
+      <svg class="rationale__tomato" viewBox="0 0 270 105" aria-hidden="true" focusable="false" data-pop>
+        <path transform="scale(1 0.64)" d="M6 130C-4 70 56 24 128 30C190 36 244 8 262 60C284 116 240 166 160 164C90 162 18 190 6 130Z" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rationale {
+    position: relative;
+    background: var(--green);
+    color: var(--cream);
+    padding: 5rem var(--gutter) 5rem;
+  }
+
+  .rationale__wave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 3rem;
+    transform: translateY(-99%);
+    fill: var(--green);
+  }
+
+  .rationale__inner {
+    display: grid;
+    gap: 3rem;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  .ln {
+    display: block;
+  }
+
+  .rationale__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 8.8vw, 3.4rem);
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--yellow);
+  }
+
+  .lm {
+    color: var(--lime);
+  }
+
+  .rationale__title :global(.hl) {
+    color: var(--yellow);
+  }
+
+  .rationale__copy :global(.rationale__underline) {
+    width: min(100%, 15rem);
+    margin: 0.35rem 0 1.25rem;
+    color: var(--orange);
+  }
+
+  .rationale__text {
+    max-width: 28rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .rationale__cta {
+    min-height: 2.5rem;
+    font-size: 0.95rem;
+  }
+
+  .rationale__photos {
+    position: relative;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .rationale__photo {
+    --photo-empty-bg: #6f8f4e;
+    overflow: hidden;
+    border-radius: 999px;
+  }
+
+  /* a touch larger than its frame so the supplied photos' own edges never show */
+  .rationale__photo :global(.photo) {
+    transform: scale(1.04);
+  }
+
+  .rationale__photo--top {
+    height: 11rem;
+    border-radius: 3.6rem; /* the top photo is a rounded rectangle, the bottom one a full pill (as supplied) */
+  }
+
+  .rationale__photo--bottom {
+    height: 8.5rem;
+  }
+
+  .rationale__pear {
+    position: absolute;
+    left: -4%;
+    top: 36%;
+    width: 22%;
+    fill: var(--yellow);
+  }
+
+  .rationale__tomato {
+    position: absolute;
+    right: -4%;
+    top: 40%;
+    width: 46%;
+    fill: var(--orange);
+  }
+
+  @media (min-width: 960px) {
+    .rationale {
+      padding: calc(var(--u) * 9.8) 0 calc(var(--u) * 11);
+    }
+
+    .rationale__wave {
+      height: calc(var(--u) * 8.4);
+    }
+
+    .rationale__inner {
+      grid-template-columns: 31.4fr 38.8fr;
+      align-items: start;
+      gap: 0 calc(var(--u) * 3.8);
+      width: calc(var(--u) * 74);
+      max-width: none;
+      margin-left: calc(var(--gx) + var(--u) * 14);
+    }
+
+    .rationale__copy {
+      text-align: right;
+      padding-top: calc(var(--u) * 1.9);
+    }
+
+    /* the heading is wider than the text column in the mockup, so it reaches out to the left */
+    .rationale__title {
+      margin-left: calc(var(--u) * -8);
+      font-size: calc(var(--u) * 4.15);
+    }
+
+    .rationale__copy :global(.rationale__underline) {
+      width: calc(var(--u) * 19);
+      margin: calc(var(--u) * 0.5) 0 calc(var(--u) * 2.1) auto;
+    }
+
+    .rationale__text {
+      max-width: calc(var(--u) * 31);
+      margin: 0 0 calc(var(--u) * 2.4) auto;
+      font-size: calc(var(--u) * 1.45);
+    }
+
+    .rationale__cta {
+      min-height: calc(var(--u) * 3);
+      padding: 0 calc(var(--u) * 1.8);
+      font-size: calc(var(--u) * 1.35);
+    }
+
+    .rationale__photos {
+      gap: calc(var(--u) * 2.8);
+    }
+
+    .rationale__photo--top {
+      height: calc(var(--u) * 18.7);
+      border-radius: calc(var(--u) * 6.4);
+    }
+
+    .rationale__photo--bottom {
+      height: calc(var(--u) * 14);
+    }
+
+    .rationale__pear {
+      left: calc(var(--u) * -1.9);
+      top: calc(var(--u) * 11.2);
+      width: calc(var(--u) * 11.7);
+    }
+
+    .rationale__tomato {
+      left: auto;
+      right: calc(var(--u) * -4);
+      top: calc(var(--u) * 15);
+      width: calc(var(--u) * 23.4);
+    }
+  }
+</style>

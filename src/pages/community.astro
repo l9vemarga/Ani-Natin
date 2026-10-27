@@ -1,0 +1,26 @@
+---
+// Community page (worksheet pages 6 and 8, Community wireframe): search, Testimonials and the Discussion
+// Forum, the FAQ, and the school locator. Forum data goes through forum-api.js (sample data until the
+// backend is connected: see BACKEND.md).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CommunityHero from '../components/CommunityHero.astro';
+import CommunityHub from '../components/CommunityHub.astro';
+import FaqSection from '../components/FaqSection.astro';
+import SchoolFinder from '../components/SchoolFinder.astro';
+import '../styles/community.css';
+---
+
+<BaseLayout
+  title="Community | Ani Natin"
+  description="Magtanong, magbasa, at matuto kasama ang mga studyante, alumni, farmers, at agri-pioneers. Discussion forum, mga kuwento ng alumni, FAQ, at school locator para sa Agri-Fishery."
+>
+  <CommunityHero />
+  <CommunityHub />
+  <FaqSection />
+  <SchoolFinder />
+</BaseLayout>
+
+<script>
+  import '../scripts/community.js';
+  import '../scripts/community-animations.js';
+</script>

@@ -1,0 +1,299 @@
+/* Ani Natin - global styles
+   Colors, fonts and rules follow the Brand Book and the Design Study (worksheet pages 10 to 15).
+   Breakpoints (from the web checklist): 360 (base), 430, 960.
+
+   Desktop layouts are drawn in proportions of a 1440px-wide design, using --u (1% of the viewport
+   width, capped at 14.4px). Below 960px the layouts stack. */
+
+:root {
+  /* Brand colors (Brand Book, Color Palette) */
+  --green: #2a4e1a; /* primary */
+  --orange: #de6822; /* primary: shapes and large type, low contrast for small text on cream */
+  --brown: #452a17; /* secondary */
+  --lime: #bed889; /* accent */
+  --yellow: #e5dc72; /* accent */
+  --cream: #fae4bc; /* background */
+
+  --green-deep: #1d3611;
+  --ink: var(--brown);
+
+  /* Fonts. Brand Book: Magic Yellow (headings), Etna Sans Serif (sub-headings), Garet (body).
+     The free stand-ins follow as a fallback for letters the brand fonts lack (see src/styles/fonts.css). */
+  --font-display: 'Magic Yellow', 'Bagel Fat One', 'Trebuchet MS', sans-serif;
+  --font-sub: 'Etna Sans Serif', 'Fredoka Variable', 'Trebuchet MS', sans-serif;
+  --font-body: 'Garet', 'Figtree Variable', 'Segoe UI', sans-serif;
+  --sub-ws: 0.1em; /* Etna's flared capitals nearly touch the next word, so its word gaps get a little extra */
+
+  --gutter: 1.25rem;
+  --u: 1vw;
+
+  /* Sideways offset that centers the 1440px design on screens wider than 1440px (0 on narrower screens).
+     The % is resolved where it is used, so it is the width of that element's container. */
+  --gx: max(0px, calc((100% - var(--u) * 100) / 2));
+}
+
+@media (min-width: 430px) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --gutter: 2rem;
+    --u: min(1vw, 14.4px);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+
+/* Pill buttons from the design study */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 1.4rem;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.pill-btn:hover {
+  transform: translateY(-2px);
+}
+
+.pill-btn[hidden] {
+  display: none;
+}
+
+.pill-btn--green {
+  background: var(--green);
+  color: var(--cream);
+}
+
+.pill-btn--lime {
+  background: var(--lime);
+  color: var(--green);
+}
+
+.pill-btn--yellow {
+  background: var(--yellow);
+  color: var(--green);
+}
+
+.pill-btn--cream {
+  background: var(--cream);
+  color: var(--brown);
+}
+
+/* Vine hover (src/scripts/vine-hover.js adds the .vine__fill and .vine__decor layers on first hover).
+   --vine-fill is the color the vines fill the button with, --vine-ink is the text color on top of it.
+   Leaves keep their own colors and a dark outline so they show on cream, green and photos alike. */
+.pill,
+.pill-btn {
+  position: relative;
+  isolation: isolate;
+  --vine-fill: var(--green);
+  --vine-ink: var(--cream);
+}
+
+.pill-btn--green {
+  --vine-fill: var(--lime);
+  --vine-ink: var(--green);
+}
+
+.pill-btn--lime {
+  --vine-fill: var(--yellow);
+  --vine-ink: var(--green);
+}
+
+.pill.is-vine.is-vine.is-vine,
+.pill-btn.is-vine.is-vine.is-vine {
+  color: var(--vine-ink);
+  transition: transform 0.18s ease, background-color 0.25s ease, color 0.2s ease 0.14s;
+}
+
+.vine__fill,
+.vine__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vine__fill {
+  z-index: -2;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.vine__decor {
+  z-index: -1;
+  --vine-line: #1d3611;
+}
+
+.vine__fill svg,
+.vine__decor svg {
+  overflow: visible;
+  max-width: none;
+}
+
+.vine__stem {
+  fill: none;
+  stroke: var(--vine-fill);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vine__stalk {
+  fill: none;
+  stroke: #66954a; /* mid green: shows on cream, on the dark green section and on photos */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The leaves, flower and sparkle are flat shapes with no outline */
+.vine__leaf,
+.vine__petal,
+.vine__heart,
+.vine__spark {
+  stroke: none;
+}
+
+.vine__leaf {
+  fill: var(--lime);
+}
+
+.vine__rib {
+  fill: none;
+  stroke: var(--vine-line);
+  stroke-width: calc(var(--vine-outline) * 0.7);
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.vine__petal {
+  fill: var(--yellow);
+}
+
+.vine__heart {
+  fill: var(--orange);
+}
+
+.vine__spark {
+  fill: var(--yellow);
+}
+
+/* Animation hooks. Elements the animation script will reveal stay hidden until it takes over,
+   so there is no flash. Skipped for reduced motion, or if the animations fail to start. */
+html.js:not(.rm):not(.anim-fail) [data-split],
+html.js:not(.rm):not(.anim-fail) [data-reveal],
+html.js:not(.rm):not(.anim-fail) [data-pop],
+html.js:not(.rm):not(.anim-fail) [data-clip],
+html.js:not(.rm):not(.anim-fail) [data-card],
+html.js:not(.rm):not(.anim-fail) [data-draw] {
+  visibility: hidden;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 300;
+  padding: 0.6rem 1rem;
+  background: var(--green);
+  color: var(--cream);
+  border-radius: 0.5rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

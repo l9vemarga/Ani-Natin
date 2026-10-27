@@ -1,0 +1,41 @@
+/* Brand fonts (Brand Book): Magic Yellow = headings, Etna Sans Serif = sub-headings, Garet = body.
+   The files are in /public/fonts (woff2). The free stand-ins (Bagel Fat One, Fredoka, Figtree) are still
+   loaded in BaseLayout.astro, but only as a fallback: the browser uses them for a letter the brand font
+   does not have (Magic Yellow has no accented letters, dashes or "..."; none of the three has the peso sign).
+   The font stacks are --font-display, --font-sub and --font-body in global.css.
+
+   Magic Yellow and Etna have one weight each. They are declared for every weight (100 900) so the browser
+   never fakes a bolder version. Garet has Book (light) and Heavy, so anything up to 500 uses Book and
+   600 and above uses Heavy. */
+
+@font-face {
+  font-family: 'Magic Yellow';
+  src: url('/fonts/magic-yellow.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Etna Sans Serif';
+  src: url('/fonts/etna-sans-serif.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Garet';
+  src: url('/fonts/garet-book.woff2') format('woff2');
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Garet';
+  src: url('/fonts/garet-heavy.woff2') format('woff2');
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}

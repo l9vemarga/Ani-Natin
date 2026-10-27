@@ -1,0 +1,135 @@
+/* 404 page. The farm scene itself is styled inside NotFoundScene.astro. */
+
+.nf {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--cream);
+  color: var(--brown);
+  text-align: center;
+}
+
+.nf__inner {
+  position: relative;
+  z-index: 2; /* in front of the sky part of the scene (clouds, sun, birds) */
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  padding: 6.5rem var(--gutter) 0;
+}
+
+.nf__code {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(5.5rem, 26vw, 9rem);
+  line-height: 0.86;
+  color: var(--green);
+}
+
+.nf__digit,
+.nf__zero {
+  display: inline-block;
+}
+
+/* The zero is an orange hanging from a leafy stem; it swings gently (see notfound-animations.js) */
+.nf__zero {
+  position: relative;
+  margin-inline: 0.04em;
+  color: var(--orange);
+}
+
+.nf__leaf {
+  position: absolute;
+  left: 50%;
+  top: -0.22em;
+  width: 0.46em;
+  height: auto;
+  transform: translateX(-30%);
+  pointer-events: none;
+}
+
+.nf__eyebrow {
+  margin: 0.4rem 0 0;
+  padding: 0.3rem 0.95rem;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--green);
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nf__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 8.4vw, 2.7rem);
+  line-height: 1.04;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+/* The yellow highlight; --mark (0% to 100%) lets splitReveal wipe it in */
+.nf__title .mark {
+  background: linear-gradient(transparent 10%, var(--yellow) 10% 92%, transparent 92%) no-repeat 0 0 / var(--mark, 100%) 100%;
+  padding-inline: 0.08em;
+}
+
+.nf__lead {
+  max-width: 34rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.nf__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 0.4rem;
+}
+
+/* The scene sits at the bottom of the screen; its empty sky tucks up behind the text */
+.nf .nf-scene {
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 640px) {
+  .nf__inner {
+    padding-top: 7.5rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .nf__inner {
+    gap: calc(var(--u) * 1);
+    padding-top: calc(var(--u) * 11);
+    margin-bottom: calc(var(--u) * -8); /* the scene's empty sky tucks up behind the text */
+  }
+
+  .nf__code {
+    font-size: calc(var(--u) * 6.2);
+  }
+
+  .nf__eyebrow {
+    margin-top: calc(var(--u) * 0.2);
+    font-size: calc(var(--u) * 0.95);
+  }
+
+  .nf__title {
+    font-size: calc(var(--u) * 3.2);
+  }
+
+  .nf__lead {
+    max-width: calc(var(--u) * 50);
+    font-size: calc(var(--u) * 1.15);
+  }
+}

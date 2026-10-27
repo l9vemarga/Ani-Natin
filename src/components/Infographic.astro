@@ -1,0 +1,575 @@
+---
+// Agri-Fishery pipeline infographic (worksheet page 14).
+// The mockup is a 718 x 850 composition (the career branches below it are their own full-screen section,
+// see AgriCareers.astro). It is built as one box that scales to the page width (container units), with
+// every piece positioned in % of that box. Below 640px it stacks into a normal flow.
+//
+// NOTE: the mockup shows no text for the 5 concepts. Stand-in: each pipeline shape carries a number and
+// the concept name, and the worksheet description appears on hover/focus (shown inline on phones).
+// Needs a decision from the design team (see ASSETS.md).
+import Photo from './Photo.astro';
+import Scribble from './Scribble.astro';
+
+const concepts = [
+  { n: 1, title: 'Hydroponics & Vertical Farming', text: 'Pagtatanim sa tubig at nutrient solutions kahit walang malawak na lupa.' },
+  { n: 2, title: 'Smart Agri-Sensors & Drones', text: 'Paggamit ng digital tools at sensors para madaling mabantayan ang pananim.' },
+  { n: 3, title: 'Vermicomposting & Bio-Tech', text: 'Paggawa ng organic fertilizer katulad ng VermiTea para makatipid at maibenta sa iba.' },
+  { n: 4, title: 'Modern Aquaculture', text: 'Sustainable breeding ng isda at aquatic life gamit ang clean water filtration systems.' },
+  { n: 5, title: 'Agribusiness & Branding', text: 'Pagbenta ng sariling ani, product packaging, at pagpapatakbo ng sariling micro-enterprise.' },
+];
+
+// Scalloped bottom edge of the orange strip: 10 bumps across the page (stretches with the width)
+const tile = 144;
+let scallop = 'M0 0H1440V13';
+for (let i = 9; i >= 0; i--) {
+  const x = i * tile;
+  scallop += `C${x + 108} 24 ${x + 72} 24 ${x + 72} 13C${x + 72} 2 ${x + 36} 2 ${x} 13`;
+}
+scallop += 'Z';
+---
+
+<section id="agri-guide" class="info" data-nav="light" aria-labelledby="info-title">
+  <!-- Orange strip with a scalloped bottom edge -->
+  <div class="info__strip" aria-hidden="true">
+    <div class="info__strip-fill"></div>
+    <svg class="info__scallop" viewBox="0 0 1440 26" preserveAspectRatio="none" focusable="false">
+      <path d={scallop} />
+    </svg>
+  </div>
+
+  <div class="info__art">
+    <!-- Background layer: the pipeline lines. Sits under everything else. -->
+    <svg class="info__bg" viewBox="0 0 718 850" aria-hidden="true" focusable="false">
+      <g class="lines" fill="none" stroke-width="4" stroke-linecap="round">
+        <path class="l-orange" d="M541 395V425M541 478V497M541 553V580" />
+        <path class="l-green" d="M432 557V640M262 782V812Q262 825 249 825H86" />
+      </g>
+      <circle class="dot" cx="86" cy="825" r="9" />
+    </svg>
+
+    <h2 id="info-title" class="a info__title" style="--x:11.1;--y:18.8;--w:44" data-split>
+      <span class="ln">What do you</span>
+      <span class="ln"><span class="mark">actually</span> do</span>
+      <span class="ln">in <span class="orange">Agri?</span></span>
+    </h2>
+
+    <div class="a info__photo-back" style="--x:57.1;--y:17.6;--w:33.7;--h:23.4" aria-hidden="true" data-reveal></div>
+    <div class="a info__photo" style="--x:56.8;--y:16.8;--w:32.3;--h:22.8" data-reveal>
+      <Photo src="infographic/produce-crate.webp" alt="A farmer holding a wooden crate of fresh vegetables" />
+    </div>
+
+    <p class="a info__spoiler" style="--x:15.3;--y:34.7;--w:36" data-reveal>
+      <span class="bang" aria-hidden="true">!</span>
+      <span class="spoiler__text"><b>spoiler alert:</b> hindi lang &lsquo;to basta pala at putik!</span>
+    </p>
+    <div class="a info__loop1" style="--x:28.8;--y:42.1;--w:5.4"><Scribble name="loop-small" /></div>
+
+    <div class="a info__lime-square" style="--x:13.9;--y:58.3;--w:34.5;--h:27.7" aria-hidden="true"></div>
+    <div class="a info__card" style="--x:8.1;--y:47.3;--w:34" data-reveal>
+      <Scribble name="star" class="info__star" />
+      <h3>5 Applied Concepts &amp; Technologies</h3>
+      <p>na pwede mong pag-aralan at matutunan sa <b>SHS Agri-Fishery Elective!</b></p>
+    </div>
+
+    <!-- Pipeline: five numbered shapes, top to bottom -->
+    <ol class="pipe">
+      <li class="a node node--circle" style="--x:68.1;--y:34.7;--w:15;--h:12.7" tabindex="0">
+        <span class="node__label"><i>{concepts[0].n}</i>{concepts[0].title}</span>
+        <span class="node__tip">{concepts[0].text}</span>
+      </li>
+      <li class="a node node--lime" style="--x:50.4;--y:49.4;--w:38.2;--h:7.1" tabindex="0">
+        <span class="node__label"><i>{concepts[1].n}</i>{concepts[1].title}</span>
+        <span class="node__tip">{concepts[1].text}</span>
+      </li>
+      <li class="a node node--dark" style="--x:50.4;--y:58.3;--w:38.2;--h:7.3" tabindex="0">
+        <span class="node__label"><i>{concepts[2].n}</i>{concepts[2].title}</span>
+        <span class="node__tip">{concepts[2].text}</span>
+      </li>
+      <li class="a node node--triangle" style="--x:65.5;--y:67.9;--w:20.2;--h:13.6" tabindex="0">
+        <svg viewBox="0 0 145 115" aria-hidden="true" focusable="false"><path d="M72 6C80 6 86 11 90 18L138 92C146 106 140 112 128 112H17C5 112 -1 106 7 92L55 18C59 11 65 6 72 6Z" /></svg>
+        <span class="node__label"><i>{concepts[3].n}</i>{concepts[3].title}</span>
+        <span class="node__tip">{concepts[3].text}</span>
+      </li>
+      <li class="a node node--rect" style="--x:30.5;--y:74.3;--w:58.1;--h:17.7" tabindex="0">
+        <span class="node__label"><i>{concepts[4].n}</i>{concepts[4].title}</span>
+        <span class="node__tip">{concepts[4].text}</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .info {
+    --art-w: min(100vw - (var(--gutter) * 2), 90rem);
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+    color: var(--brown);
+    padding: 7rem 0 0;
+  }
+
+  .info__strip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .info__strip-fill {
+    height: 2.2rem;
+    background: var(--orange);
+  }
+
+  .info__scallop {
+    display: block;
+    width: 100%;
+    height: 26px;
+    margin-top: -1px;
+    fill: var(--orange);
+  }
+
+  .info__art {
+    position: relative;
+    width: var(--art-w);
+    margin-inline: auto;
+    container-type: inline-size;
+    display: grid;
+    gap: 1.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .info__bg {
+    display: none;
+  }
+
+  .ln {
+    display: block;
+  }
+
+  .info__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 9.5vw, 3rem);
+    text-transform: uppercase;
+    line-height: 1.02;
+    color: var(--green);
+  }
+
+  /* The yellow highlight. --mark (0% to 100%) lets the animation wipe it in from the left. */
+  .mark {
+    background: linear-gradient(transparent 10%, var(--yellow) 10% 92%, transparent 92%) no-repeat 0 0 / var(--mark, 100%) 100%;
+    padding-inline: 0.08em;
+  }
+
+  .orange {
+    color: var(--orange);
+  }
+
+  .bang {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    line-height: 0.9;
+    color: var(--orange);
+    transform: rotate(-8deg);
+  }
+
+  .info__spoiler {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.12;
+    font-size: 1.15rem;
+  }
+
+  .info__spoiler b {
+    color: var(--orange);
+  }
+
+  .info__photo-back,
+  .info__lime-square,
+  .info__loop1 {
+    display: none;
+  }
+
+  .info__photo {
+    height: 14rem;
+    overflow: hidden;
+    border-radius: 1.6rem;
+  }
+
+  .info__card {
+    position: relative;
+    padding: 1.3rem 1.3rem 1.4rem;
+    border-radius: 1.6rem;
+    background: var(--yellow);
+  }
+
+  .info__card h3 {
+    margin: 0 4rem 0.5rem 0;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--green);
+  }
+
+  .info__card p {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  .info__card b {
+    color: var(--orange);
+  }
+
+  .info__card :global(.info__star) {
+    position: absolute;
+    right: 1.3rem;
+    top: 1.2rem;
+    width: 2.3rem;
+    color: var(--orange);
+  }
+
+  .pipe {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .node {
+    position: relative;
+    padding: 1rem 1.2rem;
+    border-radius: 1.2rem;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .node svg {
+    display: none;
+  }
+
+  .node__label {
+    position: relative;
+    display: block;
+  }
+
+  .node__label i {
+    display: inline-block;
+    min-width: 1.4em;
+    margin-right: 0.3em;
+    font-style: normal;
+    opacity: 0.75;
+  }
+
+  .node__tip {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+
+  .node--circle,
+  .node--triangle {
+    background: var(--orange);
+    color: var(--brown);
+  }
+
+  .node--lime {
+    background: var(--lime);
+    color: var(--green);
+  }
+
+  .node--dark,
+  .node--rect {
+    background: var(--green);
+    color: var(--cream);
+  }
+
+  /* ---------- Tablet and desktop: the composition ---------- */
+  @media (min-width: 640px) {
+    .info {
+      padding-top: 0;
+    }
+
+    .info__strip-fill {
+      height: calc(var(--art-w) * 0.077);
+    }
+
+    .info__scallop {
+      height: calc(var(--art-w) * 0.036);
+    }
+
+    .info__art {
+      display: block;
+      aspect-ratio: 718 / 850;
+      padding-bottom: 0;
+    }
+
+    .info__bg {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .l-orange {
+      stroke: var(--orange);
+    }
+
+    .l-green {
+      stroke: var(--green);
+    }
+
+    .dot {
+      fill: var(--green);
+    }
+
+    .a {
+      position: absolute;
+      left: calc(var(--x) * 1%);
+      top: calc(var(--y) * 1%);
+      width: calc(var(--w) * 1%);
+      height: calc(var(--h) * 1%);
+    }
+
+    .info__photo-back,
+    .info__lime-square {
+      display: block;
+    }
+
+    .info__loop1 {
+      display: block;
+      color: var(--orange);
+      height: auto;
+    }
+
+    .info__photo-back {
+      border-radius: 3.9cqw;
+      background: var(--yellow);
+    }
+
+    .info__lime-square {
+      border-radius: 5.6cqw;
+      background: var(--lime);
+    }
+
+    .info__title {
+      font-size: 5.3cqw;
+      height: auto;
+    }
+
+    .info__photo {
+      border-radius: 3.9cqw;
+    }
+
+    .info__spoiler {
+      height: auto;
+      font-size: 2.4cqw;
+      gap: 1.4cqw;
+      align-items: flex-start;
+    }
+
+    .bang {
+      font-size: 9cqw;
+    }
+
+    .info__card {
+      height: auto;
+      padding: 3cqw 3.2cqw 3.4cqw;
+      border-radius: 3.9cqw;
+    }
+
+    .info__card h3 {
+      margin: 0 0 1.3cqw;
+      max-width: 76%;
+      font-size: 3.6cqw;
+    }
+
+    .info__card p {
+      max-width: 82%;
+      font-size: 1.85cqw;
+    }
+
+    .info__card :global(.info__star) {
+      right: 3.2cqw;
+      top: 3cqw;
+      width: 6cqw;
+    }
+
+    .pipe {
+      display: block;
+    }
+
+    .node {
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: 1.95cqw;
+      text-align: center;
+    }
+
+    .node:focus-visible {
+      outline-offset: 4px;
+    }
+
+    .node--circle {
+      border-radius: 50%;
+    }
+
+    .node--lime,
+    .node--dark {
+      border-radius: 999px;
+      font-size: 2.1cqw;
+    }
+
+    .node--rect {
+      border-radius: 8.4cqw;
+      align-content: center;
+      font-size: 2.4cqw;
+      padding-right: 22cqw;
+    }
+
+    .node--circle .node__label {
+      padding: 0 1.2cqw;
+      font-size: 1.85cqw;
+    }
+
+    .node__label i {
+      display: block;
+      margin: 0 0 0.2em;
+      font-size: 1.15em;
+      opacity: 0.8;
+    }
+
+    .node--lime .node__label i,
+    .node--dark .node__label i,
+    .node--rect .node__label i {
+      display: inline-block;
+      margin: 0 0.3em 0 0;
+    }
+
+    /* triangle sits over the big rectangle (higher in stacking) */
+    .node--triangle {
+      z-index: 2;
+      background: none;
+      align-content: end;
+      padding-bottom: 1.4cqw;
+    }
+
+    .node--triangle svg {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      fill: var(--orange);
+    }
+
+    .node--triangle .node__label {
+      font-size: 1.6cqw;
+    }
+
+    .node--triangle .node__label i {
+      display: none;
+    }
+
+    /* hover and keyboard focus show the worksheet description */
+    .node__tip {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: calc(100% + 1.2cqw);
+      width: 36cqw;
+      margin: 0;
+      padding: 1.8cqw 2.2cqw;
+      border-radius: 2.4cqw;
+      background: var(--cream);
+      color: var(--brown);
+      border: 0.5cqw solid var(--green);
+      font-size: max(1.8cqw, 0.85rem); /* stays readable on tablets */
+      text-align: left;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-50%) translateY(0.6cqw);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      pointer-events: none;
+    }
+
+    .node--lime .node__tip,
+    .node--dark .node__tip,
+    .node--rect .node__tip {
+      left: auto;
+      right: 0;
+      transform: translateY(0.6cqw);
+    }
+
+    .node:hover .node__tip,
+    .node:focus .node__tip,
+    .node:focus-visible .node__tip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%);
+    }
+
+    .node--lime:hover .node__tip,
+    .node--dark:hover .node__tip,
+    .node--rect:hover .node__tip,
+    .node--lime:focus .node__tip,
+    .node--dark:focus .node__tip,
+    .node--rect:focus .node__tip {
+      transform: none;
+    }
+
+    /* The shape being hovered or focused comes to the front, so its tip is never covered by the next shape */
+    .node:hover,
+    .node:focus,
+    .node:focus-visible {
+      z-index: 10;
+    }
+
+    /* Triangle: the tip hangs below, leaning right so it does not cover the big rectangle's label */
+    .node--triangle .node__tip {
+      left: auto;
+      right: -12cqw;
+      width: 30cqw;
+      transform: translateY(0.6cqw);
+    }
+
+    .node--triangle:hover .node__tip,
+    .node--triangle:focus .node__tip,
+    .node--triangle:focus-visible .node__tip {
+      transform: none;
+    }
+
+    /* Big rectangle sits at the bottom of the section, so its tip opens upward instead of being cut off */
+    .node--rect .node__tip {
+      top: auto;
+      bottom: calc(100% + 1.2cqw);
+      left: 0;
+      right: auto;
+      width: 34cqw;
+      transform: translateY(-0.6cqw);
+    }
+
+    .node--rect:hover .node__tip,
+    .node--rect:focus .node__tip,
+    .node--rect:focus-visible .node__tip {
+      transform: none;
+    }
+  }
+</style>

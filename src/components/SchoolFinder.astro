@@ -1,0 +1,76 @@
+---
+// School locator (wireframe: SHS or college, province, city, a Search button, and a results list).
+// The list is one file, src/data/schools.json, searched in the browser with Fuse.js (no server).
+// Province options come from that file here; the cities and the results are drawn by community.js.
+import schoolData from '../data/schools.json';
+
+const provinces = [...new Set(schoolData.schools.map((s) => s.province))].sort((a, b) => a.localeCompare(b));
+
+// Row of cream arches along the bottom edge, leading into the footer (same shape as the Home page band)
+const bumps = 9;
+const bumpW = 1440 / bumps;
+let scallop = 'M0 36V28';
+for (let i = 0; i < bumps; i++) {
+  const x = i * bumpW;
+  scallop += `Q${(x + bumpW / 2).toFixed(1)} -18 ${(x + bumpW).toFixed(1)} 28`;
+}
+scallop += 'V36Z';
+---
+
+<section class="cm-schools" id="school-locator" data-nav="light" aria-labelledby="schools-title">
+  <svg class="cm-schools__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d="M0 40C140 8 260 12 400 44C540 76 640 80 780 50C920 20 1060 6 1200 30C1300 47 1380 52 1440 46L1440 120L0 120Z" />
+  </svg>
+
+  <div class="cm-schools__inner">
+    <h2 id="schools-title" class="cm-h2" data-split>Locate AFA High Schools &amp; Universities</h2>
+    <p class="cm-schools__lead" data-reveal>Maghanap ng High School o College na May Agri-Fishery Elective o Agriculture Courses Malapit Sa&rsquo;yo</p>
+
+    <div class="cm-schools__grid">
+      <form class="cm-finder" id="finder" data-reveal novalidate>
+        <p class="cm-field">
+          <label for="f-type">SHS or College</label>
+          <select id="f-type" name="type">
+            <option value="">Lahat (SHS at College)</option>
+            <option value="SHS">SHS</option>
+            <option value="College">College</option>
+          </select>
+        </p>
+        <p class="cm-field">
+          <label for="f-province">Province</label>
+          <select id="f-province" name="province">
+            <option value="">Lahat ng probinsya</option>
+            {provinces.map((p) => <option value={p}>{p}</option>)}
+          </select>
+        </p>
+        <p class="cm-field">
+          <label for="f-city">City</label>
+          <select id="f-city" name="city" disabled>
+            <option value="">Pumili muna ng probinsya</option>
+          </select>
+        </p>
+        <p class="cm-field">
+          <label for="f-q">Pangalan ng school (optional)</label>
+          <input id="f-q" name="q" type="search" placeholder="Halimbawa: State University" autocomplete="off" />
+        </p>
+        <div class="cm-finder__actions">
+          <button class="pill-btn pill-btn--green" type="submit">Search</button>
+          <button class="cm-link" type="reset" id="f-reset">Clear</button>
+        </div>
+      </form>
+
+      <div class="cm-found" data-reveal>
+        <p class="cm-found__count" id="found-count" aria-live="polite">Results:</p>
+        <ul class="cm-found__list" id="found-list"></ul>
+        <p class="cm-empty" id="found-empty" hidden>Walang nahanap na school. Subukan ang ibang probinsya o lungsod, o alisin ang pangalan.</p>
+        <div class="cm-more"><button class="pill-btn pill-btn--green" id="found-more" type="button" hidden>Ipakita pa</button></div>
+        <p class="cm-sample" id="found-sample" hidden>Sample na listahan lang ito. Papalitan ng totoong mga school bago ang launch.</p>
+        <noscript><p class="cm-empty">Kailangan ng JavaScript para sa School Locator.</p></noscript>
+      </div>
+    </div>
+  </div>
+
+  <svg class="cm-schools__scallop" viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={scallop} />
+  </svg>
+</section>

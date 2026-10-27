@@ -1,0 +1,208 @@
+---
+// Home hero (worksheet page 13): cream, cutout photo on an orange blob at the left,
+// wordmark on a lime blob with slogan, paragraph and one button at the right.
+import Logo from './Logo.astro';
+import Photo from './Photo.astro';
+---
+
+<section id="home" class="hero" data-nav="light" aria-labelledby="hero-title">
+  <div class="hero__inner">
+    <div class="hero__visual" data-pop>
+      <!-- Orange flower-like blob with a spiky burst at the lower right, and a small yellow blob behind
+           the second farmer (shapes read from the updated mockup; the cutout photo sits on top) -->
+      <svg class="hero__blob" viewBox="0 0 472 400" aria-hidden="true" focusable="false">
+        <path class="blob-yellow" d="M60 200C50 160 100 140 150 148C210 150 244 190 228 236C212 272 100 278 70 252C55 240 58 216 60 200Z" />
+        <path class="blob-orange" d="M150 0C190 0 215 35 205 70C255 68 290 100 278 140C335 150 352 205 338 242L430 310L372 336L388 392L325 352C290 392 215 398 165 360C120 330 90 310 60 300C20 290-2 240 5 205C8 180 40 170 67 165C30 150-5 120 3 90C10 60 60 55 107 62C100 25 125 3 150 0Z" />
+      </svg>
+      <div class="hero__cutout">
+        <Photo src="home/farmer-cutout.webp" fit="contain" position="bottom" alt="A smiling farmer holding fresh produce" />
+      </div>
+      <!-- Second farmer, in front at the lower left. Mirrored and cropped at the bottom like the mockup. -->
+      <div class="hero__cutout2">
+        <Photo src="home/farmer-cutout-2.webp" position="top" alt="A second farmer bending over to work the field" />
+      </div>
+    </div>
+
+    <div class="hero__copy">
+      <h1 id="hero-title" class="hero__title" data-pop>
+        <svg class="hero__lime" viewBox="0 0 360 212" aria-hidden="true" focusable="false">
+          <path d="M0 90C-2 50 30 30 70 35C85 30 95 15 118 2C122 22 126 35 135 45C175 55 215 75 235 100C300 95 355 125 360 160C362 195 330 212 290 212C240 212 205 190 190 160C160 140 120 135 100 125C50 122 5 125 0 90Z" />
+        </svg>
+        <Logo variant="wordmark" class="hero__wordmark" />
+      </h1>
+      <p class="hero__slogan" data-split>Tanim ng Kabataan, Ani ng Bayan</p>
+      <p class="hero__lead" data-split>
+        Alam mo ba na hindi na lamang pagtatanim ang Agri-Fishery? From school green hubs to real
+        agribusinesses, see how students like you are stepping up to feed the nation&mdash;<strong>and how
+        you could be next!</strong>
+      </p>
+      <a class="pill-btn pill-btn--green hero__cta" href="#agri-fishery" data-reveal>Explore Agri-Fishery</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    background: var(--cream);
+    color: var(--brown);
+    padding: 6.5rem var(--gutter) 6rem;
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: 2.5rem;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  .hero__visual {
+    position: relative;
+    aspect-ratio: 472 / 400;
+    width: min(100%, 24rem);
+    margin-inline: auto;
+  }
+
+  .hero__blob {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .blob-orange {
+    fill: var(--orange);
+    stroke: var(--orange);
+    stroke-width: 10;
+    stroke-linejoin: round;
+  }
+
+  .blob-yellow {
+    fill: var(--yellow);
+  }
+
+  .hero__cutout {
+    --photo-empty-bg: transparent;
+    position: absolute;
+    left: 14%;
+    right: 6%;
+    top: 3%;
+    bottom: 0;
+  }
+
+  .hero__cutout2 {
+    --photo-empty-bg: transparent;
+    position: absolute;
+    left: 4%;
+    bottom: 0;
+    width: 43%;
+    height: 44%;
+    overflow: hidden;
+  }
+
+  .hero__cutout2 :global(.photo) {
+    transform: scaleX(-1);
+  }
+
+  .hero__title {
+    position: relative;
+    width: min(100%, 16rem);
+    margin-bottom: 1.25rem;
+    line-height: 0;
+  }
+
+  .hero__lime {
+    position: absolute;
+    left: -2.4%;
+    top: -7.5%;
+    width: 99%;
+    height: 108%;
+    fill: var(--yellow);
+    max-width: none;
+  }
+
+  .hero__title :global(.hero__wordmark) {
+    position: relative;
+    width: 82%;
+    margin-left: 8%;
+    color: var(--green);
+  }
+
+  .hero__slogan {
+    margin-bottom: 0.9rem;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--green);
+  }
+
+  .hero__lead {
+    max-width: 30rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  .hero__cta {
+    min-height: 2.5rem;
+    font-size: 0.95rem;
+  }
+
+  @media (min-width: 960px) {
+    .hero {
+      padding: calc(var(--u) * 19) 0 calc(var(--u) * 15);
+    }
+
+    .hero__inner {
+      grid-template-columns: 52fr 48fr;
+      align-items: start;
+      gap: 0;
+      width: calc(var(--u) * 81.5);
+      max-width: none;
+      margin-left: calc(var(--gx) + var(--u) * 8.9);
+    }
+
+    .hero__visual {
+      width: 97%;
+      aspect-ratio: auto;
+      height: calc(var(--u) * 34.8);
+      margin: 0;
+    }
+
+    .hero__copy {
+      padding-top: calc(var(--u) * 0.9);
+    }
+
+    .hero__title {
+      width: calc(var(--u) * 31.5);
+      margin-bottom: calc(var(--u) * 1.5);
+    }
+
+    .hero__title :global(.hero__wordmark) {
+      width: calc(var(--u) * 27.6);
+      margin-left: calc(var(--u) * 0.7);
+    }
+
+    .hero__slogan {
+      margin-bottom: calc(var(--u) * 0.8);
+      font-size: calc(var(--u) * 2.1);
+    }
+
+    .hero__lead {
+      max-width: calc(var(--u) * 39);
+      margin-bottom: calc(var(--u) * 1.8);
+      font-size: calc(var(--u) * 1.4);
+      line-height: 1.4;
+    }
+
+    .hero__cta {
+      min-height: calc(var(--u) * 3);
+      padding: 0 calc(var(--u) * 1.8);
+      font-size: calc(var(--u) * 1.4);
+    }
+  }
+</style>

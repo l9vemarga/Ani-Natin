@@ -1,0 +1,303 @@
+---
+// Agri-career branches: a full-screen section (the layout of the updated Home mockup).
+// From 640px up the section is exactly one screen tall. Everything inside is drawn on a 1440 x 960 stage
+// that scales to fit the screen (the unit --k is 1% of that stage), so the three big cards always fit.
+// Below 640px the pieces stack and the section grows with its content.
+import Photo from './Photo.astro';
+import Scribble from './Scribble.astro';
+
+const branches = [
+  { lines: ['Agri-Tech', '& Crop', 'Science'], src: 'infographic/career-agri-tech.webp', alt: 'A farmer in a field hat tending vines', jobs: 'Agri-Technologist, Soil Specialist, Farm Manager' },
+  { lines: ['Aqua-', 'culture &', 'Fishery', 'Arts'], src: 'infographic/career-aquaculture.webp', alt: 'A person holding a crate of fresh harvest', jobs: 'Fish Hatchery Operator, Aquaculturist, Marine Specialist' },
+  { lines: ['Agri-', 'Business &', 'Entrepre-', 'neurship'], src: 'infographic/career-agribusiness.webp', alt: 'A farmer working in a vegetable garden', jobs: 'Agri-Entrepreneur, Product Developer, Business Owner' },
+];
+---
+
+<section id="agri-careers" class="careers" data-nav="light" aria-labelledby="careers-title">
+  <div class="careers__stage">
+    <!-- Hills: drawn in the old 718-wide mockup coordinates, scaled up by the group transform.
+         The paths run far past both sides so they reach the screen edges on wide screens. -->
+    <svg class="careers__hills" viewBox="0 0 1440 960" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+      <g transform="matrix(2.0056 0 0 1.9696 0 -1691)">
+        <path class="h-yellow" d="M-2000 1346V1105C-300 1085 200 1118 450 1100C600 1089 720 1104 2700 1090V1346Z" />
+        <path class="h-yellow" d="M520 960C540 880 600 850 650 845C690 842 705 858 718 862L2700 862L2700 960Z" />
+        <path class="h-lime" d="M440 1346C440 1200 500 1010 560 950C600 910 690 905 718 925L2700 925L2700 1346Z" />
+        <path class="h-lime" d="M-2000 1346V1070C-200 1040 100 1030 250 1075C350 1105 420 1150 470 1200L470 1346Z" />
+        <path class="h-yellow" d="M-2000 1346V1185C-300 1170 60 1215 280 1192C420 1178 560 1150 718 1182L2700 1182V1346Z" />
+        <path class="tuft" d="M600 932C590 912 568 898 556 893C574 890 590 898 599 911C596 897 598 885 606 875C611 889 613 901 611 913C621 899 636 885 657 877C649 893 631 909 611 932Z" />
+      </g>
+    </svg>
+
+    <h2 id="careers-title" class="a careers__title" style="--x:11;--y:2.5;--w:50" data-split>
+      <span class="ln"><span class="mark">Agri-career</span></span>
+      <span class="ln">branches</span>
+    </h2>
+
+    <p class="a careers__callout" style="--x:16.3;--y:14.2;--w:38" data-reveal>
+      <span class="bang" aria-hidden="true">!</span>
+      <span class="callout__text"><b>s&rsquo;an ka pa?</b> malalawak na ang oportunidad ng agri mula kolehiyo hanggang sa trabaho!</span>
+    </p>
+    <div class="a careers__loop" style="--x:61;--y:18.7;--w:16.7"><Scribble name="loop-curl" /></div>
+
+    <ul class="branches">
+      {branches.map((b, i) => (
+        <li class="a branch" style={`--x:${[6.9, 36.9, 67][i]};--y:36.1;--w:27.2;--h:27.1`} data-card>
+          <div class="branch__photo">
+            <Photo src={b.src} alt={b.alt} />
+          </div>
+          <h3 class="branch__title">{b.lines.map((line) => <span class="ln">{line}</span>)}</h3>
+          <p class="visually-hidden">Careers: {b.jobs}</p>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Front wave: the yellow hill passes in front of the bottom of the three cards (it is the wavy edge
+         in the mockup). Same stage coordinates as the hills; the shape was traced from the mockup. -->
+    <svg class="careers__wave" viewBox="0 0 1440 960" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+      <path class="h-yellow" d="M-2000 931L89 931C103 930 146 927 174 923C202 918 231 911 259 904C287 897 315 888 344 880C372 873 400 866 428 861C457 855 485 849 513 848C542 847 570 848 598 854C626 859 655 874 683 883C711 893 740 906 768 912C796 917 825 920 853 919C881 918 909 912 938 906C966 900 994 892 1022 885C1051 877 1079 869 1107 862C1136 855 1164 847 1192 842C1221 837 1249 833 1277 832C1305 832 1341 837 1362 839C1383 842 1397 848 1404 849L2700 849V1200H-2000Z" />
+    </svg>
+  </div>
+</section>
+
+<style>
+  .careers {
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+    color: var(--brown);
+  }
+
+  .ln {
+    display: block;
+  }
+
+  .careers__stage {
+    position: relative;
+  }
+
+  .careers__hills,
+  .careers__wave {
+    display: none;
+  }
+
+  .careers__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 9.5vw, 3rem);
+    text-transform: uppercase;
+    line-height: 1.02;
+    color: var(--green);
+  }
+
+  /* The yellow highlight. --mark (0% to 100%) lets the animation wipe it in from the left. */
+  .mark {
+    background: linear-gradient(transparent 10%, var(--yellow) 10% 92%, transparent 92%) no-repeat 0 0 / var(--mark, 100%) 100%;
+    padding-inline: 0.08em;
+  }
+
+  .careers__callout {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    font-family: var(--font-sub);
+    word-spacing: var(--sub-ws);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.12;
+    font-size: 1.15rem;
+  }
+
+  .careers__callout b {
+    color: var(--orange);
+  }
+
+  .bang {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    line-height: 0.9;
+    color: var(--orange);
+    transform: rotate(-8deg);
+  }
+
+  .careers__loop {
+    display: none;
+  }
+
+  .branches {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .branch {
+    position: relative;
+    height: 13rem;
+    overflow: hidden;
+    border-radius: 1.4rem;
+  }
+
+  .branch__photo {
+    --photo-empty-bg: #8a7a52;
+    position: absolute;
+    inset: 0;
+  }
+
+  .branch__photo :global(.photo) {
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .branch__photo :global(.photo--empty) {
+    place-items: start center;
+  }
+
+  .branch:hover .branch__photo :global(.photo) {
+    transform: scale(1.07);
+  }
+
+  /* dark tint so the yellow title reads on any photo; eases off on hover */
+  .branch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(30, 24, 10, 0.34);
+    transition: opacity 0.5s ease;
+  }
+
+  .branch:hover::after {
+    opacity: 0.65;
+  }
+
+  .branch__title {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    padding: 1rem;
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    line-height: 1.02;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--yellow);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .branch:hover .branch__title {
+    transform: translateY(-0.35rem) scale(1.04);
+  }
+
+  /* ---------- Phones: stacked, with soft hill bands behind the cards ---------- */
+  @media (max-width: 639px) {
+    .careers {
+      padding: 4.5rem var(--gutter) 0;
+    }
+
+    .careers__stage {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .branches {
+      position: relative;
+      margin: 1rem calc(var(--gutter) * -1) 0;
+      padding: 4rem var(--gutter) 3.5rem;
+      background: linear-gradient(var(--lime) 0 58%, var(--yellow) 58%);
+      border-radius: 55% 45% 0 0 / 3.5rem 2.5rem 0 0;
+    }
+
+    .branch :global(.photo--empty) {
+      border: 0;
+    }
+  }
+
+  /* ---------- Tablet and desktop: one screen, drawn on a 1440 x 960 stage ---------- */
+  @media (min-width: 640px) {
+    .careers {
+      --k: min(var(--u), calc(100svh / 66.67));
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      /* exactly one screen tall; a little taller than the stage only on very tall screens */
+      height: max(calc(var(--k) * 66.67), min(100svh, calc(var(--k) * 75)));
+    }
+
+    .careers__stage {
+      flex: none;
+      width: calc(var(--k) * 100);
+      height: calc(var(--k) * 66.67);
+    }
+
+    .careers__hills,
+    .careers__wave {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .careers__wave {
+      z-index: 2; /* in front of the cards and their titles */
+      pointer-events: none;
+    }
+
+    .h-yellow {
+      fill: var(--yellow);
+    }
+
+    .h-lime {
+      fill: var(--lime);
+    }
+
+    .tuft {
+      fill: var(--green);
+    }
+
+    .a {
+      position: absolute;
+      left: calc(var(--x) * var(--k));
+      top: calc(var(--y) * var(--k));
+      width: calc(var(--w) * var(--k));
+      height: calc(var(--h) * var(--k));
+    }
+
+    .careers__title {
+      font-size: calc(var(--k) * 4.75); /* Magic Yellow is wider than the old stand-in */
+      height: auto;
+    }
+
+    .careers__callout {
+      height: auto;
+      font-size: calc(var(--k) * 2.3);
+      gap: calc(var(--k) * 1.4);
+      align-items: flex-start;
+    }
+
+    .bang {
+      font-size: calc(var(--k) * 8.6);
+    }
+
+    .careers__loop {
+      display: block;
+      height: auto;
+      color: var(--orange);
+    }
+
+    .branches {
+      display: block;
+    }
+
+    .branch {
+      border-radius: calc(var(--k) * 1.8);
+    }
+
+    .branch__title {
+      font-size: calc(var(--k) * 3.5);
+      padding: calc(var(--k) * 1.2);
+    }
+  }
+</style>
