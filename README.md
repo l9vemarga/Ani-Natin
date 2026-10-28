@@ -24,10 +24,11 @@ src/layouts/BaseLayout.astro       page shell
 src/components/
   Loader.astro                     loading screen: vines over the wordmark (Home page only)
   SiteHeader.astro                 floating header: icon circle + pill links
-  IntroFrames.astro                the two intro frames (cream statement, farmer photo)
+  IntroFrames.astro                the three intro screens (food + path, brown ground, farmer photo)
   HomeHero.astro                   hero: cutout photo, wordmark, slogan, one button
   Rationale.astro                  dark green section with pill-shaped photos
-  Infographic.astro                the pipeline infographic (full page width)
+  Infographic.astro                "What do you actually do in Agri?": the plant, the vine and its five stations
+  VineIcon.astro, VinePlant.astro  the station icons and the plant (stand-in drawings)
   AgriCareers.astro                Agri-career branches: one full screen, three big cards
   ClosingBand.astro                full-bleed photo band with the button
   SiteFooter.astro                 cream footer with vertical navigation
@@ -57,7 +58,7 @@ BACKEND.md                         the forum backend plan: tables, API, rules, g
 
 - Desktop (960px and up) is drawn in proportions of a 1440px-wide design, using `--u` (1% of the width, capped at 14.4px). Positions in the CSS are measured from the Design Study mockups.
 - On screens wider than 1440px the design stays 1440px wide and is centered. `--gx` (in `global.css`) is the sideways offset that does this; add it to any new left-anchored position (`left: calc(var(--gx) + var(--u) * 10)`).
-- Below 960px the pieces stack. The infographic switches to a stacked list below 640px.
+- Below 960px the pieces stack. The infographic (vine) switches to a list with the vine beside it below 960px.
 - The Agri-career section is exactly one screen tall from 640px up. It is drawn on a 1440 x 960 stage that scales to fit the screen height as well as the width (unit `--k` in `AgriCareers.astro`). On phones it stacks.
 - Breakpoints: 360 (base), 430 and 960.
 
@@ -79,13 +80,13 @@ BACKEND.md                         the forum backend plan: tables, API, rules, g
 
 ## Animations
 
-The shared helpers live in `src/scripts/motion.js` (text lines, reveals, boot). `home-animations.js` and `community-animations.js` add what only their page has. GSAP, ScrollTrigger, SplitText, DrawSVG. Native scrolling, no smooth-scroll library.
+The shared helpers live in `src/scripts/motion.js` (text lines, reveals, boot). `home-animations.js` and `community-animations.js` add what only their page has. GSAP, ScrollTrigger, SplitText, DrawSVG. Smooth, inertial scrolling with Lenis (set up in `motion.js`, tied to ScrollTrigger like on the two26.studio reference). It gives the mouse wheel and trackpad an easing glide, waits while the loading screen is up, is off for reduced motion, and leaves touch screens on their own native scrolling. The Ask dialog and the search dropdown keep normal scrolling. To remove it everywhere, delete the `setupSmoothScroll()` call in `motion.js`.
 
 - **Loading screen:** `Loader.astro` + `src/scripts/loader.js`. The page starts covered by green vines. A carrot-shaped brush writes the Ani Natin wordmark (it follows two zig-zag strokes, one per row of letters, and the letters show wherever it has been), then hops away while vines, leaves, flowers and sparkles grow around the wordmark. Once the page is ready and the animation has played (about 5 seconds, plus a short hold) the vines pull away to alternate sides from the middle row out, and the intro starts animating while they leave (`loader-gate.js` holds the intro's entrance until then). Clicking or pressing a key skips to the end of the writing. The timings are the numbers in the `arrive` timeline in `loader.js`; the carrot, its path and the plants are drawn in `Loader.astro`. It is off for reduced motion and when scripts are off. To use it on another page, pass `loader` to `BaseLayout`.
-- **Intro:** the two frames are pinned together. Scrolling opens frame 2 from the green quarter-circle.
+- **Intro (three screens, then the hero, one continuous scroll):** `IntroFrames.astro` + `setupIntro()` in `home-animations.js`. Screen 1 is cream: the headline rises, the food cluster pops in piece by piece from the bowl, and the brown path draws itself down from it. After that the scroll does everything on one timeline while the stage is held in place (`position: sticky` inside a tall track whose height `setupIntro()` sets): the camera pans down the drawing (the path flows into the brown ground, screen 2), the statements rise in, the farmer photo (screen 3) opens from the bottom-left corner and its text rises, and finally the hero rises over the held photo like a sheet (the photo sinks back and dims, the hero's farmer and text settle). After the hero the page scrolls as usual. Screens 1 and 2 are one drawing (`.story`); on desktop their positions are the layout's, in `--u`, and the food cluster has its own unit `--cu` so it scales down on phones, where each screen fills one phone screen. The scroll length follows the distances, so the pace is the same on every screen. The track's height is also worked out in CSS (`.intro` in `IntroFrames.astro`), so the first paint is already the right size and nothing jumps. With reduced motion, without scripts, or if the animations cannot start, the screens and the hero simply stack.
 - **Text:** marked `data-split` in the markup. Lines rise out of masks.
 - **Other hooks:** `data-reveal` (fade up), `data-pop` (scale in), `data-clip` (pill photos open), `data-draw` (hand-drawn marks draw themselves).
-- **Infographic:** the pipeline builds as you scroll (desktop), and fades in step by step on phones.
+- **Infographic (the vine follows you):** `Infographic.astro` + `src/scripts/vine-scroll.js`. A long vine grows down the page through five stations. Its drawn length follows your scroll position: the tip sits about two thirds of the way down the screen and eases after you (so it keeps gliding when you stop, and pulls back in when you scroll up). The tip carries a pair of leaves and more leaves sprout along the vine as it passes. Each station (icon badge, label, speech bubble) wakes up when the vine reaches it: the badge pops and rings out, the icon draws itself and fills in, the label and bubble appear, and a part of the icon keeps moving gently (sprout, wheat, fish, arrows). The plant at the top grows when it comes into view. Desktop (960px and up) is one SVG in the 1440px design, traced from the layout; phones and tablets show the stations as a list and the vine is built from where the badges are. To change a station, edit the `stations` list at the top of `Infographic.astro` (text, position, label style). Without scripts, with reduced motion, or if the animation cannot start, the whole vine and every station simply show.
 - **Career branches:** the hills rise as the screen arrives (tied to the scroll), the grass tuft pops, and the three cards swing up one after another (`data-card`).
 - **Closing band:** slow parallax on the photo.
 - **Reduced motion:** if the visitor prefers reduced motion, no animation runs. The intro frames stack and everything is visible. If the animations cannot start within about 4.5 seconds, the page falls back to the same static view.

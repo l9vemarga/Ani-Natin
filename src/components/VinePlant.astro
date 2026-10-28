@@ -1,0 +1,32 @@
+---
+// The plant growing out of the soil at the top of the vine section, drawn in a 340 x 680 box (the soil's
+// bottom edge is at y 512; the vine starts under the soil at x 161, y 477). A <g> so it can sit in a bigger SVG.
+// Parts for the animation: .pl-soil rises, .pl-stem draws up, .pl-leaf pops out of the stem, .pl-star spins in,
+// .pl-root draws down.
+---
+
+<g class="plant">
+  <g class="pl-root-g">
+    <path class="pl-root" d="M246 506C246 560 262 604 308 654" fill="none" stroke="#4f7d37" stroke-width="18" stroke-linecap="round" />
+  </g>
+  <path class="pl-soil" d="M0 482C0 432 70 405 152 405C244 405 319 432 319 482C319 506 300 512 280 512H40C20 512 0 506 0 482Z" fill="#5b3a25" />
+  <path class="pl-stem" d="M159 480V150" fill="none" stroke="#4a7c35" stroke-width="14" stroke-linecap="round" />
+  <g class="pl-leaves">
+    <g class="pl-leaf" data-ox="159" data-oy="150">
+      <path d="M159 152C150 92 176 22 234 0C242 72 216 132 159 152Z" fill="#5f9440" />
+      <path d="M163 142C178 100 196 56 222 20" fill="none" stroke="#3f7330" stroke-width="3" stroke-linecap="round" opacity=".55" />
+    </g>
+    <g class="pl-leaf" data-ox="162" data-oy="262">
+      <path d="M162 264C176 205 242 170 318 168C306 236 246 276 162 264Z" fill="#6aa04a" />
+      <path d="M168 258C206 226 250 200 296 184" fill="none" stroke="#3f7330" stroke-width="3" stroke-linecap="round" opacity=".55" />
+    </g>
+    <g class="pl-leaf" data-ox="156" data-oy="362">
+      <path d="M156 362C130 302 70 264 18 254C30 322 90 374 156 362Z" fill="#4f8a3a" />
+      <path d="M150 352C116 318 76 286 40 268" fill="none" stroke="#2f5f24" stroke-width="3" stroke-linecap="round" opacity=".55" />
+    </g>
+    <g class="pl-leaf" data-ox="157" data-oy="216">
+      <path d="M157 218C140 178 100 140 56 132C64 184 108 226 157 218Z" fill="#76ad52" />
+    </g>
+  </g>
+  <path class="pl-star" d="M288 322l11 26 28 2-21 18 7 27-25-15-24 15 7-27-21-18 28-2z" fill="#de6822" />
+</g>

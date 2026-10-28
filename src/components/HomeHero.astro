@@ -205,4 +205,20 @@ import Photo from './Photo.astro';
       font-size: calc(var(--u) * 1.4);
     }
   }
+
+  /* With the intro animation on, the hero rises over the held photo screen: it starts one screen early
+     (negative margin), sits above the stage, and has a rounded top edge like a sheet sliding up. */
+  :global(html.js:not(.rm):not(.anim-fail) .intro + .hero) {
+    z-index: 3;
+    min-height: 100svh;
+    margin-top: -100svh;
+    border-radius: 2rem 2rem 0 0;
+    box-shadow: 0 -1.2rem 3rem rgba(20, 20, 10, 0.28);
+  }
+
+  @media (min-width: 960px) {
+    :global(html.js:not(.rm):not(.anim-fail) .intro + .hero) {
+      border-radius: calc(var(--u) * 5) calc(var(--u) * 5) 0 0;
+    }
+  }
 </style>

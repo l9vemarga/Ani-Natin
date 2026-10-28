@@ -1,5 +1,6 @@
 // Shared motion helpers used by every page (Home, Community, ...). Page scripts add their own effects.
-// - Native scrolling (no smooth-scroll library). Only transforms, opacity, clip-path and stroke drawing
+// - Smooth, inertial scrolling with Lenis (the same approach as the two26.studio reference), tied to ScrollTrigger
+//   so pinned scenes and scrubbed animations glide with it. Only transforms, opacity, clip-path and stroke drawing
 //   are animated, so nothing changes layout.
 // - Skipped entirely for visitors who prefer reduced motion (the "rm" flag is set before first paint),
 //   and skipped if it could not start in time ("anim-fail"). In both cases the page is simply static.
@@ -11,9 +12,12 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 
 export { gsap, ScrollTrigger };
 export const root = document.documentElement;
+export let lenis = null;
 export const q = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
 /* ---------- Text: lines rise out of masks ---------- */
@@ -108,7 +112,7 @@ export function setupReveals() {
   });
 
   q('[data-split]').forEach((el) => {
-    if (el.closest('.frame--one')) return; // Home's intro text is handled with the intro
+    if (el.hasAttribute('data-split-load')) return; // plays on load, after the loading screen (home-animations.js)
     splitReveal(el);
   });
 
@@ -133,6 +137,34 @@ export function headerEntrance() {
   if (header) gsap.from(header, { autoAlpha: 0, y: -22, duration: 0.9, delay: 0.15, ease: 'power3.out' });
 }
 
+/* ---------- Smooth scrolling ----------
+   Mouse wheel and trackpad scrolling eases (touch screens keep their own native, already smooth, scrolling).
+   It waits while the loading screen is up, and is skipped for reduced motion. The dialog and the search
+   dropdown keep their normal scrolling. To turn it off everywhere, remove the setupSmoothScroll() call below. */
+function setupSmoothScroll() {
+  lenis = new Lenis({
+    lerp: 0.1,
+    wheelMultiplier: 1,
+    anchors: true,
+    autoRaf: false,
+    prevent: (node) => !!node.closest?.('dialog, .cm-results, [data-lenis-prevent]'),
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  if (root.classList.contains('loader-on')) {
+    lenis.stop();
+    const watcher = new MutationObserver(() => {
+      if (!root.classList.contains('loader-on')) {
+        watcher.disconnect();
+        lenis.start();
+      }
+    });
+    watcher.observe(root, { attributes: true, attributeFilter: ['class'] });
+  }
+}
+
 /* ---------- Boot: waits for the fonts, registers the plugins, then runs the page's own setup ---------- */
 export async function startMotion(setup) {
   if (root.classList.contains('rm')) return;
@@ -149,6 +181,7 @@ export async function startMotion(setup) {
   if (root.classList.contains('anim-fail')) return; // took too long: the page stays static
   gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
   ScrollTrigger.config({ ignoreMobileResize: true });
+  setupSmoothScroll();
 
   setup();
 

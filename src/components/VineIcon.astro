@@ -1,0 +1,76 @@
+---
+// The five station icons of "What do you actually do in Agri?". Each is drawn in a 100 x 100 box, as a <g>
+// so it can sit inside a larger SVG. Stand-in artwork in the brand greens until the team's own icons exist.
+// Parts are marked for the animation (vine-scroll.js):
+//   .ic  an outlined stroke that draws itself      .fl  a solid shape that pops in
+//   .mv  a part that keeps moving once the icon is awake (see the styles in Infographic.astro)
+interface Props {
+  name: 'organic' | 'crops' | 'horti' | 'aqua' | 'food';
+}
+const { name } = Astro.props;
+---
+
+{name === 'organic' && (
+  <g class="vi vi--organic">
+    <path class="fl" d="M24 76h28l-3 16H27z" />
+    <path class="ic" d="M38 76V56" />
+    <g class="mv sway">
+      <path class="fl" d="M38 58C27 58 21 50 21 41c11 0 17 6 17 17z" />
+      <path class="fl" d="M38 52C38 41 44 34 56 33c0 11-6 18-18 19z" />
+    </g>
+    <path class="ic" d="M70 45l16 6v15c0 12-8 19-16 24-8-5-16-12-16-24V51z" />
+    <path class="ic" d="M62 66l6 6 11-13" />
+  </g>
+)}
+
+{name === 'crops' && (
+  <g class="vi vi--crops">
+    <path class="ic" d="M50 54V34" />
+    <g class="mv grow">
+      <path class="fl" d="M50 40C39 40 33 34 32 25c11 0 17 6 18 15z" />
+      <path class="fl" d="M50 36C50 25 56 18 67 17c0 11-6 18-17 19z" />
+    </g>
+    <path class="fl" d="M16 80C26 62 62 56 86 68V84H16z" />
+    <path class="cut" d="M24 77C40 66 62 64 80 70M22 85C42 74 66 72 84 78" />
+  </g>
+)}
+
+{name === 'horti' && (
+  <g class="vi vi--horti">
+    {[28, 50, 72].map((x, i) => (
+      <g class={`mv sway sway--${i}`}>
+        <path class="ic" d={`M${x} 78V38`} />
+        <path class="fl" d={`M${x} 40c-7-3-9-10-8-17 7 3 9 10 8 17z`} />
+        <path class="fl" d={`M${x} 52c-7-3-10-9-9-16 8 2 10 9 9 16zM${x} 52c7-3 10-9 9-16-8 2-10 9-9 16z`} />
+        <path class="fl" d={`M${x} 64c-7-3-10-9-9-16 8 2 10 9 9 16zM${x} 64c7-3 10-9 9-16-8 2-10 9-9 16z`} />
+      </g>
+    ))}
+    <path class="fl" d="M14 80h72a4 4 0 0 1 0 8H14a4 4 0 0 1 0-8z" />
+  </g>
+)}
+
+{name === 'aqua' && (
+  <g class="vi vi--aqua">
+    <g class="mv spin">
+      <path class="ic" d="M18 46A33 33 0 0 1 78 26" />
+      <path class="ic" d="M82 54A33 33 0 0 1 22 74" />
+      <path class="fl" d="M76 18l8 12-14 3zM24 82l-8-12 14-3z" />
+    </g>
+    <g class="mv swim">
+      <path class="fl" d="M30 50c8-10 24-12 36-4l10-8v24l-10-8c-12 8-28 6-36-4z" />
+      <circle class="cut-fill" cx="40" cy="48" r="2.6" />
+    </g>
+  </g>
+)}
+
+{name === 'food' && (
+  <g class="vi vi--food">
+    <path class="ic" d="M50 48V30" />
+    <g class="mv grow">
+      <path class="fl" d="M50 36C40 36 35 30 34 22c10 0 15 6 16 14z" />
+      <path class="fl" d="M50 32C50 22 56 16 66 15c0 10-6 16-16 17z" />
+    </g>
+    <path class="fl" d="M12 58c4 24 18 34 38 34s34-10 38-34h-12c-3 14-12 20-26 20s-23-6-26-20z" />
+    <path class="fl" d="M18 52l10 4M82 52l-10 4" stroke="#2a4e1a" stroke-width="5" stroke-linecap="round" />
+  </g>
+)}
