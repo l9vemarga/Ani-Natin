@@ -9,6 +9,16 @@
 // where the badges are). See Infographic.astro for the markup. Only transforms, opacity and stroke drawing move.
 import { gsap, ScrollTrigger, q } from './motion.js';
 
+/* ---------- VINE SPEED: the two numbers to change ----------
+   VINE_LAG      how quickly the vine catches up with your scroll, from 0.02 (very slow, it trails far behind and
+                 glides for a long time after you stop) to 1 (instant, it is always exactly at your scroll).
+                 0.14 is the normal feel; try 0.06 for slow and dreamy.
+   VINE_TIP_AT   where on the screen the tip of the vine sits, from the top: 0.4 = near the middle, 0.62 = a bit
+                 below the middle (normal), 0.85 = near the bottom. A lower number makes the vine reach each
+                 station later, because the tip is higher on the screen. */
+const VINE_LAG = 0.14;
+const VINE_TIP_AT = 0.62;
+
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const easeOutBack = (t) => 1 + 2.70158 * Math.pow(t - 1, 3) + 1.70158 * Math.pow(t - 1, 2);
 const LEAF = 'M0 0C6-14 22-18 36-12C30 3 12 9 0 0Z';
@@ -231,8 +241,8 @@ function runVine(host, { mobile }) {
       measured = true;
       measure();
     }
-    const target = lenAtY(window.scrollY + window.innerHeight * 0.62);
-    current += (target - current) * 0.14;
+    const target = lenAtY(window.scrollY + window.innerHeight * VINE_TIP_AT);
+    current += (target - current) * VINE_LAG;
     if (Math.abs(target - current) < 0.05) current = target;
     render(current);
   }

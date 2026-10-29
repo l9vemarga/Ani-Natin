@@ -216,12 +216,12 @@ const branches = [
   /* ---------- Tablet and desktop: one screen, drawn on a 1440 x 960 stage ---------- */
   @media (min-width: 640px) {
     .careers {
-      --k: min(var(--u), calc(100svh / 66.67));
+      --k: min(var(--u), calc(var(--svh) * 100 / 66.67));
       display: flex;
       align-items: flex-end;
       justify-content: center;
       /* exactly one screen tall; a little taller than the stage only on very tall screens */
-      height: max(calc(var(--k) * 66.67), min(100svh, calc(var(--k) * 75)));
+      height: max(calc(var(--k) * 66.67), min(calc(var(--svh) * 100), calc(var(--k) * 75)));
     }
 
     .careers__stage {

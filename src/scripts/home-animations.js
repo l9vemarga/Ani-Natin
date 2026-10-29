@@ -4,6 +4,8 @@
 import { gsap, ScrollTrigger, q, splitReveal, setupReveals, startMotion } from './motion.js';
 import { loaderOpen } from './loader-gate.js';
 import { setupVine } from './vine-scroll.js';
+import { createRibbon } from './story-ribbon.js';
+import { createHighlight } from './text-highlight.js';
 
 /* ---------- Intro: one held stage, three screens, then the hero ----------
    Screen 1 (the first thing you see) plays when the loading screen opens. After that the scroll does the work:
@@ -32,10 +34,9 @@ function setupIntro() {
   gsap.set(food, { autoAlpha: 0, scale: 0.35, transformOrigin: '50% 70%' });
   entrance.to(food, { autoAlpha: 1, scale: 1, duration: 1, ease: 'back.out(1.8)', stagger: 0.13 }, 0.6);
 
-  if (window.matchMedia('(min-width: 960px)').matches) {
-    gsap.set('.ribbon-draw', { drawSVG: '0%' });
-    entrance.to('.ribbon-draw', { drawSVG: '100%', duration: 2.8, ease: 'power2.inOut' }, 1.25);
-  }
+  // The brown path: the load entrance draws its first stretch; after that it follows the scroll (story-ribbon.js)
+  const ribbon = createRibbon(story, stage);
+  if (ribbon) ribbon.entrance(entrance, 1.25);
   entrance.from('.s-cue', { autoAlpha: 0, y: 10, duration: 0.8, ease: 'power2.out' }, 2);
   loaderOpen.then(() => entrance.play());
 
@@ -59,14 +60,23 @@ function setupIntro() {
   const pero = lines('.s-pero');
   const mark = q('.s-pero .mark', story);
   const title = q('.frame2__title .ln', intro);
-  gsap.set([note, quote, pero, title], { autoAlpha: 0, yPercent: 70 });
+  gsap.set([note, title], { autoAlpha: 0, yPercent: 70 });
+  const hiQuote = createHighlight(story.querySelector('.s-quote'));
+  const hiPero = createHighlight(story.querySelector('.s-pero'));
+  const sweep = { quote: 0, pero: 0 };
   gsap.set(mark, { '--mark': '0%' });
 
   // How far the camera has to travel (the drawing is taller than the screen), how long the scroll runs for it,
   // and the track: one screen for the held stage, the scroll run, and one screen while the hero rises over it
   const screen = () => stage.clientHeight;
   const pan = () => Math.max(0, story.offsetHeight - screen());
-  const runLength = () => Math.round(pan() * 1.1 + screen() * 1.15);
+  // HOW SLOW THE TEXT HIGHLIGHT IS: one number, --read-slow, set on `.intro` in IntroFrames.astro (1 = quick,
+  // 2.5 = slow, 4 = very slow). A bigger number gives the highlight more scrolling to run across, and the photo
+  // and hero come in later. (The same number is used in the CSS that pre-sizes the track.)
+  const slow = Math.max(1, parseFloat(getComputedStyle(intro).getPropertyValue('--read-slow')) || 1);
+  const extra = 25 * (slow - 1); // extra timeline units (out of 100) given to the reading
+  const baseRun = () => pan() * 1.1 + screen() * 1.5;
+  const runLength = () => Math.round((baseRun() * (100 + extra)) / 100);
   const sizeTrack = () => {
     intro.style.height = screen() + runLength() + screen() + 'px';
   };
@@ -88,25 +98,29 @@ function setupIntro() {
     },
   });
 
+  const panned = { k: 0 }; // how far the camera has gone, 0 to 1; the brown path follows it
   tl.to(story, { y: () => -pan(), duration: P }, 0)
+    .to(panned, { k: 1, duration: P, onUpdate: () => ribbon && ribbon.apply(panned.k) }, 0)
     // screen 1 lets go: the cue goes, the headline lifts away, the food drifts up a little faster than the path
     .fromTo('.s-cue', { autoAlpha: 1 }, { autoAlpha: 0, duration: 4, immediateRender: false }, 0)
     .to(story.querySelector('.s-head'), { autoAlpha: 0, yPercent: -40, duration: 12 }, 4)
     .to('.s-cluster', { yPercent: -16, duration: P }, 0)
     .to(note, { autoAlpha: 1, yPercent: 0, duration: 7, stagger: 2.4, ease: 'power2.out' }, 5)
-    // screen 2: the statements rise as the brown ground fills the screen
-    .to(quote, { autoAlpha: 1, yPercent: 0, duration: 8, stagger: 2.2, ease: 'power2.out' }, P * 0.34)
-    .to(pero, { autoAlpha: 1, yPercent: 0, duration: 8, stagger: 2.2, ease: 'power2.out' }, P * 0.58)
-    .to(mark, { '--mark': '100%', duration: 7, ease: 'power2.out' }, P * 0.58 + 6)
+    // screen 2: the two statements are there (faded) as the brown ground fills the screen. Then, as you scroll,
+    // a highlight sweeps through them letter by letter (text-highlight.js), the orange block behind "Pero tumatanda"
+    // wipes in as the second one starts
+    .to(sweep, { quote: 1, duration: 15 * slow, onUpdate: () => hiQuote.apply(sweep.quote) }, 33)
+    .to(sweep, { pero: 1, duration: 12 * slow, onUpdate: () => hiPero.apply(sweep.pero) }, 33 + 12.75 * slow)
+    .to(mark, { '--mark': '100%', duration: 6, ease: 'power2.out' }, 33 + 12.75 * slow)
     // screen 3: they make way as the photo opens from the bottom-left corner
-    .to([...note, ...quote, ...pero], { autoAlpha: 0, yPercent: -35, duration: 10, stagger: 0.6 }, 56)
-    .fromTo(photo, { clipPath: 'circle(0% at 10% 100%)' }, { clipPath: 'circle(150% at 10% 100%)', duration: 38, ease: 'power2.inOut' }, 54)
-    .fromTo('.frame2__photo', { scale: 1.2 }, { scale: 1, duration: 46 }, 54)
-    .from('.frame2__ring', { scale: 0.5, transformOrigin: '100% 100%', duration: 14 }, 76)
-    .to(title, { autoAlpha: 1, yPercent: 0, duration: 9, stagger: 2.6, ease: 'power2.out' }, 78)
+    .to([...note, ...quote, ...pero], { autoAlpha: 0, yPercent: -35, duration: 10, stagger: 0.6 }, 60 + extra)
+    .fromTo(photo, { clipPath: 'circle(0% at 10% 100%)' }, { clipPath: 'circle(150% at 10% 100%)', duration: 32, ease: 'power2.inOut' }, 62 + extra)
+    .fromTo('.frame2__photo', { scale: 1.2 }, { scale: 1, duration: 38 }, 62 + extra)
+    .from('.frame2__ring', { scale: 0.5, transformOrigin: '100% 100%', duration: 12 }, 82 + extra)
+    .to(title, { autoAlpha: 1, yPercent: 0, duration: 8, stagger: 2, ease: 'power2.out' }, 84 + extra)
     .set(story, { autoAlpha: 1 }, 0)
-    .set(story, { autoAlpha: 0 }, 93)
-    .set({}, {}, 100);
+    .set(story, { autoAlpha: 0 }, 95 + extra)
+    .set({}, {}, 100 + extra);
 
   // The hero rises over the held photo: the photo sinks back and dims, the hero's own pieces settle as it arrives
   const hero = document.querySelector('#home');

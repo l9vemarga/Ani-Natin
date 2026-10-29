@@ -210,8 +210,8 @@ import Photo from './Photo.astro';
      (negative margin), sits above the stage, and has a rounded top edge like a sheet sliding up. */
   :global(html.js:not(.rm):not(.anim-fail) .intro + .hero) {
     z-index: 3;
-    min-height: var(--stage, 100svh);
-    margin-top: calc(var(--stage, 100svh) * -1);
+    min-height: var(--stage, calc(var(--svh) * 100));
+    margin-top: calc(var(--stage, calc(var(--svh) * 100)) * -1);
     border-radius: 2rem 2rem 0 0;
     box-shadow: 0 -1.2rem 3rem rgba(20, 20, 10, 0.28);
   }

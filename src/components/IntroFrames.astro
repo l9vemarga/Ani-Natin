@@ -20,12 +20,15 @@ import Photo from './Photo.astro';
   <svg class="story__art" viewBox="0 0 1440 1846" aria-hidden="true" focusable="false">
     <defs>
       <mask id="ribbon-mask" maskUnits="userSpaceOnUse" x="-200" y="0" width="1840" height="1846">
-        <path class="ribbon-draw" d="M1039 522C1004 527 897 541 828 554C759 568 684 581 625 601C565 620 512 644 470 671C428 698 392 732 373 765C354 798 356 834 356 870C356 906 371 943 373 982C375 1022 369 1062 368 1109C367 1156 368 1237 368 1263" fill="none" stroke="#fff" stroke-width="440" stroke-linecap="round" />
+        <path class="ribbon-draw" d="M1039 522C1004 527 897 541 828 554C759 568 684 581 625 601C565 620 512 644 470 671C428 698 392 732 373 765C354 798 356 834 356 870C356 906 371 943 373 982C375 1022 369 1062 368 1109C367 1156 368 1237 368 1263" fill="none" stroke="#fff" stroke-width="300" stroke-linecap="butt" stroke-linejoin="round" />
       </mask>
     </defs>
     <path class="story__ground" data-nav="dark" d="M-2400 1060 L0 1060C23 1065 90 1084 140 1095C191 1106 248 1117 302 1126C356 1134 408 1147 463 1144C518 1141 578 1125 632 1109C685 1092 732 1062 786 1046C840 1029 901 1015 954 1008C1008 1000 1057 998 1109 999C1160 1001 1208 1006 1263 1018C1318 1029 1391 1055 1440 1067C1489 1079 1538 1085 1558 1089L3840 1089 V1850 H-2400 Z" />
     <g mask="url(#ribbon-mask)"><path class="story__ribbon" data-nav="dark" d="M1032 505C1002 507 906 512 856 516C806 521 770 526 730 533C690 541 657 550 618 560C578 570 532 581 494 595C456 609 417 625 387 643C357 661 333 679 314 702C296 725 286 753 278 780C270 808 268 837 268 865C269 893 276 922 281 949C286 975 296 1001 298 1025C299 1048 292 1055 289 1088C286 1120 282 1199 281 1221L466 1221C466 1208 465 1170 467 1144C470 1118 475 1092 479 1067C482 1041 491 1016 488 990C486 963 472 935 465 905C457 876 447 840 445 814C443 788 445 770 453 751C461 732 475 716 493 702C510 688 534 676 560 665C586 655 614 647 647 639C680 630 723 622 759 615C796 607 835 601 865 592C894 584 907 574 935 564C963 554 1015 538 1032 533Z" /></g>
   </svg>
+
+  <!-- Phones and tablets: the brown path, built and drawn by story-ribbon.js (empty until then) -->
+  <svg class="story__ribbon-m" aria-hidden="true" focusable="false"><path class="rb-path" data-nav="dark" fill="none" stroke="#452a17" stroke-linecap="round" stroke-linejoin="round" /></svg>
 
   <div class="story__a">
   <p class="s-head" data-split data-split-load>
@@ -130,6 +133,22 @@ import Photo from './Photo.astro';
     display: none;
   }
 
+  /* the path sits behind the food and the text */
+  .story__ribbon-m {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .story__ribbon-m path {
+    pointer-events: stroke; /* so the header can tell it is over brown */
+  }
+
   .s-head,
   .s-note {
     font-size: clamp(1.9rem, 8.4vw, 3.2rem);
@@ -146,10 +165,12 @@ import Photo from './Photo.astro';
 
   /* phones and tablets: screen 1 fills one screen (headline at the top, the note at the bottom) */
   .story__a {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: 1.5rem;
     align-content: space-between;
-    min-height: calc(100svh - 6.5rem);
+    min-height: calc(var(--svh) * 100 - 6.5rem);
     padding-bottom: 2.6rem;
   }
 
@@ -226,7 +247,7 @@ import Photo from './Photo.astro';
     display: grid;
     gap: 2rem;
     align-content: center;
-    min-height: 100svh;
+    min-height: calc(var(--svh) * 100);
     margin: 0 calc(var(--gutter) * -1);
     padding: 3.5rem var(--gutter) 4.5rem;
     background: var(--brown);
@@ -269,7 +290,7 @@ import Photo from './Photo.astro';
   .frame--photo {
     position: relative;
     overflow: hidden;
-    min-height: 100svh;
+    min-height: calc(var(--svh) * 100);
     display: flex;
     align-items: center;
     padding: 5rem var(--gutter);
@@ -327,6 +348,10 @@ import Photo from './Photo.astro';
       display: contents;
     }
 
+    .story__ribbon-m {
+      display: none;
+    }
+
     .story__art {
       display: block;
       position: absolute;
@@ -373,7 +398,7 @@ import Photo from './Photo.astro';
     .s-cue {
       position: absolute;
       left: 50%;
-      top: calc(100svh - var(--u) * 5.6);
+      top: calc(var(--svh) * 100 - var(--u) * 5.6);
       z-index: 3;
       display: grid;
       justify-items: center;
@@ -426,7 +451,7 @@ import Photo from './Photo.astro';
     }
 
     .frame--photo {
-      min-height: max(100svh, calc(var(--u) * 58.5));
+      min-height: max(calc(var(--svh) * 100), calc(var(--u) * 58.5));
       padding: 0;
       display: block;
     }
@@ -456,27 +481,28 @@ import Photo from './Photo.astro';
      three screens simply stack. */
   /* The track's height is set exactly by home-animations.js. This is the same sum worked out in CSS, so the
      very first paint already has the right height and nothing below (the hero) jumps when the script takes over.
-       height = stage + scroll run + stage, with scroll run = 1.1 x pan + 1.15 x stage, pan = story - stage.
+       height = stage + scroll run + stage, with scroll run = (1.1 x pan + 1.5 x stage) x (1 + 0.25 x (read-slow - 1)), pan = story - stage.
      On phones the story is two screens tall (one per screen), so the pan is one screen. */
   :global(html.js:not(.rm):not(.anim-fail)) {
-    --stage: 100svh;
+    --stage: calc(var(--svh) * 100);
   }
 
   /* phones: the stage is as tall as the screen with the browser toolbar tucked away, so scrolling that
      collapses the toolbar never shows a strip under it. Screen 1's content is still laid out for the
-     smaller visible height (svh), so nothing is hidden behind the toolbar. */
+     smaller visible height (--svh), so nothing is hidden behind the toolbar. */
   @media (max-width: 959px) {
-    @supports (height: 100lvh) {
-      :global(html.js:not(.rm):not(.anim-fail)) {
-        --stage: 100lvh;
-      }
+    :global(html.js:not(.rm):not(.anim-fail)) {
+      --stage: calc(var(--lvh) * 100);
     }
   }
 
   :global(html.js:not(.rm):not(.anim-fail)) .intro {
-    --intro-pan: max(0px, calc(200svh - var(--stage)));
+    /* HOW SLOW THE TEXT HIGHLIGHT IS: change this one number (1 = quick, 2.5 = slow, 4 = very slow). It gives
+       the highlight more scrolling to run across; the photo and hero come in later. */
+    --read-slow: 6;
+    --intro-pan: max(0px, calc(var(--svh) * 200 - var(--stage)));
     position: relative;
-    height: calc(var(--stage) * 3.15 + var(--intro-pan) * 1.1);
+    height: calc(var(--stage) * 2 + (var(--stage) * 1.5 + var(--intro-pan) * 1.1) * (1 + 0.25 * (var(--read-slow) - 1)));
   }
 
   @media (min-width: 960px) {

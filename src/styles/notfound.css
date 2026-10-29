@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  min-height: calc(var(--svh) * 100);
   overflow: hidden;
   background: var(--cream);
   color: var(--brown);

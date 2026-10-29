@@ -187,6 +187,14 @@ export async function startMotion(setup) {
   await Promise.race([fonts, new Promise((resolve) => setTimeout(resolve, 2500))]);
 
   if (root.classList.contains('anim-fail')) return; // took too long: the page stays static
+
+  // Safety net: the Home intro is a held stage that must have a real height. If a browser could not work one
+  // out (it does not understand some CSS), fall back to the simple stacked page instead of showing a blank screen.
+  const stage = document.querySelector('.intro__stage');
+  if (stage && stage.getBoundingClientRect().height < 120) {
+    root.classList.add('anim-fail');
+    return;
+  }
   gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
   ScrollTrigger.config({ ignoreMobileResize: true });
   setupSmoothScroll();

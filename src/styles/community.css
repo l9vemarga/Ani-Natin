@@ -280,7 +280,7 @@
   right: 0;
   top: calc(100% + 0.6rem);
   z-index: 30;
-  max-height: min(24rem, 60svh);
+  max-height: min(24rem, calc(var(--svh) * 60));
   padding: 0.5rem;
   overflow: auto;
   border: 3px solid var(--green);
@@ -917,7 +917,7 @@
 /* "Ask a question" dialog */
 .cm-dialog {
   width: min(34rem, calc(100vw - 2rem));
-  max-height: calc(100svh - 2rem);
+  max-height: calc(var(--svh) * 100 - 2rem);
   padding: 0;
   overflow: auto;
   border: 0;

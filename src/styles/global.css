@@ -29,12 +29,29 @@
   --font-body: 'Garet', 'Segoe UI', system-ui, sans-serif;
   --sub-ws: 0.1em; /* Etna's flared capitals nearly touch the next word, so its word gaps get a little extra */
 
+  /* Screen-height units with a fallback. Older phones and browsers do not know svh / lvh at all, and a
+     page that uses them directly then loses those heights (a blank first screen). So everything uses
+     these two instead: --svh is 1% of the visible height (toolbar showing), --lvh of the large height. */
+  --svh: 1vh;
+  --lvh: 1vh;
   --gutter: 1.25rem;
   --u: 1vw;
 
   /* Sideways offset that centers the 1440px design on screens wider than 1440px (0 on narrower screens).
      The % is resolved where it is used, so it is the width of that element's container. */
   --gx: max(0px, calc((100% - var(--u) * 100) / 2));
+}
+
+@supports (height: 1svh) {
+  :root {
+    --svh: 1svh;
+  }
+}
+
+@supports (height: 1lvh) {
+  :root {
+    --lvh: 1lvh;
+  }
 }
 
 @media (min-width: 430px) {
