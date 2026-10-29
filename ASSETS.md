@@ -45,8 +45,12 @@ Scribble SVGs keep their own colors. The stand-ins take the color of the section
 
 **In place.** Magic Yellow (headings), Etna Sans Serif (sub-headings) and Garet Book + Heavy (body) are in `public/fonts/` as woff2, wired in `src/styles/fonts.css` and the stacks in `global.css`. The originals are in the `Fonts/` folder next to the site (Magic Yellow and Etna were converted from .otf).
 
-- Magic Yellow has no accented letters (n with tilde, a with accent), no dashes or "...". Etna has no peso sign or "...". Garet has no peso sign. The browser shows those few characters in the free stand-in fonts (Bagel Fat One, Fredoka, Figtree), which stay installed only for that. Avoid them in headings.
+- Magic Yellow has no accented letters (n with tilde, a with accent), no dashes or "...". Etna has no peso sign or "...". Garet has no peso sign. The browser shows those few characters in a fallback: Bagel Fat One (installed, headings only) or the phone's own font for the rest. Avoid them in headings.
 - Keep a record of where each font was downloaded and its license. Garet's file says "End user license agreement at spacetype.co" and the Etna file is a "free font" release. Check that both allow use on a public website before the site goes live.
+
+## Smaller copies of photos (for phones)
+
+`intro/farmer-field-640.webp`, `-960.webp`, `closing/field-tractor-720.webp`, `-1080.webp` and `home/farmer-cutout-2-320.webp` are smaller copies of the photos next to them, so phones download less. If you replace one of those photos, make its smaller copies again (same names, smaller widths).
 
 ## Decisions still open
 

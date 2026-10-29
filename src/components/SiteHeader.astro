@@ -43,7 +43,8 @@ const here = Astro.url.pathname.replace(/\/$/, '');
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem var(--gutter) 0;
+    /* phones: keep clear of the notch and the rounded corners */
+    padding: calc(1rem + env(safe-area-inset-top)) max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
     pointer-events: none;
   }
 
@@ -101,7 +102,7 @@ const here = Astro.url.pathname.replace(/\/$/, '');
   .site-header__toggle {
     display: inline-flex;
     align-items: center;
-    min-height: 2.6rem;
+    min-height: 2.75rem; /* 44px: a comfortable tap size */
     padding: 0 1.2rem;
     border: 0;
     border-radius: 999px;

@@ -75,7 +75,7 @@ const email = 'aninatin.project@gmail.com';
   .footer {
     background: var(--cream);
     color: var(--orange);
-    padding: 3.5rem var(--gutter) 3rem;
+    padding: 3.5rem var(--gutter) calc(3rem + env(safe-area-inset-bottom));
   }
 
   .footer__grid {

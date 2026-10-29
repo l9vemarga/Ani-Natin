@@ -62,6 +62,19 @@ BACKEND.md                         the forum backend plan: tables, API, rules, g
 - The Agri-career section is exactly one screen tall from 640px up. It is drawn on a 1440 x 960 stage that scales to fit the screen height as well as the width (unit `--k` in `AgriCareers.astro`). On phones it stacks.
 - Breakpoints: 360 (base), 430 and 960.
 
+## Phones
+
+Made and checked for phones as well as desktop (Chrome and Safari's engine, WebKit, in iPhone 13, iPhone SE and Pixel 7 sizes).
+
+- **The loading screen plays once per browser session.** Coming back to Home, or reloading it, goes straight to the page. Add `?loader` to the address to see it again. It is also skipped when the visitor asked to save data, and it runs about 25% quicker on phones.
+- **Animation work starts only when needed.** Text is split into lines (the slow part) only when it is within one and a half screens, and the vine is measured the first time it nears the screen, so the first paint is not held up.
+- **The intro stage uses the large viewport on phones** (`--stage` in `IntroFrames.astro`: `100lvh` on phones, `100svh` on desktop), so the phone browser's collapsing toolbar never leaves a strip under it. The content inside is still laid out for the visible height.
+- **Notches and the home indicator:** `viewport-fit=cover` in `BaseLayout.astro`, with the header and footer padded by `env(safe-area-inset-*)`.
+- **Tap size:** buttons and menu pills are at least 44px tall.
+- **Weight:** the CSS is inside each page (no extra request that blocks the first paint, `astro.config.mjs`), only the display stand-in font is loaded as a fallback (the others use the phone's own font), and the big photos have smaller copies for small screens (`-640`, `-960`, `-720`, `-1080` and `-320` files next to the originals, chosen with `srcset` in `Photo.astro`). **If you replace one of those photos, make its smaller copies again.**
+- **Touch scrolling stays native** (Lenis only eases the mouse wheel and trackpad). two26.studio also eases touch; that can feel laggy on some iPhones, so it is left off here.
+- **Accessible orange:** headlines in orange on cream use `--orange-ink` (3.1 to 1) and small orange text `--orange-ink-sm` (4.5 to 1), both a little deeper than the brand orange (see `global.css`). The nav pills and footer keep the exact brand orange, as in the mockups.
+
 ## Community page
 
 - Sections, from the wireframe: a hero with one big search, two tall cards that act as tabs (Testimonials and Discussion Forum), the FAQ, and the school locator.

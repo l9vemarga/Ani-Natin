@@ -162,11 +162,22 @@ const petals = [0, 1, 2, 3, 4].map((i) => {
   </div>
 </div>
 
-<!-- Switches the loader on only when the animation can run (scripts available, no reduced motion) -->
+<!-- Switches the loader on only when the animation can run (scripts available, no reduced motion), and
+     only on a visitor's first load in a browser session: coming back to the Home page, or reloading it, goes
+     straight to the page. Skipped too when the visitor asked to save data. Add ?loader to the address to see
+     it again. -->
 <script is:inline>
   (function () {
     var r = document.documentElement;
-    if (r.classList.contains('js') && !r.classList.contains('rm')) r.classList.add('loader-on');
+    if (!r.classList.contains('js') || r.classList.contains('rm')) return;
+    var seen = false;
+    try {
+      seen = !!sessionStorage.getItem('ani.loader');
+      if (/[?&]loader(&|$)/.test(location.search)) seen = false;
+    } catch (e) {}
+    var c = navigator.connection;
+    if (seen || (c && c.saveData)) return;
+    r.classList.add('loader-on');
   })();
 </script>
 

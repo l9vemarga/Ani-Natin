@@ -14,6 +14,7 @@ const root = document.documentElement;
 const loader = document.querySelector('[data-loader]');
 
 function finish() {
+  try { sessionStorage.setItem('ani.loader', '1'); } catch (e) {}
   loader?.remove();
   root.classList.remove('loader-on', 'loader-opening');
   root.classList.add('loader-done');
@@ -65,7 +66,8 @@ function run() {
   };
   const second = sweeps[1].getPointAtLength(0);
 
-  const arrive = gsap.timeline();
+  const phone = window.matchMedia('(max-width: 639px)').matches; // a little quicker on phones
+  const arrive = gsap.timeline().timeScale(phone ? 1.3 : 1);
   arrive
     // the thin background vines draw in
     .to(veins, { drawSVG: '100%', duration: 1.5, ease: 'power2.inOut', stagger: 0.12 }, 0)
@@ -108,7 +110,7 @@ function run() {
     window.addEventListener('ani:ready', resolve, { once: true });
     setTimeout(resolve, 7000);
   });
-  const hold = arrived.then(() => new Promise((resolve) => setTimeout(resolve, 600)));
+  const hold = arrived.then(() => new Promise((resolve) => setTimeout(resolve, phone ? 250 : 600)));
 
   Promise.all([hold, ready]).then(() => {
     if (root.classList.contains('anim-fail')) return finish();
@@ -116,7 +118,7 @@ function run() {
     root.classList.add('loader-opening');
     gsap.set(word, { scale: 1 });
 
-    const out = gsap.timeline({ onComplete: finish });
+    const out = gsap.timeline({ onComplete: finish }).timeScale(phone ? 1.25 : 1);
     out
       .to(word, { scale: 1.18, autoAlpha: 0, y: -30, duration: 0.5, ease: 'power2.in' }, 0)
       .to(veins, { autoAlpha: 0, duration: 0.35 }, 0)
@@ -142,4 +144,7 @@ function run() {
 }
 
 if (loader && root.classList.contains('loader-on')) run();
-else openLoader();
+else {
+  loader?.remove(); // not needed this time: take its markup out of the page
+  openLoader();
+}

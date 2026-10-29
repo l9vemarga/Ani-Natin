@@ -97,6 +97,7 @@ function runVine(host, { mobile }) {
   let stations = stationEls.map((el) => ({ el, tl: buildStation(el), at: 0, on: false }));
   let current = 0;
   let live = false;
+  let measured = false; // the drawing is measured the first time it is near the screen, not at page start
 
   // Phone: the vine is built from where the badges are, so it runs through each of them
   function buildMobilePath() {
@@ -226,14 +227,17 @@ function runVine(host, { mobile }) {
 
   function tick() {
     if (!live) return;
+    if (!measured) {
+      measured = true;
+      measure();
+    }
     const target = lenAtY(window.scrollY + window.innerHeight * 0.62);
     current += (target - current) * 0.14;
     if (Math.abs(target - current) < 0.05) current = target;
     render(current);
   }
 
-  measure();
-  const onRefresh = () => measure();
+  const onRefresh = () => measured && measure();
   ScrollTrigger.addEventListener('refresh', onRefresh);
   gsap.ticker.add(tick);
   // work only while the section is on (or near) the screen

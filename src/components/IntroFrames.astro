@@ -75,7 +75,7 @@ import Photo from './Photo.astro';
 
 <section class="frame frame--photo" data-nav="dark" aria-label="Introduction, continued">
   <div class="frame2__photo">
-    <Photo src="intro/farmer-field.webp" alt="A farmer bent over a field of young crops" />
+    <Photo src="intro/farmer-field.webp" alt="A farmer bent over a field of young crops" srcset="/images/intro/farmer-field-640.webp 640w, /images/intro/farmer-field-960.webp 960w, /images/intro/farmer-field.webp 1368w" sizes="100vw" />
   </div>
   <span class="frame2__ring" aria-hidden="true"></span>
 
@@ -89,6 +89,7 @@ import Photo from './Photo.astro';
     </p>
   </div>
 </section>
+<span class="intro__shade" aria-hidden="true"></span>
 </div>
 </div>
 
@@ -98,7 +99,7 @@ import Photo from './Photo.astro';
   }
 
   .accent {
-    color: var(--orange);
+    color: var(--orange-ink);
   }
 
   /* shared headline style for the intro: heavy rounded sans, tight, sentence case (as in the layout) */
@@ -457,15 +458,30 @@ import Photo from './Photo.astro';
      very first paint already has the right height and nothing below (the hero) jumps when the script takes over.
        height = stage + scroll run + stage, with scroll run = 1.1 x pan + 1.15 x stage, pan = story - stage.
      On phones the story is two screens tall (one per screen), so the pan is one screen. */
+  :global(html.js:not(.rm):not(.anim-fail)) {
+    --stage: 100svh;
+  }
+
+  /* phones: the stage is as tall as the screen with the browser toolbar tucked away, so scrolling that
+     collapses the toolbar never shows a strip under it. Screen 1's content is still laid out for the
+     smaller visible height (svh), so nothing is hidden behind the toolbar. */
+  @media (max-width: 959px) {
+    @supports (height: 100lvh) {
+      :global(html.js:not(.rm):not(.anim-fail)) {
+        --stage: 100lvh;
+      }
+    }
+  }
+
   :global(html.js:not(.rm):not(.anim-fail)) .intro {
-    --intro-pan: 100svh;
+    --intro-pan: max(0px, calc(200svh - var(--stage)));
     position: relative;
-    height: calc(100svh * 3.15 + var(--intro-pan) * 1.1);
+    height: calc(var(--stage) * 3.15 + var(--intro-pan) * 1.1);
   }
 
   @media (min-width: 960px) {
     :global(html.js:not(.rm):not(.anim-fail)) .intro {
-      --intro-pan: max(0px, calc(var(--u) * 128.2 - 100svh));
+      --intro-pan: max(0px, calc(var(--u) * 128.2 - var(--stage)));
     }
   }
 
@@ -473,7 +489,7 @@ import Photo from './Photo.astro';
     position: sticky;
     top: 0;
     z-index: 1;
-    height: 100svh;
+    height: var(--stage);
     overflow: hidden;
     background: var(--green-deep); /* shows around the photo while it sinks back under the hero */
   }
@@ -483,6 +499,15 @@ import Photo from './Photo.astro';
     left: 0;
     top: 0;
     width: 100%;
+  }
+
+  :global(html.js:not(.rm):not(.anim-fail)) .intro__shade {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: #140f06;
+    opacity: 0;
+    pointer-events: none;
   }
 
   :global(html.js:not(.rm):not(.anim-fail)) .intro .frame--photo {

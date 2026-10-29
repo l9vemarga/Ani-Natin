@@ -15,13 +15,18 @@
   --cream: #fae4bc; /* background */
 
   --green-deep: #1d3611;
+  /* Brand orange on cream is 2.8 to 1, just under the 3 to 1 needed for large text. These two are the same
+     orange, a little deeper, for TEXT on cream: large (headlines) 3.1 to 1, small 4.5 to 1. Shapes and
+     buttons keep the brand orange. */
+  --orange-ink: #d26220;
+  --orange-ink-sm: #a64e19;
   --ink: var(--brown);
 
   /* Fonts. Brand Book: Magic Yellow (headings), Etna Sans Serif (sub-headings), Garet (body).
-     The free stand-ins follow as a fallback for letters the brand fonts lack (see src/styles/fonts.css). */
+     A stand-in follows each as a fallback for letters the brand fonts lack (see src/styles/fonts.css). */
   --font-display: 'Magic Yellow', 'Bagel Fat One', 'Trebuchet MS', sans-serif;
-  --font-sub: 'Etna Sans Serif', 'Fredoka Variable', 'Trebuchet MS', sans-serif;
-  --font-body: 'Garet', 'Figtree Variable', 'Segoe UI', sans-serif;
+  --font-sub: 'Etna Sans Serif', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Garet', 'Segoe UI', system-ui, sans-serif;
   --sub-ws: 0.1em; /* Etna's flared capitals nearly touch the next word, so its word gaps get a little extra */
 
   --gutter: 1.25rem;

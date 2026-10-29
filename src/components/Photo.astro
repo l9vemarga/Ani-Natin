@@ -11,9 +11,11 @@ interface Props {
   fit?: 'cover' | 'contain';
   position?: string;
   class?: string;
+  srcset?: string; // smaller copies for small screens, e.g. "/images/a-640.webp 640w, /images/a.webp 1368w"
+  sizes?: string;
 }
 
-const { src, alt, fit = 'cover', position = 'center', class: className } = Astro.props;
+const { src, alt, fit = 'cover', position = 'center', class: className, srcset, sizes } = Astro.props;
 const exists = fs.existsSync(path.join(process.cwd(), 'public', 'images', src));
 ---
 
@@ -21,6 +23,8 @@ const exists = fs.existsSync(path.join(process.cwd(), 'public', 'images', src));
   <img
     class:list={['photo', className]}
     src={`/images/${src}`}
+    srcset={srcset}
+    sizes={sizes}
     alt={alt}
     loading="lazy"
     decoding="async"

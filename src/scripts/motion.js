@@ -27,6 +27,7 @@ export function splitReveal(el, { load = false, delay = 0, start = 'top 86%', ga
     type: 'lines',
     mask: 'lines',
     autoSplit: true,
+    aria: 'none', // the text stays real text; an aria-label on a <p> is not allowed
     onSplit(self) {
       // The line masks hide overflow; give them breathing room so descenders (g, y, p) are never clipped
       (self.masks || []).forEach((mask) => {
@@ -113,7 +114,14 @@ export function setupReveals() {
 
   q('[data-split]').forEach((el) => {
     if (el.hasAttribute('data-split-load')) return; // plays on load, after the loading screen (home-animations.js)
-    splitReveal(el);
+    let done = false;
+    const go = () => {
+      if (done) return;
+      done = true;
+      splitReveal(el);
+    };
+    // set up when it is within one and a half screens (also if the page was opened already scrolled past it)
+    ScrollTrigger.create({ trigger: el, start: 'top bottom+=150%', once: true, onEnter: go, onLeave: go });
   });
 
   // Safety net: when the very end of the page is reached, show anything still waiting.
@@ -187,6 +195,7 @@ export async function startMotion(setup) {
 
   root.classList.add('anim-ready');
   window.dispatchEvent(new Event('ani:ready')); // tells the loading screen it may open
-  window.addEventListener('load', () => ScrollTrigger.refresh());
-  document.fonts.ready.then(() => ScrollTrigger.refresh());
+  // one refresh once everything (images) has loaded; the fonts were already waited for above
+  if (document.readyState === 'complete') requestAnimationFrame(() => ScrollTrigger.refresh());
+  else window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
 }

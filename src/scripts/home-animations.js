@@ -112,7 +112,8 @@ function setupIntro() {
   const hero = document.querySelector('#home');
   if (hero) {
     const cover = { trigger: hero, start: 'top bottom', end: 'top top', scrub: true };
-    gsap.fromTo(photo, { scale: 1, filter: 'brightness(1)' }, { scale: 0.9, filter: 'brightness(0.55)', ease: 'none', scrollTrigger: cover });
+    gsap.fromTo(photo, { scale: 1 }, { scale: 0.9, ease: 'none', scrollTrigger: cover });
+    gsap.to('.intro__shade', { opacity: 0.45, ease: 'none', scrollTrigger: cover });
     gsap.fromTo('.hero__cutout', { yPercent: 12 }, { yPercent: 0, ease: 'none', scrollTrigger: { ...cover, end: 'top 15%' } });
     gsap.fromTo('.hero__copy', { yPercent: 7 }, { yPercent: 0, ease: 'none', scrollTrigger: { ...cover, end: 'top 15%' } });
   }
