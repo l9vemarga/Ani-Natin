@@ -1,0 +1,1331 @@
+/* Youth in Agri page, the final design: lime video block, "Agri-Success Stories" with the story diagram, the yellow
+   GREEN Zone (arch photo, photo strip), the dark green VermiTea Kit, and "But wait... There's more!" as an accordion
+   over an orange ribbon, then the closing question. Mobile first; from 960px up the sections are drawn in proportions
+   of the 1440px design (--u). Headings are Etna Sans Serif, pills and small caps are Garet Heavy. */
+
+.yt-hero .ln,
+.yt-intro .ln,
+.yt-more .ln,
+.yt-callout .ln {
+  display: block;
+}
+
+.yt-h2,
+.yt-title,
+.yt-intro__sub,
+.yt-vtext__lead,
+.yt-frame__title {
+  /* the design's headings are a little heavier than Etna's one weight, so they get a hair of outline */
+  -webkit-text-stroke: 0.028em currentColor;
+  paint-order: stroke fill;
+}
+
+.yt-h2 {
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+
+/* body paragraphs in the stories */
+.yt-text p + p,
+.yt-frame__body p + p {
+  margin-top: 0.8em;
+}
+
+.yt-text strong,
+.yt-frame__body strong {
+  font-weight: 700;
+}
+
+/* ---------- Video block (lime) ---------- */
+.yt-hero {
+  position: relative;
+  min-height: 21rem;
+  background: var(--lime);
+  color: var(--green);
+}
+
+.yt-hero__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.yt-hero__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.yt-hero__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--green);
+  cursor: pointer;
+}
+
+.yt-hero__play svg {
+  position: relative;
+  width: 4.5rem;
+  transition: transform 0.25s ease;
+}
+
+.yt-hero__play:hover svg {
+  transform: scale(1.1);
+}
+
+.yt-hero__frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.yt-hero__empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: end;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 0 var(--gutter) 3.2rem;
+  text-align: center;
+}
+
+.yt-hero__empty svg {
+  width: 2.6rem;
+}
+
+.yt-hero__cap {
+  max-width: 24rem;
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.yt-hero__need {
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(250, 228, 188, 0.8);
+  font-family: var(--font-sub);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* ---------- Intro: headline and the story diagram ---------- */
+.yt-intro {
+  position: relative;
+  display: grid;
+  gap: 2.2rem;
+  padding: 3.4rem var(--gutter) 5.5rem;
+  background: var(--cream);
+  color: var(--green);
+}
+
+.yt-title {
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 12.5vw, 3.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--orange-ink);
+}
+
+.yt-intro__sub {
+  max-width: 17rem;
+  margin-top: 1rem;
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* the diagram. --tu is its own unit: about 1% of the page on desktop, smaller on a phone.
+   The two green pills open a vine of orange buttons (drawn in the SVG, animated in youth-animations.js). */
+.yt-tree {
+  z-index: 2; /* the diagram hangs over the yellow wave below */
+  --tu: 0.66rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--tu) * 4.4); /* room for the closed sprout under the first pill */
+}
+
+.yt-tree__group {
+  position: relative;
+}
+
+.yt-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.yt-pill--parent {
+  gap: calc(var(--tu) * 1);
+  width: max-content;
+  min-width: calc(var(--tu) * 16.9);
+  height: calc(var(--tu) * 4.2);
+  padding: 0 calc(var(--tu) * 2.2) 0 calc(var(--tu) * 2.4);
+  border: 0;
+  background: var(--green);
+  color: var(--cream);
+  font-size: calc(var(--tu) * 1.95);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.yt-pill--parent:hover,
+.yt-tree__group.is-open .yt-pill--parent {
+  transform: translateY(-2px);
+  background: #34601f;
+  box-shadow: 0 0.5rem 1.1rem -0.5rem rgba(42, 78, 26, 0.7);
+}
+
+.yt-pill__chev {
+  flex: none;
+  width: calc(var(--tu) * 1.5);
+  height: calc(var(--tu) * 1.5);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.yt-tree__group.is-open .yt-pill__chev {
+  transform: rotate(180deg);
+}
+
+/* the vine: a drawing in the diagram's unit, laid over the space under the green pill */
+.yt-vine {
+  position: absolute;
+  left: 0;
+  top: calc(var(--tu) * 4.2);
+  z-index: 0;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.yt-vine path:not(.yt-leaf),
+.yt-vine__ring {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 0.15; /* in the diagram's unit */
+  stroke-linecap: round;
+}
+
+.yt-vine__bud {
+  fill: var(--orange);
+  stroke: none;
+}
+
+.yt-vine__ring {
+  opacity: 0;
+  stroke-width: 0.12;
+}
+
+.yt-leaf {
+  fill: #66954a;
+}
+
+.yt-leaf--b {
+  fill: #8fb55f;
+}
+
+.yt-tree__list {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 0 calc(var(--tu) * var(--indent));
+  padding: 0;
+  list-style: none;
+}
+
+.yt-tree__list li {
+  width: calc(var(--tu) * 20);
+  margin-top: calc(var(--tu) * 1.5);
+}
+
+.yt-tree__list li:first-child {
+  margin-top: calc(var(--tu) * 2.8);
+}
+
+.yt-pill--child {
+  width: 100%;
+  height: calc(var(--tu) * 4.1);
+  background: var(--orange);
+  color: var(--cream);
+  font-size: calc(var(--tu) * 1.95);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.yt-pill--child:hover,
+.yt-pill--child:focus-visible {
+  transform: translateX(0.25rem);
+  background: var(--orange-ink-sm);
+}
+
+/* Closed (only with scripts): the buttons and the vine are not there yet, and only a short sprout shows.
+   The buttons keep their room on desktop so nothing moves; on phones they take none until opened.
+   With animations on, youth-animations.js draws all of this instead; this is the plain version (also used for
+   reduced motion). */
+html.js .yt-tree__group:not(.is-open) .yt-tree__list,
+html.js .yt-tree__group:not(.is-open) .yt-vine__main,
+html.js .yt-tree__group:not(.is-open) .yt-vine__branch,
+html.js .yt-tree__group:not(.is-open) .yt-vine__leaf,
+html.js .yt-tree__group:not(.is-open) .yt-vine__tendril,
+html.js .yt-tree__group:not(.is-open) .yt-vine__ring {
+  visibility: hidden;
+}
+
+html:not(.js) .yt-vine__stub,
+.yt-tree__group.is-open .yt-vine__stub {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  html.js .yt-tree__group:not(.is-open) .yt-tree__list {
+    display: none;
+  }
+}
+
+/* ---------- GREEN Zone story (yellow) ---------- */
+.yt-gz {
+  position: relative;
+  display: grid;
+  gap: 2.4rem;
+  padding: 3rem var(--gutter) 4rem;
+  background: var(--yellow);
+  color: var(--green);
+}
+
+.yt-gz__wave {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  z-index: 1;
+  width: 100%;
+  height: 3.4rem;
+  transform: translateY(-100%);
+  fill: var(--yellow);
+  pointer-events: none;
+}
+
+.yt-gz .yt-h2 {
+  font-size: clamp(1.55rem, 6.6vw, 2.2rem);
+  color: var(--green);
+}
+
+.yt-gz .yt-text,
+.yt-vtext .yt-text {
+  margin-top: 1.2rem;
+  max-width: 30rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+}
+
+.yt-gz__photo {
+  --photo-empty-bg: var(--lime);
+  overflow: hidden;
+  width: min(100%, 22rem);
+  aspect-ratio: 41 / 42;
+  margin-inline: auto;
+  border-radius: 11rem 11rem 0 0;
+  background: var(--lime);
+}
+
+/* ---------- Photo strip ---------- */
+.yt-strip {
+  position: relative;
+  padding: 2.2rem 0 4.6rem;
+  background: var(--cream);
+}
+
+.yt-strip__track {
+  display: flex;
+  gap: 1rem;
+  padding: 0 var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.yt-strip__track::-webkit-scrollbar {
+  display: none;
+}
+
+.yt-strip__track.is-drag {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+
+.yt-strip__track:focus-visible {
+  outline-offset: -3px;
+}
+
+.yt-card {
+  flex: none;
+  width: min(78vw, 20rem);
+  aspect-ratio: 37 / 20.3;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 1.3rem;
+  scroll-snap-align: start;
+  background: var(--green);
+  --photo-empty-bg: var(--green);
+  --photo-empty-fg: var(--cream);
+}
+
+.yt-card--orange {
+  background: var(--orange);
+  --photo-empty-bg: var(--orange);
+}
+
+.yt-card img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.yt-strip__arrows {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 0.9rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.yt-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--cream);
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.yt-arrow:hover {
+  background: var(--orange);
+  transform: translateY(-2px);
+}
+
+.yt-arrow svg {
+  width: 1.3rem;
+}
+
+/* ---------- VermiTea Kit story (green) ---------- */
+.yt-vt {
+  --band: 2.4rem; /* the lime band above the green */
+  position: relative;
+  z-index: 2;
+  height: 25rem;
+  background: linear-gradient(var(--lime) 0 var(--band), var(--green) var(--band) 100%);
+  color: var(--cream);
+}
+
+.yt-vt__ripple {
+  position: absolute;
+  left: 0;
+  top: calc(var(--band) - 0.5rem);
+  width: 100%;
+  height: 1rem;
+  fill: var(--green);
+}
+
+.yt-vt__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.yt-vt__veg {
+  position: absolute;
+  left: 50%;
+  top: 4rem;
+  width: 21rem;
+  transform: translateX(-52%);
+}
+
+.yt-vt__veg .v-orange {
+  fill: #dd672f;
+}
+
+.yt-vt__veg .v-leaf {
+  fill: #cfd36a;
+}
+
+.yt-vt__veg .v-gold {
+  fill: #e9d352;
+}
+
+.yt-vt__veg .v-ochre {
+  fill: #ad843c;
+}
+
+.yt-vt__veg .v-pale {
+  fill: var(--yellow);
+}
+
+.yt-vt__veg .v-tuft {
+  fill: #d3c350;
+}
+
+.yt-vt__box {
+  --photo-empty-bg: #3d6a27;
+  --photo-empty-fg: var(--cream);
+  position: absolute;
+  left: 50%;
+  top: 6.5rem;
+  z-index: 2;
+  width: 17rem;
+  height: 17.5rem;
+  transform: translateX(-52%);
+}
+
+.yt-vt__box .photo--empty {
+  border-radius: 1rem;
+}
+
+.yt-vt__tags {
+  position: absolute;
+  left: 50%;
+  top: 20.4rem;
+  z-index: 3;
+  width: 12rem;
+  height: 5rem;
+  margin: 0;
+  transform: translateX(-4%);
+}
+
+.yt-tag {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(42, 78, 26, 0.55);
+  border-radius: 999px;
+  background: #fcf0d4;
+  font-family: var(--font-body);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.yt-tag--a {
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 11.5rem;
+  height: 3rem;
+  font-size: 1.55rem;
+  color: var(--green);
+  transform: rotate(-8deg);
+}
+
+.yt-tag--b {
+  left: 3.6rem;
+  top: 2.2rem;
+  width: 6.4rem;
+  height: 2.6rem;
+  font-size: 1.4rem;
+  color: var(--orange-ink);
+  background: #f3e6c3;
+  transform: rotate(5deg);
+}
+
+.yt-vtext {
+  padding: 4.6rem var(--gutter) 3rem;
+  background: var(--cream);
+  color: var(--orange-ink-sm);
+}
+
+.yt-vtext__lead {
+  max-width: 34rem;
+  margin-inline: auto;
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 5vw, 1.4rem);
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--orange-ink);
+}
+
+.yt-vtext__cols {
+  display: grid;
+  gap: 1rem;
+  max-width: 34rem;
+  margin: 1.2rem auto 0;
+}
+
+.yt-vtext .yt-text {
+  margin-top: 1.2rem;
+  max-width: none;
+}
+
+.yt-vtext__cols p + p {
+  margin-top: 0;
+}
+
+/* ---------- "But wait... there's more!": the expanding frames (an accordion on phones) ----------
+   Desktop: one frame is open (wide), the next is a tall frame and the last peeks out behind it; they hang half over the
+   lime part below. Phones: each frame is a row of an accordion in one of the three tones of the design. */
+.yt-more {
+  position: relative;
+  padding: 3.4rem var(--gutter) 3rem;
+  background: var(--cream);
+  color: var(--green);
+}
+
+.yt-more__title {
+  text-align: center;
+  font-size: clamp(1.7rem, 7.4vw, 2.4rem);
+}
+
+.yt-frames {
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+  max-width: 40rem;
+  margin: 2rem auto 0;
+}
+
+/* one row. The colors come from its tone (the three tones of the design: yellow, pale lime, dark green) */
+.yt-frame {
+  --frame-bg: var(--yellow);
+  --frame-fg: var(--green);
+  --frame-line: rgba(42, 78, 26, 0.2);
+  --badge-bg: var(--green);
+  --badge-fg: var(--yellow);
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.4rem;
+  background: var(--frame-bg);
+  color: var(--frame-fg);
+  box-shadow: 0 0.7rem 1.4rem -1.1rem rgba(42, 78, 26, 0.55);
+  transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease; /* (translate, not transform: the entrance animation uses transform) */
+}
+
+.yt-frame--pale {
+  --frame-bg: #e7fbb9;
+  --badge-fg: var(--cream);
+}
+
+.yt-frame--green {
+  --frame-bg: var(--green);
+  --frame-fg: var(--cream);
+  --frame-line: rgba(250, 228, 188, 0.25);
+  --badge-bg: var(--yellow);
+  --badge-fg: var(--green);
+}
+
+.yt-frame:hover {
+  box-shadow: 0 1rem 1.8rem -1.1rem rgba(42, 78, 26, 0.7);
+}
+
+.yt-frame__head {
+  margin: 0;
+  font: inherit;
+}
+
+/* the desktop layers: not on phones */
+.yt-frame__bg,
+.yt-frame__lead {
+  display: none;
+}
+
+.yt-frame__tab {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 1rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.yt-frame__tab:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: -6px;
+  border-radius: 1.4rem;
+}
+
+/* number badge */
+.yt-frame__num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.yt-frame__text {
+  display: grid;
+  flex: 1;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+/* small label, then the headline: the label says who, the headline says what */
+.yt-frame__name {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.yt-frame__title {
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.18;
+  text-transform: uppercase;
+}
+
+/* the + that turns into an x */
+.yt-frame__toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, color 0.25s ease;
+}
+
+.yt-frame__toggle svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.yt-frame__tab:hover .yt-frame__toggle,
+.yt-frame.is-open .yt-frame__toggle {
+  background: var(--frame-fg);
+  color: var(--frame-bg);
+}
+
+.yt-frame.is-open .yt-frame__toggle {
+  transform: rotate(135deg);
+}
+
+/* the content opens by growing its row (0fr to 1fr), so the rows below glide down */
+.yt-frame__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.yt-frame.is-open .yt-frame__panel {
+  grid-template-rows: 1fr;
+}
+
+.yt-frame__inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.yt-frame__content {
+  display: grid;
+  gap: 1.1rem;
+  margin: 0 1rem;
+  padding: 1.1rem 0 1.3rem;
+  border-top: 2px solid var(--frame-line);
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.yt-frame.is-open .yt-frame__content {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s ease 0.15s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+
+.yt-frame__photo {
+  --photo-empty-bg: var(--lime);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 1rem;
+  background: var(--lime);
+}
+
+.yt-frame__body {
+  font-size: 1.02rem;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+}
+
+/* ---------- Closing question (on the lower, lime part) ---------- */
+.yt-callout {
+  position: relative;
+  z-index: 1; /* above the cream of the section before it (the frames hang over this lime part) but below the frames */
+  display: grid;
+  justify-items: center;
+  gap: 1.4rem;
+  padding: 3.4rem var(--gutter) 4rem;
+  background: var(--lime);
+  color: var(--green);
+  text-align: center;
+}
+
+.yt-callout__title {
+  max-width: 28rem;
+  font-size: clamp(1.25rem, 5.6vw, 1.7rem);
+  line-height: 1.2;
+}
+
+.yt-callout__btn {
+  min-height: 3rem;
+  padding: 0.7rem 1.8rem;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- Desktop: the 1440px design ---------- */
+@media (min-width: 960px) {
+  .yt-hero {
+    min-height: 0;
+    height: calc(var(--u) * 37.9);
+  }
+
+  .yt-hero__empty {
+    padding-bottom: calc(var(--u) * 6.4);
+  }
+
+  .yt-hero__empty svg {
+    width: calc(var(--u) * 3.6);
+  }
+
+  .yt-hero__cap {
+    font-size: calc(var(--u) * 1.6);
+  }
+
+  .yt-hero__need {
+    font-size: calc(var(--u) * 0.95);
+  }
+
+  .yt-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    height: calc(var(--u) * 36.1);
+    padding: calc(var(--u) * 8) 0 0 calc(var(--gx) + var(--u) * 8.9);
+  }
+
+  .yt-intro__copy {
+    flex: none;
+    width: calc(var(--u) * 34.1);
+  }
+
+  .yt-title {
+    font-size: calc(var(--u) * 5.4);
+    line-height: 0.86; /* tight, as in the design */
+  }
+
+  .yt-intro__sub {
+    max-width: calc(var(--u) * 28);
+    margin-top: calc(var(--u) * 1.8);
+    font-size: calc(var(--u) * 2.25);
+    line-height: 1.06;
+  }
+
+  .yt-tree {
+    --tu: var(--u);
+    flex-direction: row;
+    gap: calc(var(--u) * 0.8);
+    margin-top: calc(var(--u) * 4.4);
+  }
+
+  .yt-tree__group {
+    flex: none;
+  }
+
+  .yt-tree__group:nth-child(1) {
+    width: calc(var(--u) * 16.9);
+  }
+
+  .yt-gz {
+    display: block;
+    height: calc(var(--u) * 54.8);
+    padding: 0;
+  }
+
+  .yt-gz__wave {
+    height: calc(var(--u) * 12.3);
+  }
+
+  .yt-gz__copy {
+    position: absolute;
+    left: calc(var(--gx) + var(--u) * 8.1);
+    top: calc(var(--u) * 9.9);
+    width: calc(var(--u) * 38);
+  }
+
+  .yt-gz .yt-h2 {
+    font-size: calc(var(--u) * 2.9);
+    line-height: 1.1;
+  }
+
+  .yt-gz .yt-text {
+    max-width: calc(var(--u) * 33);
+    margin-top: calc(var(--u) * 2.6);
+    font-size: calc(var(--u) * 1.5);
+  }
+
+  .yt-gz__photo {
+    position: absolute;
+    left: calc(var(--gx) + var(--u) * 51.9);
+    top: calc(var(--u) * 4.6);
+    width: calc(var(--u) * 40.9);
+    height: calc(var(--u) * 42.2);
+    aspect-ratio: auto;
+    border-radius: calc(var(--u) * 20.45) calc(var(--u) * 20.45) 0 0;
+  }
+
+  .yt-strip {
+    padding: calc(var(--u) * 5.7) 0 calc(var(--u) * 4.4);
+  }
+
+  .yt-strip__track {
+    gap: calc(var(--u) * 3.8);
+    padding: 0 calc(var(--gx) + var(--u) * 11);
+    scroll-padding-inline: calc(var(--gx) + var(--u) * 11);
+  }
+
+  .yt-card {
+    width: calc(var(--u) * 37);
+    border-radius: calc(var(--u) * 2.5);
+  }
+
+  .yt-strip__arrows {
+    right: calc(var(--gx) + var(--u) * 6);
+    bottom: calc(var(--u) * 0.7);
+  }
+
+  .yt-arrow {
+    width: calc(var(--u) * 3.2);
+    height: calc(var(--u) * 3.2);
+  }
+
+  .yt-vt {
+    --band: calc(var(--u) * 5.3);
+    height: calc(var(--u) * 42.6);
+  }
+
+  .yt-vt__ripple {
+    top: calc(var(--band) - var(--u) * 1.04);
+    height: calc(var(--u) * 2.08);
+  }
+
+  .yt-vt__veg {
+    left: calc(var(--gx) + var(--u) * 16.1);
+    top: calc(var(--u) * 15.5);
+    width: calc(var(--u) * 66.3);
+    transform: none;
+  }
+
+  .yt-vt__box {
+    left: calc(var(--gx) + var(--u) * 28.6);
+    top: calc(var(--u) * 12.7);
+    width: calc(var(--u) * 35);
+    height: calc(var(--u) * 34);
+    transform: none;
+  }
+
+  .yt-vt__tags {
+    left: calc(var(--gx) + var(--u) * 56.8);
+    top: calc(var(--u) * 36.4);
+    width: calc(var(--u) * 24);
+    height: calc(var(--u) * 10);
+    transform: none;
+  }
+
+  .yt-tag--a {
+    width: calc(var(--u) * 23);
+    height: calc(var(--u) * 5.8);
+    font-size: calc(var(--u) * 3.2);
+  }
+
+  .yt-tag--b {
+    left: calc(var(--u) * 7);
+    top: calc(var(--u) * 4.2);
+    width: calc(var(--u) * 13);
+    height: calc(var(--u) * 5);
+    font-size: calc(var(--u) * 2.8);
+  }
+
+  .yt-vtext {
+    padding: calc(var(--u) * 10.4) 0 calc(var(--u) * 6);
+  }
+
+  .yt-vtext__lead {
+    max-width: calc(var(--u) * 68);
+    margin: 0 0 0 calc(var(--gx) + var(--u) * 15.5);
+    font-size: calc(var(--u) * 2.2);
+  }
+
+  .yt-vtext__cols {
+    grid-template-columns: repeat(2, calc(var(--u) * 32));
+    gap: 0 calc(var(--u) * 4.2);
+    max-width: none;
+    margin: calc(var(--u) * 1.6) 0 0 calc(var(--gx) + var(--u) * 15.5);
+  }
+
+  .yt-vtext .yt-text {
+    margin-top: calc(var(--u) * 1.6);
+    font-size: calc(var(--u) * 1.5);
+  }
+
+  /* "But wait... There's more!" and its expanding frames (49 tall). The frames hang half over the lime part below. */
+  .yt-more {
+    padding: calc(var(--u) * 10.5) 0 0;
+  }
+
+  .yt-more__title {
+    font-size: calc(var(--u) * 3.4);
+    line-height: 1.12;
+  }
+
+  .yt-frames {
+    --ease: cubic-bezier(0.65, 0, 0.35, 1); /* eases in and out, so a frame starts and stops softly */
+    --move: 0.8s;
+    display: flex;
+    gap: calc(var(--u) * 3.2);
+    width: min(calc(100% - var(--gutter) * 2), calc(var(--u) * 88));
+    max-width: none;
+    height: calc(var(--u) * 49);
+    margin: calc(var(--u) * 7) auto calc(var(--u) * -24.8);
+    z-index: 2;
+  }
+
+  /* Three slots, set by youth.js. Their widths are plain numbers (the open one is what is left), so the browser can
+     slide every frame from one width to the next. 100% is the width of the row of frames. */
+  .yt-frame {
+    flex: 0 0 var(--w, calc(var(--u) * 26));
+    height: 100%;
+    min-width: 0;
+    border-radius: calc(var(--u) * 2.4);
+    contain: layout paint style; /* what happens inside a frame never makes the page re-measure */
+    transition: flex-basis var(--move) var(--ease), margin var(--move) var(--ease), translate 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+
+  .yt-frame[data-slot='open'] {
+    --w: calc(100% - var(--u) * 32.2); /* the row, minus the next frame (26), the sliver (3) and one gap (3.2) */
+  }
+
+  .yt-frames[data-layout='gap'] .yt-frame[data-slot='open'] {
+    --w: calc(100% - var(--u) * 35.4); /* the sliver is on the other side of the open frame: two gaps */
+  }
+
+  .yt-frame[data-slot='next'] {
+    --w: calc(var(--u) * 26);
+    z-index: 1;
+  }
+
+  .yt-frame[data-slot='peek'] {
+    --w: calc(var(--u) * 3);
+  }
+
+  .yt-frame[data-slot='peek'][data-flush='prev'] {
+    margin-left: calc(var(--u) * -3.2);
+  }
+
+  .yt-frame[data-slot='peek'][data-flush='next'] {
+    margin-right: calc(var(--u) * -3.2);
+  }
+
+  .yt-frame:not(.is-open):hover {
+    translate: 0 calc(var(--u) * -0.4);
+  }
+
+  /* ---- the tall layer: the photo, a shade, and the button with the number, name, headline and + ----
+     Fixed size (the width of a tall frame) and pinned to the left, so it is simply uncovered as the frame grows. */
+  .yt-frame__bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: calc(var(--u) * 26);
+    transition: opacity 0.45s ease 0.18s, visibility 0s linear 0s;
+  }
+
+  .yt-frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(var(--u) * 26);
+    background: linear-gradient(to top, rgba(29, 54, 17, 0.88), rgba(29, 54, 17, 0.1) 62%, rgba(29, 54, 17, 0.28));
+    pointer-events: none;
+    transition: opacity 0.45s ease 0.18s, visibility 0s linear 0s;
+  }
+
+  .yt-frame__bg .photo {
+    height: 100%;
+  }
+
+  .yt-frame__head {
+    margin: 0;
+  }
+
+  .yt-frame__tab {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto 1fr;
+    align-items: start;
+    gap: calc(var(--u) * 1.6);
+    width: calc(var(--u) * 26);
+    padding: calc(var(--u) * 2.2);
+    color: var(--cream);
+    transition: opacity 0.45s ease 0.18s, visibility 0s linear 0s;
+  }
+
+  .yt-frame__num {
+    width: calc(var(--u) * 4.4);
+    height: calc(var(--u) * 4.4);
+    font-size: calc(var(--u) * 1.6);
+  }
+
+  .yt-frame__tab .yt-frame__text {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-self: end;
+    gap: calc(var(--u) * 0.6);
+  }
+
+  .yt-frame__tab .yt-frame__name {
+    font-size: calc(var(--u) * 1);
+    opacity: 0.9;
+  }
+
+  .yt-frame__tab .yt-frame__title {
+    font-size: calc(var(--u) * 1.6);
+    line-height: 1.15;
+  }
+
+  .yt-frame__toggle {
+    grid-column: 3;
+    grid-row: 1;
+    width: calc(var(--u) * 3.8);
+    height: calc(var(--u) * 3.8);
+  }
+
+  .yt-frame__toggle svg {
+    width: calc(var(--u) * 1.5);
+    height: calc(var(--u) * 1.5);
+  }
+
+  /* the open frame has no use for the tall layer: it fades out first, and leaves the tab order once it has */
+  .yt-frame.is-open .yt-frame__bg,
+  .yt-frame.is-open::after,
+  .yt-frame.is-open .yt-frame__tab {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+  }
+
+  /* the one peeking out behind: just its color (its button is still there to press, with nothing showing) */
+  .yt-frame[data-slot='peek'] .yt-frame__bg,
+  .yt-frame[data-slot='peek']::after,
+  .yt-frame[data-slot='peek'] .yt-frame__tab > * {
+    opacity: 0;
+  }
+
+  /* ---- the open layer: photo top left, the headline beside it, the text under them ----
+     Fixed size (a little less than the open frame can be), pinned to the left: it is uncovered as the frame grows. */
+  .yt-frame__panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: calc(var(--u) * 52);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+  }
+
+  .yt-frame.is-open .yt-frame__panel {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease 0.3s, visibility 0s linear 0s;
+  }
+
+  .yt-frame__inner {
+    height: 100%;
+    overflow: visible;
+  }
+
+  .yt-frame__content {
+    display: grid;
+    grid-template-columns: calc(var(--u) * 20.6) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: calc(var(--u) * 4.4);
+    align-content: start;
+    height: 100%;
+    margin: 0;
+    padding: calc(var(--u) * 4.9) calc(var(--u) * 4.4) calc(var(--u) * 4.4);
+    border: 0;
+    opacity: 1;
+    transform: translateY(calc(var(--u) * 1.2));
+    transition: transform 0.25s ease;
+  }
+
+  .yt-frame.is-open .yt-frame__content {
+    transform: none;
+    transition: transform 0.7s var(--ease) 0.3s;
+  }
+
+  .yt-frame__photo {
+    grid-column: 1;
+    grid-row: 1;
+    aspect-ratio: 20.6 / 17.7;
+    border-radius: calc(var(--u) * 2);
+  }
+
+  .yt-frame__lead {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .yt-frame__lead .yt-frame__name {
+    display: block;
+    font-size: calc(var(--u) * 1.1);
+  }
+
+  .yt-frame__lead .yt-frame__title {
+    display: block;
+    margin-top: calc(var(--u) * 1);
+    font-size: calc(var(--u) * 2);
+    line-height: 1.14;
+    overflow-wrap: anywhere;
+  }
+
+  .yt-frame__body {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    align-self: start;
+    max-width: calc(var(--u) * 43);
+    margin-top: calc(var(--u) * 3.2);
+    font-size: calc(var(--u) * 1.55);
+    line-height: 1.55;
+  }
+
+  /* the closing question, on the lime part (the frames overlap its top) */
+  .yt-callout {
+    gap: calc(var(--u) * 2.4);
+    padding: calc(var(--u) * 37.1) 0 calc(var(--u) * 8);
+  }
+
+  .yt-callout__title {
+    max-width: calc(var(--u) * 50);
+    font-size: calc(var(--u) * 2.2);
+  }
+
+  .yt-callout__btn {
+    min-height: calc(var(--u) * 4.6);
+    padding: 0 calc(var(--u) * 3.4);
+    font-size: calc(var(--u) * 1.5);
+  }
+}
+
+
+/* wide phones and small tablets: the columns of the other sections are kept, the accordion gets a bit more room */
+@media (min-width: 700px) and (max-width: 959px) {
+  .yt-intro {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .yt-tree {
+    --tu: 0.78rem;
+  }
+
+  .yt-gz {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+
+  .yt-vtext__cols {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+    max-width: 44rem;
+  }
+
+  .yt-vt {
+    height: 30rem;
+  }
+
+  .yt-frames {
+    max-width: 44rem;
+  }
+
+  .yt-frame__content {
+    grid-template-columns: 15rem 1fr;
+    align-items: start;
+    gap: 1.6rem;
+  }
+
+  .yt-frame__photo {
+    aspect-ratio: 4 / 3;
+  }
+
+  .yt-frame__title {
+    font-size: 1.2rem;
+  }
+}

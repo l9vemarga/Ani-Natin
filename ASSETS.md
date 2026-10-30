@@ -70,3 +70,25 @@ Scribble SVGs keep their own colors. The stand-ins take the color of the section
 | `src/data/community-content.js`, `faq` | Check the 7 answers | They are written only from what the worksheet says. Add questions the team gets asked, and anything about enrolling or costs once it is confirmed |
 | `src/data/community-content.js`, `samplePosts` | Only for the demo (mock mode). Nothing to replace | Disappears when the forum goes live |
 | `src/data/community.config.js` | Set `showSampleTags` to `false` | Removes the yellow "Sample" tags |
+
+## About page: content to add
+
+| File | Section | Notes |
+|---|---|---|
+| `public/images/about/objective-inform.webp` or `public/videos/about/objective-inform.mp4` | Objectives stage, "Inform" | The Video Feature on CNHS's GREEN Zone and the VermiTea research. A video is shown muted and loops; a still image works too. 16:9, under 200 KB for an image |
+| `public/images/about/objective-provide.webp` | Objectives stage, "Provide" | A picture of the website (for example on a laptop and a phone). 16:9 |
+| `public/images/about/objective-create.webp` | Objectives stage, "Create" | The branded VermiTea Kit. 16:9 |
+| `src/data/about-content.js`, `missionVision.vision` | Mission / Vision | The vision is from the worksheet (the design showed only the mission). Confirm the wording |
+| Partner logos | Partnerships band | The design shows only the word "Partnerships" scrolling. Logos or names can be added once 4-H, SEED Philippines and DA-ATI have given permission |
+
+## Youth in Agri page: content to add
+
+| File (in `public/images/youth/` unless noted) | Section | Notes |
+|---|---|---|
+| `public/videos/youth/feature.mp4` (+ `feature-poster.webp`), or a YouTube id in `src/data/youth-content.js` | Top lime block | The Video Feature (CNHS GREEN Zone and the VermiTea research). Keep the file small or use YouTube |
+| `green-zone.webp` | GREEN Zone, arch photo | Tall photo, shown in an arch about 41 x 42 (nearly square) |
+| `green-zone-1.webp` to `green-zone-5.webp` | Photo strip under it | 37 x 20 (landscape). Add or remove slots in `youth-content.js`, `greenZone.gallery` |
+| `vermitea-kit.webp` | VermiTea Kit story | A transparent cut-out of the carry box, about square. The design shows the box render with the "ani natin / vermitea fertilizer kit" print |
+| `4h-club.webp`, `seed-philippines.webp`, `da-ati.webp` | The three expanding frames | Shown small (about 21 x 18) in the open frame and large (tall, 26 x 49) in a closed one, so use photos that crop well to both |
+| `src/data/youth-content.js` | All the short paragraphs | **Draft copy**, written only from the worksheet's headlines (GREEN Zone, VermiTea, 4-H, SEED, DA-ATI). Replace each with the real story and check nothing in it is wrong |
+| Partner names and logos | Diagram and frames | The names of 4-H Club Philippines, SEED Philippines and DA-ATI are used. Get their permission before launch (and before adding logos or links to their sites) |

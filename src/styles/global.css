@@ -74,8 +74,14 @@
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+}
+
+/* eased page scrolling (links that jump to a section) is for desktop only, like the Lenis smooth scrolling */
+@media (min-width: 960px) and (hover: hover) and (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

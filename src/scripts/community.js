@@ -13,6 +13,8 @@ import { listPosts, getThread, createPost, createReply, ForumError, validatePost
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const motion = () => !root.classList.contains('rm') && !root.classList.contains('anim-fail');
+// page scrolling eases only on a desktop (a wide screen with a mouse or trackpad); phones and tablets jump
+const smoothScroll = () => motion() && window.matchMedia('(min-width: 960px) and (hover: hover) and (pointer: fine)').matches;
 const categoryLabel = Object.fromEntries(categories.map((c) => [c.id, c.label]));
 
 /** Small safe element builder. Text always goes in as text. */
@@ -435,7 +437,7 @@ function openFaq(id, scroll = true) {
   if (!button) return;
   const item = button.closest('.cm-acc__item');
   accItems.forEach((other) => setFaq(other, other === item));
-  if (scroll) item.scrollIntoView({ behavior: motion() ? 'smooth' : 'auto', block: 'center' });
+  if (scroll) item.scrollIntoView({ behavior: smoothScroll() ? 'smooth' : 'auto', block: 'center' });
 }
 
 /* =====================================================================
@@ -566,7 +568,7 @@ async function chooseResult(option) {
     fillCities();
     fQ.value = option.name;
     runSearch();
-    $('#school-locator').scrollIntoView({ behavior: motion() ? 'smooth' : 'auto', block: 'start' });
+    $('#school-locator').scrollIntoView({ behavior: smoothScroll() ? 'smooth' : 'auto', block: 'start' });
   } else {
     selectTab('forum', { animate: false });
     q('.cm-chip').forEach((c) => {
@@ -578,7 +580,7 @@ async function chooseResult(option) {
     state.q = option.title;
     forumQ.value = option.title;
     await loadPosts();
-    hub.scrollIntoView({ behavior: motion() ? 'smooth' : 'auto', block: 'start' });
+    hub.scrollIntoView({ behavior: smoothScroll() ? 'smooth' : 'auto', block: 'start' });
     const item = q('.cm-topic', listEl).find((node) => node.dataset.id === option.id);
     if (item) $('.cm-topic__btn', item).click();
   }

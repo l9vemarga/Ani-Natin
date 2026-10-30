@@ -1,0 +1,32 @@
+---
+// Youth in Agri, top (design: a full-width lime block, "Video Embed of Video Feature"). It shows, in this order:
+// a video file if public/videos/youth/feature.mp4 exists (the visitor starts it), else a YouTube video if an id is
+// set in youth-content.js (loaded only when the visitor presses play), else a labeled placeholder.
+import fs from 'node:fs';
+import path from 'node:path';
+import { hero } from '../data/youth-content.js';
+
+const has = (dir, file) => !!file && fs.existsSync(path.join(process.cwd(), 'public', dir, file));
+const video = has('videos', hero.video) ? `/videos/${hero.video}` : null;
+const poster = has('images', hero.poster) ? `/images/${hero.poster}` : null;
+const youtube = !video && hero.youtubeId ? hero.youtubeId : null;
+---
+
+<section class="yt-hero" data-nav="light" aria-label="Video Feature">
+  <div class="yt-hero__frame" data-hero-frame>
+    {video ? (
+      <video class="yt-hero__media" src={video} poster={poster ?? undefined} controls playsinline preload="metadata" aria-label={hero.label} />
+    ) : youtube ? (
+      <button class="yt-hero__play" type="button" data-youtube={youtube} aria-label={`Play video: ${hero.label}`}>
+        {poster && <img class="yt-hero__media" src={poster} alt="" loading="lazy" decoding="async" />}
+        <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="22" fill="currentColor" /><path d="M20 15l14 9-14 9z" fill="var(--lime)" /></svg>
+      </button>
+    ) : (
+      <div class="yt-hero__empty">
+        <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3" /><path d="M20 15l14 9-14 9z" fill="currentColor" /></svg>
+        <span class="yt-hero__cap">{hero.label}</span>
+        <span class="yt-hero__need">Needs: videos/{hero.video} (or a YouTube id in youth-content.js)</span>
+      </div>
+    )}
+  </div>
+</section>

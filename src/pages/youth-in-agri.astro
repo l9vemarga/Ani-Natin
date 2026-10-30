@@ -1,0 +1,27 @@
+---
+// Youth in Agri page (the final Youth in Agri design): success stories from real young pioneers. The words and photo
+// slots are in src/data/youth-content.js.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import YouthHero from '../components/YouthHero.astro';
+import YouthIntro from '../components/YouthIntro.astro';
+import YouthGreenZone from '../components/YouthGreenZone.astro';
+import YouthVermiTea from '../components/YouthVermiTea.astro';
+import YouthMore from '../components/YouthMore.astro';
+import '../styles/youth.css';
+---
+
+<BaseLayout
+  title="Youth in Agri | Ani Natin"
+  description="Mga kuwentong tagumpay sa Agri: alamin kung paano ginawang totoong negosyo at projects ng mga estudyante ang kanilang pinag-aralan sa Agri-Fishery. CNHS GREEN Zone, VermiTea Kit, 4-H, SEED Philippines at DA-ATI."
+>
+  <YouthHero />
+  <YouthIntro />
+  <YouthGreenZone />
+  <YouthVermiTea />
+  <YouthMore />
+</BaseLayout>
+
+<script>
+  import '../scripts/youth.js';
+  import '../scripts/youth-animations.js';
+</script>

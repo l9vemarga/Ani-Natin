@@ -1,0 +1,67 @@
+---
+// About, bottom: dark green section with two overlapping tilted tabs (Mission in front, Vision behind; click
+// one to bring it forward) and the statement, a row of vegetables growing along the bottom edge, and the yellow
+// Partnerships band with its slow marquee.
+import { missionVision } from '../data/about-content.js';
+
+const word = 'Partnerships';
+---
+
+<section class="ab-mv" data-nav="dark" aria-labelledby="ab-mv-title">
+  <h2 id="ab-mv-title" class="visually-hidden">Mission and Vision</h2>
+
+  <div class="ab-mv__tabs" role="tablist" aria-label="Mission and Vision" data-pop>
+    <button class="ab-tab ab-tab--vision" id="ab-tab-vision" type="button" role="tab" aria-selected="false" aria-controls="ab-panel-vision" tabindex="-1" data-tab="vision">Vision</button>
+    <button class="ab-tab ab-tab--mission" id="ab-tab-mission" type="button" role="tab" aria-selected="true" aria-controls="ab-panel-mission" data-tab="mission">Mission</button>
+  </div>
+
+  <div class="ab-mv__panels" data-reveal>
+    <p class="ab-panel is-on" id="ab-panel-mission" role="tabpanel" aria-labelledby="ab-tab-mission" data-panel="mission">{missionVision.mission}</p>
+    <p class="ab-panel" id="ab-panel-vision" role="tabpanel" aria-labelledby="ab-tab-vision" data-panel="vision">{missionVision.vision}</p>
+  </div>
+
+  <!-- the harvest: flat shapes in the 847 x 165 proportions of the design, sitting on the yellow band -->
+  <svg class="ab-veg" viewBox="0 0 847 165" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">
+    <g id="ab-veg-set">
+    <g class="ab-veg__item ab-veg__item--1">
+      <path class="ab-v-yellow" d="M0 86C26 84 50 108 62 165H0Z" />
+      <path class="ab-v-yellow" d="M0 14C8 22 16 30 18 48C8 46 2 38 0 30Z" />
+    </g>
+    <g class="ab-veg__item ab-veg__item--2">
+      <path class="ab-v-ochre" d="M40 165C36 128 44 106 66 98C70 70 100 52 130 54C142 40 172 38 188 54C206 52 222 66 224 86C232 96 230 120 214 165Z" />
+      <circle class="ab-v-ochre" cx="68" cy="106" r="19" /><circle class="ab-v-ochre" cx="98" cy="68" r="25" /><circle class="ab-v-ochre" cx="134" cy="52" r="24" />
+      <circle class="ab-v-ochre" cx="170" cy="52" r="24" /><circle class="ab-v-ochre" cx="200" cy="70" r="21" />
+    </g>
+    <g class="ab-veg__item ab-veg__item--3">
+      <circle class="ab-v-orange" cx="203" cy="150" r="73" />
+      <path class="ab-v-orange" d="M203 82C196 70 194 62 198 52C203 62 206 70 210 80C216 68 224 60 234 55C230 66 226 74 219 83C230 80 240 80 250 83C238 90 226 92 216 90Z" />
+    </g>
+    <g class="ab-veg__item ab-veg__item--4">
+      <path class="ab-v-pale" d="M273 165C273 118 298 94 338 88C372 76 410 72 434 74C470 62 504 72 516 92C552 90 586 104 592 138L590 165Z" />
+      <path class="ab-v-tuft" d="M326 74C346 80 360 92 372 104C380 90 384 80 386 78C390 90 394 100 392 108C410 98 440 90 454 86C438 98 420 108 400 112C390 118 380 120 372 118C356 100 342 88 326 74Z" />
+    </g>
+    <g class="ab-veg__item ab-veg__item--5">
+      <path class="ab-v-gold" d="M584 165C590 118 600 100 620 94C624 76 632 66 640 58C641 74 646 86 656 96C674 108 682 138 688 165Z" />
+    </g>
+    <g class="ab-veg__item ab-veg__item--6">
+      <path class="ab-v-ochre" d="M670 165C666 128 674 106 696 98C700 70 730 52 760 54C772 40 802 38 818 54C836 52 852 66 854 86C862 96 860 120 844 165Z" />
+      <circle class="ab-v-ochre" cx="698" cy="106" r="19" /><circle class="ab-v-ochre" cx="728" cy="68" r="25" /><circle class="ab-v-ochre" cx="764" cy="52" r="24" />
+      <circle class="ab-v-ochre" cx="800" cy="52" r="24" /><circle class="ab-v-ochre" cx="830" cy="70" r="21" />
+    </g>
+    <g class="ab-veg__item ab-veg__item--7">
+      <path class="ab-v-gold" d="M784 165C790 118 812 94 847 86V165Z" />
+      <path class="ab-v-gold" d="M832 56C842 62 848 72 850 88C840 86 833 78 831 68Z" />
+    </g>
+    </g>
+    <!-- on screens wider than the 1440px design the row carries on to both sides (the same plants again) -->
+    <use href="#ab-veg-set" x="-847" />
+    <use href="#ab-veg-set" x="847" />
+  </svg>
+</section>
+
+<section class="ab-partners" data-nav="light" aria-label="Partnerships">
+  <div class="ab-partners__track" aria-hidden="true">
+    {Array.from({ length: 12 }).map(() => <span class="ab-partners__word">{word}</span>)}
+  </div>
+  <p class="visually-hidden">{word}</p>
+</section>

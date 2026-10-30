@@ -1,0 +1,56 @@
+---
+// Youth in Agri, VermiTea Kit story (design): a dark green section under a lime band, with a ripple along its top
+// edge, flat vegetables, the kit's box in the middle (it hangs down over the edge) and a tilted "VERMITEA / KIT" tag
+// in front. Under it, the story in two columns on cream. The box is a photo slot (a transparent cut-out of the kit).
+import Photo from './Photo.astro';
+import { vermitea } from '../data/youth-content.js';
+
+// small, even waves along the top of the green (14 humps across the 1440px design)
+const halves = 28;
+const hw = 1440 / halves;
+let ripple = `M0 15Q${hw / 2} 3 ${hw} 15`;
+for (let i = 2; i <= halves; i++) ripple += `T${(i * hw).toFixed(1)} 15`;
+---
+
+<section id="vermitea" class="yt-vt" data-nav="dark" aria-labelledby="yt-vt-title">
+  <h2 id="yt-vt-title" class="visually-hidden">{vermitea.heading}</h2>
+
+  <svg class="yt-vt__ripple" viewBox="0 0 1440 30" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={`${ripple}V30H0Z`} />
+  </svg>
+
+  <div class="yt-vt__stage">
+    <!-- flat vegetables behind the box, in the design's own proportions (350 x 150) -->
+    <svg class="yt-vt__veg" viewBox="85 925 350 150" aria-hidden="true" focusable="false">
+      <g class="yt-vt__bit">
+        <circle class="v-orange" cx="148" cy="984" r="36" />
+        <path class="v-orange" d="M146 949C142 942 142 936 146 930C150 937 152 942 154 948C158 944 162 942 168 941C166 947 163 951 159 954Z" />
+      </g>
+      <g class="yt-vt__bit">
+        <path class="v-leaf" d="M104 1016C96 1010 92 1004 92 996C100 998 106 1003 110 1010C108 1002 110 994 114 988C120 996 120 1004 116 1012C122 1006 130 1004 138 1006C134 1014 126 1018 118 1018Z" />
+        <path class="v-gold" d="M126 1030C122 1012 136 1006 144 1018C150 1030 152 1052 150 1068C138 1070 128 1060 126 1030Z" />
+      </g>
+      <g class="yt-vt__bit">
+        <path class="v-ochre" d="M330 1070C326 1040 336 1016 358 1008C376 1006 392 1020 392 1046C392 1060 390 1066 388 1070Z" />
+        <path class="v-pale" d="M312 1000C310 960 336 934 372 930C398 926 416 936 422 956C424 976 414 998 392 1012C370 1020 330 1022 312 1000Z" />
+        <path class="v-tuft" d="M306 958C322 962 334 970 344 980C350 970 354 962 356 960C360 968 362 976 360 982C374 974 392 968 402 966C392 974 378 982 364 986C356 990 348 990 342 988C330 976 318 966 306 958Z" />
+      </g>
+    </svg>
+
+    <div class="yt-vt__box" data-box>
+      <Photo src={vermitea.photo.src} alt={vermitea.photo.alt} fit="contain" />
+    </div>
+
+    <p class="yt-vt__tags" aria-hidden="true">
+      <span class="yt-tag yt-tag--a">{vermitea.label[0]}</span>
+      <span class="yt-tag yt-tag--b">{vermitea.label[1]}</span>
+    </p>
+  </div>
+</section>
+
+<section class="yt-vtext" data-nav="light" aria-label="The VermiTea Kit story">
+  <p class="yt-vtext__lead" data-split>{vermitea.heading}</p>
+  <div class="yt-vtext__cols yt-text" data-reveal>
+    {vermitea.columns.map((p) => <p set:html={p} />)}
+  </div>
+</section>

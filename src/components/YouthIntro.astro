@@ -1,0 +1,108 @@
+---
+// Youth in Agri, second block (design): the orange headline "Agri-Success Stories" on the left, and on the right a
+// small diagram of the stories on this page (CNHS: GREEN Zone, VermiTea Kit; Young Pioneers: three partners).
+//
+// The two green pills are buttons. Hover one (or press it, or tap it) and a vine drops from it: it grows down,
+// reaches out to each story, a bud swells at the tip and stretches into an orange button, and then the leaves and
+// a tendril unfold around it. Each button is a link to its story (the partner ones also open their frame, see
+// youth.js). Move away and the vine pulls back in. Without scripts the whole diagram is simply shown.
+//
+// The vine is an SVG drawn in the diagram's own unit (--tu), so it lines up with the pills at any size. All the
+// numbers below are in that unit; they match the pill sizes in youth.css.
+import { intro } from '../data/youth-content.js';
+
+const CHILD_H = 4.1; // height of an orange button
+const FIRST_GAP = 2.8; // from the green pill down to the first orange button
+const GAP = 1.5; // between orange buttons
+const CHILD_W = 20;
+const R = 1.3; // radius of the curve where a branch turns into a button
+// where the vertical vine runs, and where the buttons start, for each group (the design's two groups differ)
+const shapes = [
+  { line: 1.9, indent: 3.8 },
+  { line: 8.7, indent: 13.3 },
+];
+
+const f = (n) => +n.toFixed(2);
+const groups = intro.tree.map((group, gi) => {
+  const { line, indent } = shapes[gi] ?? shapes[0];
+  const ys = group.items.map((_, i) => f(FIRST_GAP + CHILD_H / 2 + i * (CHILD_H + GAP))); // centre of each button, below the pill
+  const last = ys[ys.length - 1];
+  const roomRight = indent - line > 3; // a leaf also fits on the right of the vine
+  return {
+    ...group,
+    id: `tree-${gi}`,
+    line,
+    indent,
+    ys,
+    w: f(indent + CHILD_W + 1),
+    h: f(last + 3.2),
+    main: `M${line} 0V${f(last - R)}`,
+    branches: ys.map((y) => `M${line} ${f(y - R)}Q${line} ${y} ${f(line + R)} ${y}H${indent}`),
+    // leaves hang from the vine above each branch, with a curling tendril under them
+    leaves: ys.flatMap((y, i) => [
+      { i, x: line, y: f(y - 3.3), a: 155, s: 1.35, tone: 'a' },
+      ...(roomRight ? [{ i, x: line, y: f(y - 2.4), a: 24, s: 1.05, tone: 'b' }] : []),
+    ]),
+    tendrils: ys.map((y, i) => ({ i, x: line, y: f(y - 1.9) })),
+    // the pop ring: a ring that spreads from where each bud swells
+    rings: ys.map((y, i) => ({ i, cx: f(indent + CHILD_H / 2), cy: y })),
+  };
+});
+---
+
+<section class="yt-intro" data-nav="light" aria-labelledby="yt-title">
+  <div class="yt-intro__copy">
+    <h1 id="yt-title" class="yt-title" data-split>
+      {intro.title.map((line) => <span class="ln">{line}</span>)}
+    </h1>
+    <p class="yt-intro__sub" data-split>{intro.sub}</p>
+  </div>
+
+  <nav class="yt-tree" aria-label="Stories on this page">
+    {groups.map((group) => (
+      <div class="yt-tree__group" data-tree data-pop style={`--line:${group.line};--indent:${group.indent}`}>
+        <button class="yt-pill yt-pill--parent" type="button" aria-expanded="false" aria-controls={group.id}>
+          <span>{group.label}</span>
+          <svg class="yt-pill__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+        </button>
+
+        <svg
+          class="yt-vine"
+          viewBox={`0 0 ${group.w} ${group.h}`}
+          style={`width:calc(var(--tu) * ${group.w});height:calc(var(--tu) * ${group.h})`}
+          aria-hidden="true"
+          focusable="false"
+        >
+          <!-- while closed: a short sprout hangs under the pill, as a hint -->
+          <g class="yt-vine__stub">
+            <path d={`M${group.line} 0V2.1`} />
+            <g transform={`translate(${group.line} 1.1) rotate(150)`}><path class="yt-leaf" d="M0 0C0.35-0.62 1.15-0.85 1.75-0.35C1.2 0.35 0.4 0.5 0 0Z" transform="scale(0.8)" /></g>
+            <circle class="yt-vine__bud" cx={group.line} cy="2.45" r="0.4" />
+          </g>
+
+          <path class="yt-vine__main" d={group.main} />
+          {group.branches.map((d, i) => <path class="yt-vine__branch" d={d} data-i={i} />)}
+          {group.leaves.map((leaf) => (
+            <g transform={`translate(${leaf.x} ${leaf.y}) rotate(${leaf.a})`}>
+              <path class={`yt-leaf yt-leaf--${leaf.tone} yt-vine__leaf`} data-i={leaf.i} d="M0 0C0.35-0.62 1.15-0.85 1.75-0.35C1.2 0.35 0.4 0.5 0 0Z" data-s={leaf.s} transform={`scale(${leaf.s})`} />
+            </g>
+          ))}
+          {group.tendrils.map((t) => (
+            <g transform={`translate(${t.x} ${t.y}) scale(-1 1)`}>
+              <path class="yt-vine__tendril" data-i={t.i} d="M0 0C1.1-0.3 2 0.6 1.5 1.5C1.0 2.2-0.2 1.8 0.2 0.8C0.5 0.2 1.1 0.5 1.0 1.0" />
+            </g>
+          ))}
+          {group.rings.map((r) => <circle class="yt-vine__ring" data-i={r.i} cx={r.cx} cy={r.cy} r="2.05" />)}
+        </svg>
+
+        <ul id={group.id} class="yt-tree__list" role="list">
+          {group.items.map((item) => (
+            <li>
+              <a class="yt-pill yt-pill--child" href={item.href} data-frame={item.frame}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</section>

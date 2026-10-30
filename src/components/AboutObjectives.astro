@@ -1,0 +1,73 @@
+---
+// About, middle: the orange background paragraph (its bottom edge is a wave that spills onto the yellow), the
+// yellow "Project Objectives" heading with three arch cards, and the lime stage under them. Hovering (or
+// focusing or tapping) a card swaps what the stage shows: a video or image for that objective. Until those
+// files exist (see ASSETS.md) the stage shows a labeled placeholder for each.
+import fs from 'node:fs';
+import path from 'node:path';
+import Scribble from './Scribble.astro';
+import { background, objectives } from '../data/about-content.js';
+
+const has = (dir, file) => fs.existsSync(path.join(process.cwd(), 'public', dir, file));
+const items = objectives.map((o) => ({
+  ...o,
+  image: has('images', o.media.image) ? `/images/${o.media.image}` : null,
+  video: o.media.video && has('videos', o.media.video) ? `/videos/${o.media.video}` : null,
+}));
+
+// The green section's top edge: small, even waves (18 half-waves across the 1440px design)
+let ripple = 'M0 15Q40 3 80 15';
+for (let i = 2; i <= 18; i++) ripple += `T${i * 80} 15`;
+---
+
+<section class="ab-story" data-nav="dark" aria-labelledby="ab-story-title">
+  <h2 id="ab-story-title" class="visually-hidden">The Ani Natin Project</h2>
+  <p class="ab-story__text" set:html={background} />
+</section>
+
+<section class="ab-obj" data-nav="light" aria-labelledby="ab-obj-title">
+  <svg class="ab-obj__wave" viewBox="0 0 1440 170" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d="M0 0H1440V86C1330 40 1190 28 1070 70C960 108 850 150 720 130C590 110 470 96 330 118C200 138 90 150 0 118Z" />
+  </svg>
+
+  <h2 id="ab-obj-title" class="ab-obj__title" aria-label="Project Objectives">
+    <span class="ab-obj__w ab-obj__w--a" data-reveal aria-hidden="true">Project</span>
+    <span class="ab-obj__w ab-obj__w--b" data-reveal aria-hidden="true">Objectives</span>
+  </h2>
+
+  <ul class="ab-cards" role="list">
+    {items.map((o, i) => (
+      <li data-fade class:list={['ab-card', `ab-card--${o.tone}`, i === 0 && 'is-on']} data-objective={o.id} >
+        <button class="ab-card__tab" type="button" aria-pressed={i === 0 ? 'true' : 'false'} aria-controls={`ab-media-${o.id}`}>
+          {o.label}
+        </button>
+        <p class="ab-card__text" set:html={o.html} />
+      </li>
+    ))}
+  </ul>
+
+  <div class="ab-stage" data-reveal>
+    <div class="ab-stage__frame" aria-live="polite">
+      {items.map((o, i) => (
+        <figure class:list={['ab-media', i === 0 && 'is-on']} id={`ab-media-${o.id}`} data-media={o.id} aria-hidden={i === 0 ? 'false' : 'true'}>
+          {o.video ? (
+            <video src={o.video} poster={o.image ?? undefined} muted loop playsinline preload="none" aria-label={o.media.alt} />
+          ) : o.image ? (
+            <img src={o.image} alt={o.media.alt} loading="lazy" decoding="async" />
+          ) : (
+            <div class="ab-media__empty">
+              <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3" /><path d="M20 15l14 9-14 9z" fill="currentColor" /></svg>
+              <span class="ab-media__cap">{o.media.caption}</span>
+              <span class="ab-media__need">Needs: {o.media.video ? `videos/${o.media.video} or ` : ''}images/{o.media.image}</span>
+            </div>
+          )}
+        </figure>
+      ))}
+    </div>
+    <div class="ab-stage__arrow"><Scribble name="loop-curl" /></div>
+  </div>
+
+  <svg class="ab-obj__ripple" viewBox="0 0 1440 30" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={`${ripple}V30H0Z`} />
+  </svg>
+</section>

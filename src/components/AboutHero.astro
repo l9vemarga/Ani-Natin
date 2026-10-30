@@ -1,0 +1,28 @@
+---
+// About hero (About design, top): cream, the headline in two staggered blocks, and an orange sprout growing out
+// of the orange band below it: a dome with three thin arcs that climb, step by step, up to an orange dot.
+// The sprout is drawn in the design's own 847 x 435 proportions, so it scales with the page.
+---
+
+<section class="ab-hero" data-nav="light" aria-labelledby="ab-title">
+  <h1 id="ab-title" class="ab-title">
+    <span class="ab-t ab-t--a" data-split>
+      <span class="ln">Para saan</span>
+      <span class="ln">nga ba</span>
+    </span>
+    <span class="ab-t ab-t--b" data-split>
+      <span class="ln">Ang <span class="hl">Ani</span></span>
+      <span class="ln"><span class="hl">Natin</span>?</span>
+    </span>
+  </h1>
+
+  <svg class="ab-sprout" viewBox="0 0 847 435" aria-hidden="true" focusable="false">
+    <g class="ab-sprout__lines" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+      <path class="ab-arc ab-arc--1" d="M108 398C106 338 150 288 208 270" />
+      <path class="ab-arc ab-arc--2" d="M219 266C218 226 252 200 303 203" />
+      <path class="ab-arc ab-arc--3" d="M316 208C332 162 388 138 436 142C452 143 464 146 474 150" />
+    </g>
+    <circle class="ab-sprout__dot" cx="481" cy="150" r="14" fill="currentColor" />
+    <path class="ab-sprout__dome" d="M44 436C50 412 78 395 110 395C142 395 170 412 176 436Z" fill="currentColor" />
+  </svg>
+</section>

@@ -145,10 +145,14 @@ export function headerEntrance() {
   if (header) gsap.from(header, { autoAlpha: 0, y: -22, duration: 0.9, delay: 0.15, ease: 'power3.out' });
 }
 
-/* ---------- Smooth scrolling ----------
-   Mouse wheel and trackpad scrolling eases (touch screens keep their own native, already smooth, scrolling).
-   It waits while the loading screen is up, and is skipped for reduced motion. The dialog and the search
-   dropdown keep their normal scrolling. To turn it off everywhere, remove the setupSmoothScroll() call below. */
+/* ---------- Smooth scrolling (desktop only) ----------
+   Mouse wheel and trackpad scrolling eases, but only on a desktop: a wide screen with a mouse or trackpad.
+   Phones and tablets (iPads too, even with a big screen) keep their own native scrolling, because the eased
+   scrolling broke the page there. It waits while the loading screen is up, and is skipped for reduced motion.
+   The dialog and the search dropdown keep their normal scrolling. To turn it off everywhere, remove the
+   setupSmoothScroll() call below. */
+export const isDesktopPointer = () => window.matchMedia('(min-width: 960px) and (hover: hover) and (pointer: fine)').matches;
+
 function setupSmoothScroll() {
   lenis = new Lenis({
     lerp: 0.1,
@@ -197,7 +201,7 @@ export async function startMotion(setup) {
   }
   gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin);
   ScrollTrigger.config({ ignoreMobileResize: true });
-  setupSmoothScroll();
+  if (isDesktopPointer()) setupSmoothScroll();
 
   setup();
 

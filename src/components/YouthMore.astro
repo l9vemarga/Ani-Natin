@@ -1,0 +1,68 @@
+---
+// Youth in Agri, "But wait... There's more!": a big open frame on the left (a photo, the headline beside it, the text
+// under them) and tall frames on the right, the last one peeking out behind the one before it. These are the expanding
+// frames: pressing a tall frame opens it (it grows, the open one folds into a tall frame), so there is always one open.
+// The frames straddle a change of background, and the closing question and its button sit on the lower, lime part.
+//   On phones the frames stack as an accordion: each row shows its number, name and headline, opens to show the
+//   photo and text, and can be closed again.
+// The slots (open / next / peek) are set here for the first frame and kept up to date by youth.js.
+//
+// For smooth motion on desktop, a frame is two layers of fixed size inside a box whose width animates: the "open" layer
+// (photo, headline, text; the panel) and the "tall" layer (photo behind, number, name, headline, +; the button).
+// They cross-fade while the box grows or shrinks, so the text never re-wraps and nothing jumps. The photo is in both
+// layers (the tall one is decorative, aria-hidden).
+import Photo from './Photo.astro';
+import { more, callout } from '../data/youth-content.js';
+---
+
+<section id="more" class="yt-more" data-nav="light" aria-labelledby="yt-more-title">
+  <h2 id="yt-more-title" class="yt-more__title yt-h2" data-split>
+    {more.title.map((line) => <span class="ln">{line}</span>)}
+  </h2>
+
+  <div class="yt-frames" data-frames data-layout="flush">
+    {more.frames.map((frame, i) => (
+      <article
+        data-fade
+        class:list={['yt-frame', `yt-frame--${frame.tone}`, i === 0 && 'is-open']}
+        id={`feature-${frame.id}`}
+        data-frame={frame.id}
+        data-slot={i === 0 ? 'open' : i === 1 ? 'next' : 'peek'}
+        data-flush={i === 2 ? 'prev' : undefined}
+      >
+        <div class="yt-frame__bg" aria-hidden="true"><Photo src={frame.photo.src} alt="" fit={frame.photo.fit} /></div>
+        <h3 class="yt-frame__head">
+          <button class="yt-frame__tab" type="button" id={`tab-${frame.id}`} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`panel-${frame.id}`}>
+            <span class="yt-frame__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="yt-frame__text">
+              <span class="yt-frame__name">{frame.name}</span>
+              <span class="yt-frame__title">{frame.title}</span>
+            </span>
+            <span class="yt-frame__toggle" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+            </span>
+          </button>
+        </h3>
+        <div class="yt-frame__panel" id={`panel-${frame.id}`} role="region" aria-labelledby={`tab-${frame.id}`}>
+          <div class="yt-frame__inner">
+            <div class="yt-frame__content">
+              <div class="yt-frame__photo"><Photo src={frame.photo.src} alt={frame.photo.alt} fit={frame.photo.fit} /></div>
+              <p class="yt-frame__lead" aria-hidden="true">
+                <span class="yt-frame__name">{frame.name}</span>
+                <span class="yt-frame__title">{frame.title}</span>
+              </p>
+              <div class="yt-frame__body">
+                {frame.body.map((p) => <p set:html={p} />)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="yt-callout" data-nav="light" aria-labelledby="yt-callout-title">
+  <p id="yt-callout-title" class="yt-callout__title yt-h2" data-split>{callout.title}</p>
+  <a class="pill-btn pill-btn--green yt-callout__btn" href={callout.href} data-pop>{callout.button}</a>
+</section>

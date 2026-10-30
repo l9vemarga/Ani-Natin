@@ -1,0 +1,44 @@
+---
+// Youth in Agri, GREEN Zone story (design): a yellow section whose top edge is a wave, with the green headline and
+// text on the left and a tall arch-shaped photo on the right; under it a strip of rounded photos that slides sideways
+// (drag it, scroll it, use the arrows). Photos are slots (Photo.astro) until the files exist, see ASSETS.md.
+import Photo from './Photo.astro';
+import { greenZone } from '../data/youth-content.js';
+
+const tones = ['green', 'orange', 'green'];
+---
+
+<section id="green-zone" class="yt-gz" data-nav="light" aria-labelledby="yt-gz-title">
+  <svg class="yt-gz__wave" viewBox="0 0 1440 177" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d="M0 134C100 160 190 177 274 177C480 177 700 0 1008 0C1180 0 1330 40 1440 68V177H0Z" />
+  </svg>
+
+  <div class="yt-gz__copy">
+    <h2 id="yt-gz-title" class="yt-h2" data-split>{greenZone.title}</h2>
+    <div class="yt-text" data-reveal>
+      {greenZone.body.map((p) => <p set:html={p} />)}
+    </div>
+  </div>
+
+  <div class="yt-gz__photo" data-arch>
+    <Photo src={greenZone.photo.src} alt={greenZone.photo.alt} />
+  </div>
+</section>
+
+<section class="yt-strip" data-nav="light" aria-label="Photos of the GREEN Zone">
+  <div class="yt-strip__track" tabindex="0" role="group" aria-label="Photos of the GREEN Zone, scroll sideways">
+    {greenZone.gallery.map((item, i) => (
+      <figure class:list={['yt-card', `yt-card--${tones[i % tones.length]}`]} data-card-in>
+        <Photo src={item.src} alt={item.alt} />
+      </figure>
+    ))}
+  </div>
+  <div class="yt-strip__arrows">
+    <button class="yt-arrow" type="button" data-strip="-1" aria-label="Previous photos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+    </button>
+    <button class="yt-arrow" type="button" data-strip="1" aria-label="Next photos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+    </button>
+  </div>
+</section>

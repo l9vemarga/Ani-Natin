@@ -1,0 +1,23 @@
+---
+// About page (About Ani Natin design): what the project is for, its three objectives, mission and vision,
+// and partnerships. The words are in src/data/about-content.js.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutHero from '../components/AboutHero.astro';
+import AboutObjectives from '../components/AboutObjectives.astro';
+import AboutMissionVision from '../components/AboutMissionVision.astro';
+import '../styles/about.css';
+---
+
+<BaseLayout
+  title="About | Ani Natin"
+  description="Para saan nga ba ang Ani Natin? Alamin kung paano nabuo ang proyekto, ang tatlong layunin nito, at ang misyon at bisyon para sa kabataang Pilipino sa Agri-Fishery."
+>
+  <AboutHero />
+  <AboutObjectives />
+  <AboutMissionVision />
+</BaseLayout>
+
+<script>
+  import '../scripts/about.js';
+  import '../scripts/about-animations.js';
+</script>

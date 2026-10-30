@@ -1,0 +1,667 @@
+/* About page. Mobile first; from 960px up the sections are drawn in proportions of the 1440px design (--u).
+   Colors: cream hero, orange band, yellow and lime objectives, dark green mission and vision, yellow partners. */
+
+.ab-hero .ln {
+  display: block;
+}
+
+/* ---------- Hero ---------- */
+.ab-hero {
+  position: relative;
+  padding: 7.5rem var(--gutter) 0;
+  overflow: hidden;
+  background: var(--cream);
+  color: var(--green);
+}
+
+.ab-title {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 11.4vw, 5.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.ab-t {
+  display: block;
+}
+
+.ab-t--a {
+  margin-left: 22%;
+}
+
+.ab-t--b {
+  margin-top: 0.45rem;
+}
+
+.ab-hero .hl {
+  color: var(--orange-ink);
+}
+
+.ab-sprout {
+  display: block;
+  width: calc(100% + var(--gutter) * 2);
+  max-width: none;
+  margin: -12vw calc(var(--gutter) * -1) 0; /* the sprout drawing starts with an empty strip; tuck it up under the headline */
+  color: var(--orange);
+  overflow: visible;
+}
+
+.ab-sprout__dome {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.ab-sprout__dot {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+/* ---------- Background paragraph (orange band) ---------- */
+.ab-story {
+  position: relative;
+  padding: 3.5rem var(--gutter) 3rem;
+  background: var(--orange);
+  color: var(--cream);
+  text-align: center;
+}
+
+/* hidden until the highlight script takes it over (no flash of the plain text) */
+html.js:not(.rm):not(.anim-fail) .ab-story__text {
+  visibility: hidden;
+}
+
+.ab-story__text {
+  max-width: 30rem;
+  margin-inline: auto;
+  font-size: clamp(1.25rem, 5.4vw, 1.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.ab-story__text strong {
+  font-weight: 700;
+}
+
+/* ---------- Project objectives ---------- */
+.ab-obj {
+  --split: 17rem; /* where the yellow turns to lime */
+  position: relative;
+  padding: 14rem var(--gutter) 0;
+  background: linear-gradient(var(--yellow) 0 var(--split), var(--lime) var(--split) 100%);
+  color: var(--cream);
+}
+
+.ab-obj__wave {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 100%;
+  height: 4.5rem;
+  fill: var(--orange);
+  pointer-events: none;
+}
+
+.ab-obj__title {
+  position: absolute;
+  left: 50%;
+  top: 5.4rem;
+  width: max-content;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 7.4vw, 2.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--orange-ink);
+}
+
+.ab-obj__w {
+  display: block;
+  white-space: nowrap;
+}
+
+.ab-obj__w--a {
+  rotate: -3deg; /* its own property: the reveal animation uses transform */
+}
+
+.ab-obj__w--b {
+  margin-left: 1.9em;
+  rotate: 2deg;
+}
+
+.ab-cards {
+  position: relative;
+  display: grid;
+  gap: 4.2rem;
+  max-width: 21rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-card {
+  --tilt: -4deg;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 15.5rem;
+  padding: 5.2rem 1.5rem 1.5rem;
+  border-radius: 10.5rem 10.5rem 0 0;
+  background: var(--orange);
+  color: var(--cream);
+  transition: translate 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ab-card--green {
+  background: var(--green);
+}
+
+.ab-card:nth-child(2) {
+  --tilt: 2.5deg;
+}
+
+.ab-card:nth-child(3) {
+  --tilt: -3deg;
+}
+
+.ab-card:hover,
+.ab-card.is-on {
+  translate: 0 -0.4rem; /* its own property, so it does not fight the entrance animation's transform */
+}
+
+.ab-card__text {
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+}
+
+.ab-card__text strong {
+  font-weight: 700;
+}
+
+.ab-card__tab {
+  position: absolute;
+  top: -1.6rem;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  min-width: 11.5rem;
+  min-height: 3.1rem;
+  padding: 0.2rem 1.4rem;
+  border: 1px solid rgba(42, 78, 26, 0.55);
+  border-radius: 999px;
+  background: #fcf0d4;
+  color: var(--green);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1.7rem;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: translateX(-50%) rotate(var(--tilt));
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease;
+}
+
+.ab-card--green .ab-card__tab {
+  color: var(--orange-ink);
+}
+
+.ab-card__tab:hover,
+.ab-card.is-on .ab-card__tab {
+  transform: translateX(-50%) rotate(calc(var(--tilt) * -0.4)) scale(1.05);
+  background: #fff8e4;
+}
+
+/* the stage under the cards: what the hovered objective shows */
+.ab-stage {
+  position: relative;
+  width: min(100%, 36rem);
+  margin: 3rem auto 0;
+  padding-bottom: 4rem;
+}
+
+.ab-stage__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 1.4rem;
+  background: rgba(42, 78, 26, 0.1);
+}
+
+.ab-media {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.ab-media.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease;
+}
+
+.ab-media img,
+.ab-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ab-media__empty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1rem;
+  border: 2px dashed rgba(42, 78, 26, 0.55);
+  border-radius: inherit;
+  color: var(--green);
+  text-align: center;
+}
+
+.ab-media__empty svg {
+  width: 2.4rem;
+}
+
+.ab-media__cap {
+  max-width: 20rem;
+  font-family: var(--font-sub);
+  word-spacing: var(--sub-ws);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ab-media__need {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(250, 228, 188, 0.8);
+  font-family: var(--font-sub);
+  font-size: 0.7rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ab-stage__arrow {
+  display: none;
+}
+
+.ab-obj__ripple {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1.2rem;
+  fill: var(--green);
+}
+
+/* ---------- Mission and Vision ---------- */
+.ab-mv {
+  position: relative;
+  overflow: hidden;
+  padding: 3.5rem var(--gutter) 9rem;
+  background: var(--green);
+  color: var(--cream);
+  text-align: center;
+}
+
+.ab-mv__tabs {
+  position: relative;
+  width: 17rem;
+  height: 7.4rem;
+  margin: 0 auto 1.4rem;
+}
+
+.ab-tab {
+  --rot: -9deg;
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 12.6rem;
+  height: 3.7rem;
+  border: 1px solid rgba(42, 78, 26, 0.55);
+  border-radius: 999px;
+  background: #fcf0d4;
+  color: var(--green);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: rotate(var(--rot));
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease, background-color 0.3s ease;
+}
+
+.ab-tab[aria-selected='false'] {
+  --rot: 4deg;
+  left: 4.4rem;
+  top: 2.9rem;
+  z-index: 1;
+  color: var(--orange-ink);
+  background: #f3e6c3;
+}
+
+.ab-tab[aria-selected='false']:hover {
+  --rot: 1deg;
+  background: #fcf0d4;
+}
+
+.ab-mv__panels {
+  position: relative;
+  display: grid;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.ab-panel {
+  grid-area: 1 / 1;
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.8rem);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.4s;
+}
+
+.ab-panel.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.5s ease 0.1s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.ab-veg {
+  overflow: visible;
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: max(100%, 34rem);
+  max-width: none;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.ab-veg__item {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.ab-v-yellow,
+.ab-v-gold {
+  fill: #e9d352;
+}
+
+.ab-v-ochre {
+  fill: #ad843c;
+}
+
+.ab-v-orange {
+  fill: #dd672f;
+}
+
+.ab-v-pale {
+  fill: var(--yellow);
+}
+
+.ab-v-tuft {
+  fill: #d3c350;
+}
+
+/* ---------- Partnerships band ---------- */
+.ab-partners {
+  position: relative;
+  z-index: 1;
+  margin-top: -2px; /* covers the hairline where the vegetables meet the band */
+  overflow: hidden;
+  padding: 1.4rem 0;
+  background: var(--yellow);
+  color: var(--green);
+}
+
+.ab-partners__track {
+  display: flex;
+  width: max-content;
+  animation: ab-marquee 46s linear infinite;
+}
+
+.ab-partners__word {
+  flex: none;
+  padding-inline: 0.9rem;
+  font-family: var(--font-body);
+  font-size: clamp(1.7rem, 7vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@keyframes ab-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+html.rm .ab-partners__track {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-partners__track {
+    animation: none !important;
+  }
+}
+
+/* ---------- Tablet and up: cards side by side ---------- */
+@media (min-width: 700px) and (max-width: 959px) {
+  .ab-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 44rem;
+  }
+
+  .ab-card {
+    min-height: 19rem;
+    padding: 4.4rem 1rem 1.2rem;
+    border-radius: 7rem 7rem 0 0;
+  }
+
+  .ab-card__text {
+    font-size: 0.88rem;
+  }
+
+  .ab-card__tab {
+    min-width: 9rem;
+    font-size: 1.4rem;
+  }
+}
+
+/* ---------- Desktop: the 1440px design ---------- */
+@media (min-width: 960px) {
+  .ab-hero {
+    height: calc(var(--u) * 51.3);
+    padding: 0;
+  }
+
+  .ab-title {
+    position: absolute;
+    inset: 0;
+    font-size: calc(var(--u) * 6.2);
+    line-height: 0.88;
+  }
+
+  .ab-t {
+    position: absolute;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .ab-t--a {
+    left: calc(var(--gx) + var(--u) * 44.4);
+    top: calc(var(--u) * 19.2);
+  }
+
+  .ab-t--b {
+    left: calc(var(--gx) + var(--u) * 25);
+    top: calc(var(--u) * 31.6);
+  }
+
+  .ab-sprout {
+    position: absolute;
+    left: var(--gx);
+    bottom: 0;
+    width: calc(var(--u) * 100);
+    margin: 0;
+  }
+
+  .ab-story {
+    padding: calc(var(--u) * 4.4) 0 calc(var(--u) * 2.4);
+  }
+
+  .ab-story__text {
+    max-width: calc(var(--u) * 46);
+    font-size: calc(var(--u) * 1.95);
+    letter-spacing: -0.035em;
+  }
+
+  .ab-obj {
+    --split: calc(var(--u) * 29.3);
+    padding: calc(var(--u) * 23.3) 0 0;
+  }
+
+  .ab-obj__wave {
+    height: calc(var(--u) * 7.6);
+  }
+
+  .ab-obj__title {
+    top: calc(var(--u) * 9.6);
+    left: calc(var(--gx) + var(--u) * 38.4);
+    transform: none;
+    font-size: calc(var(--u) * 2.9);
+    line-height: 0.95;
+  }
+
+  .ab-cards {
+    grid-template-columns: repeat(3, calc(var(--u) * 24.2));
+    gap: 0 calc(var(--u) * 3.8);
+    justify-content: center;
+    width: calc(var(--u) * 100);
+    max-width: none;
+    margin-left: var(--gx);
+  }
+
+  .ab-card {
+    min-height: calc(var(--u) * 26.6);
+    padding: calc(var(--u) * 7.4) calc(var(--u) * 2.6) calc(var(--u) * 2.4);
+    border-radius: calc(var(--u) * 12.1) calc(var(--u) * 12.1) 0 0;
+  }
+
+  .ab-card__text {
+    font-size: calc(var(--u) * 1.45);
+    line-height: 1.32;
+  }
+
+  .ab-card__tab {
+    top: calc(var(--u) * -3);
+    min-width: calc(var(--u) * 19.8);
+    min-height: calc(var(--u) * 4.4);
+    padding: 0 calc(var(--u) * 2);
+    font-size: calc(var(--u) * 2.9);
+  }
+
+  .ab-stage {
+    width: calc(var(--u) * 36);
+    margin-top: calc(var(--u) * 5);
+    padding-bottom: calc(var(--u) * 4.2);
+  }
+
+  .ab-stage__frame {
+    border-radius: calc(var(--u) * 2.2);
+  }
+
+  .ab-media__cap {
+    font-size: calc(var(--u) * 1.6);
+  }
+
+  .ab-media__need {
+    font-size: calc(var(--u) * 0.95);
+  }
+
+  .ab-media__empty svg {
+    width: calc(var(--u) * 3.4);
+  }
+
+  .ab-stage__arrow {
+    position: absolute;
+    left: calc(100% + var(--u) * 3);
+    top: calc(var(--u) * -1.5);
+    display: block;
+    width: calc(var(--u) * 9);
+    color: var(--orange);
+    transform: scaleX(-1) rotate(-8deg);
+    pointer-events: none;
+  }
+
+  .ab-obj__ripple {
+    height: calc(var(--u) * 2.1);
+  }
+
+  .ab-mv {
+    padding: calc(var(--u) * 5.2) 0 calc(var(--u) * 19);
+  }
+
+  .ab-mv__tabs {
+    width: calc(var(--u) * 33);
+    height: calc(var(--u) * 11.4);
+    margin-bottom: calc(var(--u) * 2.6);
+  }
+
+  .ab-tab {
+    top: calc(var(--u) * 0.6);
+    width: calc(var(--u) * 22.4);
+    height: calc(var(--u) * 6.2);
+    font-size: calc(var(--u) * 3.7);
+  }
+
+  .ab-tab[aria-selected='false'] {
+    left: calc(var(--u) * 9.8);
+    top: calc(var(--u) * 4.6);
+  }
+
+  .ab-mv__panels {
+    max-width: calc(var(--u) * 50);
+  }
+
+  .ab-panel {
+    font-size: calc(var(--u) * 2.05);
+  }
+
+  .ab-veg {
+    left: var(--gx);
+    width: calc(var(--u) * 100);
+    transform: none;
+  }
+
+  .ab-partners {
+    padding: calc(var(--u) * 2.9) 0;
+  }
+
+  .ab-partners__word {
+    padding-inline: calc(var(--u) * 1.1);
+    font-size: calc(var(--u) * 3.05);
+  }
+}
